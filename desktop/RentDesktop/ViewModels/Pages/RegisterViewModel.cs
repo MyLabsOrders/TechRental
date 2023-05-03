@@ -5,7 +5,6 @@ using ReactiveUI;
 using RentDesktop.Infrastructure.App;
 using RentDesktop.ViewModels.Base;
 using System;
-using System.Collections.Generic;
 using System.Reactive;
 
 namespace RentDesktop.ViewModels.Pages

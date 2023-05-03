@@ -15,7 +15,7 @@
 		<vm:UserWindowViewModel />
 	</Design.DataContext>
 	
-	<TabControl>
+	<TabControl SelectedIndex="{Binding SelectedTabIndex}">
 		<TabItem Header="Пользователь">
 			<pages:UserPage DataContext="{Binding UserVM}" />
 		</TabItem>

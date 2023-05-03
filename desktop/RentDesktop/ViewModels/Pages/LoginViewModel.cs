@@ -114,10 +114,10 @@ namespace RentDesktop.ViewModels.Pages
 
         private void EnterSystem()
         {
-            throw new NotImplementedException();
-
             if (RememberUser)
                 SaveLoginInfo();
+
+            throw new NotImplementedException();
         }
 
         private void CloseProgram()
