@@ -72,12 +72,8 @@
 			</Grid.Styles>
 
 			<Button Grid.Column="1" Content="Регистрация" Command="{Binding RegisterUserCommand}" />
-			<Button Grid.Column="3" Content="Отмена" Command="{Binding CloseRegisterPageCommand}" />
-			
-			<Button Grid.Column="5"
-					Content="Загрузить фото"
-					Command="{Binding LoadUserImageCommand}"
-					CommandParameter="{Binding ElementName=UserImageBorder, Path=Ac}" />
+			<Button Grid.Column="3" Content="Отмена" Command="{Binding CloseRegisterPageCommand}" />	
+			<Button Grid.Column="5" Content="Загрузить фото" Command="{Binding LoadUserImageCommand}" />
 		</Grid>
 
 		<Border Grid.Column="2" BorderThickness="2" BorderBrush="LightGray" Name="UserImageBorder">

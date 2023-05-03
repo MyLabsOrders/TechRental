@@ -58,7 +58,7 @@
 									img:Attached.Icon="fa-shopping-cart" />
 
 							<Border BorderBrush="DarkGray" BorderThickness="2" Margin="5, 5, 35, 0">
-								<Image Grid.Row="0" />
+								<Image Source="{Binding Icon}" MaxHeight="94" />
 							</Border>
 
 							<Grid Grid.Row="1" Margin="5, 0">
