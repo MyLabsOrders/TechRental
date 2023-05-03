@@ -25,32 +25,33 @@
 
 			<Grid Grid.Row="0" ColumnDefinitions="Auto, 5, 1*" RowDefinitions="30, 10, 30">
 				<TextBlock Grid.Row="0" Grid.Column="0" Text="Логин" />
-				<TextBox Grid.Column="2" />
+				<TextBox Grid.Column="2" Text="{Binding Login}" />
 				<TextBlock Grid.Row="2" Grid.Column="0" Text="Пароль" />
-				<TextBox Grid.Row="2" Grid.Column="2" />
+				<TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Password}" PasswordChar="{Binding PasswordChar}" />
 			</Grid>
 
 			<Grid Grid.Row="2" ColumnDefinitions="1*, 10, 1*">
-				<CheckBox Grid.Column="0" Content="Показать пароль" />
-				<CheckBox Grid.Column="2" Content="Запомнить меня" />
+				<CheckBox Grid.Column="0" Content="Показать пароль" IsChecked="{Binding ShowPassword}" />
+				<CheckBox Grid.Column="2" Content="Запомнить меня" IsChecked="{Binding RememberUser}" />
 			</Grid>
 
 			<Border Grid.Row="4" BorderThickness="2" BorderBrush="DarkGray">
 				<Grid>
 					<TextBlock HorizontalAlignment="Center"
 							   FontSize="32"
-							   FontFamily="Calibri"
-							   Text="Some text" />
+							   TextDecorations="Strikethrough"
+							   Text="{Binding Captcha.Text}" />
 					
 					<Button HorizontalAlignment="Right"
 							VerticalAlignment="Bottom"
 							Background="LightGray"
-							img:Attached.Icon="fa-sync" />
+							img:Attached.Icon="fa-sync"
+							Command="{Binding UpdateCaptchaCommand}" />
 				</Grid>
 			</Border>
 			
 			<TextBlock Grid.Row="6" Text="Введите текст с картинки" HorizontalAlignment="Center" />
-			<TextBox Grid.Row="8" />
+			<TextBox Grid.Row="8" Text="{Binding UserCaptchaText}" />
 
 			<Grid Grid.Row="10" ColumnDefinitions="1*, 10, 1*, 10, 1*">
 				<Grid.Styles>
@@ -60,9 +61,9 @@
 					</Style>
 				</Grid.Styles>
 				
-				<Button Grid.Column="0" Content="Вход" />
-				<Button Grid.Column="2" Content="Регистрация" />
-				<Button Grid.Column="4" Content="Выход" />
+				<Button Grid.Column="0" Content="Вход" Command="{Binding EnterSystemCommand}" />
+				<Button Grid.Column="2" Content="Регистрация" Command="{Binding OpenRegisterPageCommand}" />
+				<Button Grid.Column="4" Content="Выход" Command="{Binding CloseProgramCommand}" />
 			</Grid>
 		</Grid>
 	</Border>

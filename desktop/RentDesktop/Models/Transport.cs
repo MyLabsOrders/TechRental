@@ -2,6 +2,13 @@
 {
     public class Transport : ITransport
     {
+        public Transport(string name, string company, int price)
+        {
+            Name = name;
+            Company = company;
+            Price = price;
+        }
+
         public string Name { get; }
         public string Company { get; }
         public int Price { get; }
@@ -11,12 +18,5 @@
         public string NamePresenter => $"Название: {Name}";
         public string CompanyPresenter => $"Компания: {Company}";
         public string PricePresenter => $"Цена: {Price}";
-
-        public Transport(string name, string company, int price)
-        {
-            Name = name;
-            Company = company;
-            Price = price;
-        }
     }
 }
