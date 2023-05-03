@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using ReactiveUI;
+using RentDesktop.Infrastructure.Services;
 using RentDesktop.Models;
 using RentDesktop.ViewModels.Base;
 using System;
@@ -76,6 +77,7 @@ namespace RentDesktop.ViewModels.Pages
 
         #region Commands
 
+        public ReactiveCommand<Unit, Unit> LoadLoginInfoCommand { get; }
         public ReactiveCommand<Unit, Unit> UpdateCaptchaCommand { get; }
         public ReactiveCommand<Unit, Unit> EnterSystemCommand { get; }
         public ReactiveCommand<Unit, Unit> OpenRegisterPageCommand { get; }
@@ -91,6 +93,7 @@ namespace RentDesktop.ViewModels.Pages
         {
             _openRegisterPage = openRegisterPage;
 
+            LoadLoginInfoCommand = ReactiveCommand.Create(LoadLoginInfo);
             UpdateCaptchaCommand = ReactiveCommand.Create(UpdateCaptcha);
             EnterSystemCommand = ReactiveCommand.Create(EnterSystem);
             OpenRegisterPageCommand = ReactiveCommand.Create(OpenRegisterPage);
@@ -112,12 +115,29 @@ namespace RentDesktop.ViewModels.Pages
         private void EnterSystem()
         {
             throw new NotImplementedException();
+
+            if (RememberUser)
+                SaveLoginInfo();
         }
 
         private void CloseProgram()
         {
             if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime)
                 lifetime.Shutdown();
+        }
+
+        private void LoadLoginInfo()
+        {
+            if (UserInfoSaveService.TryLoadInfo(out var info))
+            {
+                Login = info.Login;
+                Password = info.Password;
+            }
+        }
+
+        private void SaveLoginInfo()
+        {
+            UserInfoSaveService.TrySaveInfo(Login, Password);
         }
 
         #endregion

@@ -3,10 +3,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-			 d:DesignWidth="600" d:DesignHeight="460"
+			 d:DesignWidth="600" d:DesignHeight="400"
              x:Class="RentDesktop.Views.Pages.RegisterPage">
 
-	<Grid ColumnDefinitions="300, 10, 1*" RowDefinitions="Auto, 1*, 30">
+	<Grid ColumnDefinitions="310, 10, 1*" RowDefinitions="Auto, 1*, 30">
 		<Grid.Styles>
 			<Style Selector="TextBlock">
 				<Setter Property="VerticalAlignment" Value="Center" />
@@ -16,34 +16,50 @@
 			</Style>
 		</Grid.Styles>
 
-		<Grid Grid.Column="0" RowDefinitions="Auto, 5, Auto" Margin="0, 1, 0, 0">
-			<Grid Grid.Row="0" RowDefinitions="30, 5, 30, 5, 30, 5, 30, 5, 30, 5, 30, 5, 30" ColumnDefinitions="Auto, 5, 1*">
-				<TextBlock Grid.Row="0" Grid.Column="0" Text="Логин" />
-				<TextBox Grid.Row="0" Grid.Column="2" />
-				<TextBlock Grid.Row="2" Grid.Column="0" Text="Пароль" />
-				<TextBox Grid.Row="2" Grid.Column="2" />
-				<TextBlock Grid.Row="4" Grid.Column="0" Text="Подтверждение" />
-				<TextBox Grid.Row="4" Grid.Column="2" />
-				<CheckBox Grid.Row="6" Grid.ColumnSpan="3" Content="Показать пароль" />
-				<TextBlock Grid.Row="8" Grid.Column="0" Text="Имя" />
-				<TextBox Grid.Row="8" Grid.Column="2" />
-				<TextBlock Grid.Row="10" Grid.Column="0" Text="Фамилия" />
-				<TextBox Grid.Row="10" Grid.Column="2" />
-				<TextBlock Grid.Row="12" Grid.Column="0" Text="Отчество" />
-				<TextBox Grid.Row="12" Grid.Column="2" />
-			</Grid>
+		<Grid Grid.Column="0"
+			  Margin="0, 1, 0, 0"
+			  RowDefinitions="30, 5, 30, 5, 30, 5, 30, 5, 30, 5, 30, 5, 30, 5, 32, 5, 30, 5, 30, 1*"
+			  ColumnDefinitions="Auto, 5, 1*">
+			
+			<TextBlock Grid.Row="0" Grid.Column="0" Text="Логин" />
+			<TextBox Grid.Row="0" Grid.Column="2" Text="{Binding Login}" />
+			<TextBlock Grid.Row="2" Grid.Column="0" Text="Пароль" />
+			<TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Password}" />
+			<TextBlock Grid.Row="4" Grid.Column="0" Text="Подтверждение" />
+			<TextBox Grid.Row="4" Grid.Column="2" Text="{Binding PasswordConfirmation}" />
+			<CheckBox Grid.Row="6" Grid.ColumnSpan="3" Content="Показать пароль" />
+			<TextBlock Grid.Row="8" Grid.Column="0" Text="Имя" />
+			<TextBox Grid.Row="8" Grid.Column="2" Text="{Binding Name}" />
+			<TextBlock Grid.Row="10" Grid.Column="0" Text="Фамилия" />
+			<TextBox Grid.Row="10" Grid.Column="2" Text="{Binding Surname}" />
+			<TextBlock Grid.Row="12" Grid.Column="0" Text="Отчество" />
+			<TextBox Grid.Row="12" Grid.Column="2" Text="{Binding Patronymic}" />
+			<TextBlock Grid.Row="14" Grid.Column="0" Text="Дата рождения" />
+			
+			<CalendarDatePicker Grid.Row="14"
+								Grid.Column="2"
+								HorizontalContentAlignment="Center"
+								HorizontalAlignment="Stretch"
+								SelectedDate="{Binding DateOfBirth}" />
+			
+			<TextBlock Grid.Row="16" Grid.Column="0" Text="Телефон" />
+			<MaskedTextBox Grid.Row="16" Grid.Column="2" Mask="8 (000) 000-0000" Text="{Binding PhoneNumber}" />
+			<TextBlock Grid.Row="18" Grid.Column="0" Text="Пол" />
 
-			<Grid Grid.Row="2" RowDefinitions="22, 30, 5, 22, 30, 5, 22, 30, 1*">
-				<TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Text="Дата рождения" />
-				<TextBox Grid.Row="1" Grid.Column="2" />
-				<TextBlock Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Text="Номер телефона" />
-				<TextBox Grid.Row="4" Grid.Column="2" />
-				<TextBlock Grid.Row="6" Grid.Column="0" HorizontalAlignment="Center" Text="Выберите пол" />
+			<Grid Grid.Row="18" Grid.Column="2" ColumnDefinitions="Auto, 10, Auto" >
+				<RadioButton Grid.Column="0"
+							 Content="Мужской"
+							 GroupName="Gender"
+							 Name="MaleGenderRadioButton"
+							 Command="{Binding SetGenderCommand}"
+							 CommandParameter="{Binding ElementName=MaleGenderRadioButton, Path=Content}" />
 				
-				<Grid Grid.Row="7" ColumnDefinitions="Auto, 10, Auto" HorizontalAlignment="Center">
-					<RadioButton Grid.Column="0" Content="Мужской" GroupName="Gender" />
-					<RadioButton Grid.Column="2" Content="Женский" GroupName="Gender" />
-				</Grid>
+				<RadioButton Grid.Column="2"
+							 Content="Женский"
+							 GroupName="Gender"
+							 Name="FemaleGenderRadioButton"
+							 Command="{Binding SetGenderCommand}"
+							 CommandParameter="{Binding ElementName=FemaleGenderRadioButton, Path=Content}" />
 			</Grid>
 		</Grid>
 
@@ -55,13 +71,17 @@
 				</Style>
 			</Grid.Styles>
 
-			<Button Grid.Column="1" Content="Регистрация" />
-			<Button Grid.Column="3" Content="Отмена" />
-			<Button Grid.Column="5" Content="Загрузить фото" />
+			<Button Grid.Column="1" Content="Регистрация" Command="{Binding RegisterUserCommand}" />
+			<Button Grid.Column="3" Content="Отмена" Command="{Binding CloseRegisterPageCommand}" />
+			
+			<Button Grid.Column="5"
+					Content="Загрузить фото"
+					Command="{Binding LoadUserImageCommand}"
+					CommandParameter="{Binding ElementName=UserImageBorder, Path=Ac}" />
 		</Grid>
 
-		<Border Grid.Column="2" BorderThickness="2" BorderBrush="LightGray">
-			<Image Margin="10" />
+		<Border Grid.Column="2" BorderThickness="2" BorderBrush="LightGray" Name="UserImageBorder">
+			<Image Margin="10" Source="{Binding UserImage}" MaxHeight="323" />
 		</Border>
 	</Grid>
 	

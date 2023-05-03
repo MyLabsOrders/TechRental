@@ -8,7 +8,7 @@
 		xmlns:pages="using:RentDesktop.Views.Pages"
         mc:Ignorable="d"
 		d:DesignWidth="650" d:DesignHeight="470"
-		Width="650" Height="470"
+		Width="650" Height="400"
         x:Class="RentDesktop.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="Аренда спецтехники">
@@ -20,6 +20,7 @@
 	<i:Interaction.Behaviors>
 		<ia:EventTriggerBehavior EventName="Opened">
 			<ia:InvokeCommandAction Command="{Binding UpdateCaptchaCommand}" />
+			<ia:InvokeCommandAction Command="{Binding LoginVM.LoadLoginInfoCommand}" />
 		</ia:EventTriggerBehavior>
 		
 		<ia:EventTriggerBehavior EventName="PointerMoved">

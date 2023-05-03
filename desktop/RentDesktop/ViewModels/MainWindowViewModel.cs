@@ -60,7 +60,7 @@ namespace RentDesktop.ViewModels
         public MainWindowViewModel()
         {
             LoginVM = new LoginViewModel(OpenRegisterPage);
-            RegisterVM = new RegisterViewModel();
+            RegisterVM = new RegisterViewModel(OpenLoginPage);
 
             _inactivity_timer = new DispatcherTimer(
                 new TimeSpan(0, 0, INACTIVITY_TIMER_INTERVAL_SECONDS),
@@ -101,16 +101,16 @@ namespace RentDesktop.ViewModels
             IsRegisterPageVisible = false;
         }
 
+        private void OpenLoginPage()
+        {
+            HideAllPages();
+            IsLoginPageVisible = true;
+        }
+
         private void OpenRegisterPage()
         {
             HideAllPages();
             IsRegisterPageVisible = true;
-        }
-
-        private void CloseRegisterPage()
-        {
-            HideAllPages();
-            IsRegisterPageVisible = false;
         }
 
         #endregion
