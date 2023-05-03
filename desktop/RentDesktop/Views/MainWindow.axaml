@@ -1,0 +1,28 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:vm="using:RentDesktop.ViewModels"
+		xmlns:pages="using:RentDesktop.Views.Pages"
+        mc:Ignorable="d"
+		d:DesignWidth="650" d:DesignHeight="470"
+		Width="650" Height="470"
+        x:Class="RentDesktop.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Аренда спецтехники">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+
+	<Grid Margin="5">
+		<UniformGrid IsVisible="{Binding IsLoginPageVisible}">
+			<pages:LoginPage DataContext="{Binding LoginVM}" />
+		</UniformGrid>
+		
+		<UniformGrid IsVisible="{Binding IsRegisterPageVisible}">
+			<pages:RegisterPage DataContext="{Binding RegisterVM}" />
+		</UniformGrid>
+	</Grid>
+
+</Window>

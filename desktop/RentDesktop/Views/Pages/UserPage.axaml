@@ -1,0 +1,67 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+			 d:DesignWidth="600" d:DesignHeight="400"
+             x:Class="RentDesktop.Views.Pages.UserPage">
+
+	<Grid ColumnDefinitions="300, 10, 1*" RowDefinitions="Auto, 1*, 30" Margin="0, 5">
+		<Grid.Styles>
+			<Style Selector="TextBlock">
+				<Setter Property="VerticalAlignment" Value="Center" />
+			</Style>
+			<Style Selector="TextBox">
+				<Setter Property="HorizontalAlignment" Value="Stretch" />
+			</Style>
+		</Grid.Styles>
+
+		<Grid Grid.Column="0" RowDefinitions="Auto, 5, Auto" Margin="0, 1, 0, 0" IsEnabled="{Binding IsEditModeEnabled}">
+			<Grid Grid.Row="0" RowDefinitions="30, 5, 30, 5, 30, 5, 30, 5, 30, 5, 30" ColumnDefinitions="Auto, 5, 1*">
+				<TextBlock Grid.Row="0" Grid.Column="0" Text="Логин" />
+				<TextBox Grid.Row="0" Grid.Column="2" />
+				<TextBlock Grid.Row="2" Grid.Column="0" Text="Пароль" />
+				<TextBox Grid.Row="2" Grid.Column="2" />
+				<TextBlock Grid.Row="4" Grid.Column="0" Text="Имя" />
+				<TextBox Grid.Row="4" Grid.Column="2" />
+				<TextBlock Grid.Row="6" Grid.Column="0" Text="Фамилия" />
+				<TextBox Grid.Row="6" Grid.Column="2" />
+				<TextBlock Grid.Row="8" Grid.Column="0" Text="Отчество" />
+				<TextBox Grid.Row="8" Grid.Column="2" />
+				<TextBlock Grid.Row="10" Grid.Column="0" Text="Должность" />
+				<TextBox Grid.Row="10" Grid.Column="2" />
+			</Grid>
+
+			<Grid Grid.Row="2" RowDefinitions="22, 30, 5, 22, 30, 5, 30, 1*">
+				<TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Text="Дата рождения" />
+				<TextBox Grid.Row="1" Grid.Column="2" />
+				<TextBlock Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Text="Номер телефона" />
+				<TextBox Grid.Row="4" Grid.Column="2" />
+
+				<Grid Grid.Row="6" ColumnDefinitions="Auto, 5, Auto, 10, Auto">
+					<TextBlock Grid.Column="0" HorizontalAlignment="Center" Text="Пол" />
+					<RadioButton Grid.Column="2" Content="Мужской" GroupName="Gender" />
+					<RadioButton Grid.Column="4" Content="Женский" GroupName="Gender" />
+				</Grid>
+			</Grid>
+		</Grid>
+
+		<Grid Grid.Row="4" Grid.ColumnSpan="3" ColumnDefinitions="1*, 130, 5, 130, 5, 130, 1*">
+			<Grid.Styles>
+				<Style Selector="Button">
+					<Setter Property="HorizontalAlignment" Value="Stretch" />
+					<Setter Property="HorizontalContentAlignment" Value="Center" />
+				</Style>
+			</Grid.Styles>
+
+			<Button Grid.Column="1" Content="Редактировать" />
+			<Button Grid.Column="3" Content="Подтвердить" />
+			<Button Grid.Column="5" Content="Изменить фото" />
+		</Grid>
+
+		<Border Grid.Column="2" BorderThickness="2" BorderBrush="LightGray">
+			<Image Margin="10" />
+		</Border>
+	</Grid>
+	
+</UserControl>

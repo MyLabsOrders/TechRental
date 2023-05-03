@@ -1,0 +1,32 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:vm="using:RentDesktop.ViewModels"
+		xmlns:pages="using:RentDesktop.Views.Pages"
+        mc:Ignorable="d"
+		d:DesignWidth="670" d:DesignHeight="460"
+		Width="670" Height="460"
+        x:Class="RentDesktop.Views.UserWindow"
+		Icon="/Assets/avalonia-logo.ico"
+        Title="Пользователь">
+
+	<Design.DataContext>
+		<vm:UserWindowViewModel />
+	</Design.DataContext>
+	
+	<TabControl>
+		<TabItem Header="Пользователь">
+			<pages:UserPage DataContext="{Binding UserVM}" />
+		</TabItem>
+		
+		<TabItem Header="Транспорт">
+			<pages:TransportPage DataContext="{Binding TransportVM}" />
+		</TabItem>
+		
+		<TabItem Header="Корзина">
+			<pages:CartPage DataContext="{Binding CartVM}" />
+		</TabItem>
+	</TabControl>
+	
+</Window>
