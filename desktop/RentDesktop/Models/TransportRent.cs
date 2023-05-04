@@ -8,8 +8,11 @@ namespace RentDesktop.Models
         {
             Transport = transport;
             Days = days;
+            TotalPrice = CalcTotalPrice();
+            Presenter = GetPresenterString();
         }
 
+        public TransportRent Self => this;
         public Transport Transport { get; }
 
         private int _days = 1;
@@ -19,11 +22,37 @@ namespace RentDesktop.Models
             set
             {
                 int days = value >= 1 ? value : 1;
-                RaiseAndSetIfChanged(ref _days, days);
+
+                if (RaiseAndSetIfChanged(ref _days, days))
+                {
+                    TotalPrice = CalcTotalPrice();
+                    Presenter = GetPresenterString();
+                }
             }
         }
 
-        public int TotalPrice => Transport.Price * Days;
-        public TransportRent Self => this;
+        private int _totalPrice = 0;
+        public int TotalPrice
+        {
+            get => _totalPrice;
+            private set => RaiseAndSetIfChanged(ref _totalPrice, value);
+        }
+
+        private string _presenter = string.Empty;
+        public string Presenter
+        {
+            get => _presenter;
+            private set => RaiseAndSetIfChanged(ref _presenter, value);
+        }
+
+        private int CalcTotalPrice()
+        {
+            return Transport.Price * _days;
+        }
+
+        private string GetPresenterString()
+        {
+            return $"{Transport.Name} за {TotalPrice} рублей (дней аренды: {Days})";
+        }
     }
 }

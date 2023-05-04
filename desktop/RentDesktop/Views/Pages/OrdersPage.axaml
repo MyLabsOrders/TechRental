@@ -1,0 +1,30 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="using:RentDesktop.ViewModels.Pages"
+			 xmlns:models="clr-namespace:RentDesktop.Models;assembly=RentDesktop"
+             mc:Ignorable="d"
+			 d:DesignWidth="650" d:DesignHeight="470"
+             x:Class="RentDesktop.Views.Pages.OrdersPage">
+
+	<Design.DataContext>
+		<vm:CartViewModel />
+	</Design.DataContext>
+
+	<Grid>
+		<DataGrid AutoGenerateColumns="False"
+				  Margin="0, 0, 0, 5"
+				  IsReadOnly="True"
+				  Items="{Binding Orders}">
+			
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="ID" IsReadOnly="True" Binding="{Binding ID}" />
+				<DataGridTextColumn Header="Дата создания" IsReadOnly="True" Binding="{Binding DateOfCreationPresenter}" />
+				<DataGridTextColumn Header="Стоимость" IsReadOnly="True" Binding="{Binding Price}" />
+				<DataGridTextColumn Header="Модели" IsReadOnly="True" Binding="{Binding ModelsPresenter}" />
+			</DataGrid.Columns>
+		</DataGrid>
+	</Grid>
+	
+</UserControl>

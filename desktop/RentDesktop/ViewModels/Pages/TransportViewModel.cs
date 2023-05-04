@@ -1,7 +1,6 @@
 ﻿using ReactiveUI;
 using RentDesktop.Models;
 using RentDesktop.ViewModels.Base;
-using System;
 using System.Collections.ObjectModel;
 using System.Reactive;
 
@@ -9,6 +8,13 @@ namespace RentDesktop.ViewModels.Pages
 {
     public class TransportViewModel : ViewModelBase
     {
+        #region Events
+
+        public delegate void CartTabOpeningHandler();
+        public event CartTabOpeningHandler? CartTabOpening;
+
+        #endregion
+
         #region Properties
 
         public ObservableCollection<Transport> Transports { get; }
@@ -60,7 +66,6 @@ namespace RentDesktop.ViewModels.Pages
 
         #region Private Fields
 
-        private readonly Action? _openCartTab;
         private readonly ObservableCollection<TransportRent> _cart;
 
         #endregion
@@ -73,11 +78,11 @@ namespace RentDesktop.ViewModels.Pages
 
         #endregion
 
-        public TransportViewModel() : this(null, new ObservableCollection<TransportRent>())
+        public TransportViewModel() : this(new ObservableCollection<TransportRent>())
         {
         }
 
-        public TransportViewModel(Action? openCartTab, ObservableCollection<TransportRent> cart)
+        public TransportViewModel(ObservableCollection<TransportRent> cart)
         {
             // temp
             Transports = new ObservableCollection<Transport>()
@@ -89,7 +94,6 @@ namespace RentDesktop.ViewModels.Pages
             };
             // end temp
 
-            _openCartTab = openCartTab;
             _cart = cart;
 
             SelectTransportCommand = ReactiveCommand.Create<Transport>(SelectTransport);
@@ -114,7 +118,7 @@ namespace RentDesktop.ViewModels.Pages
 
         private void OpenCartTab()
         {
-            _openCartTab?.Invoke();
+            CartTabOpening?.Invoke();
         }
 
         #endregion

@@ -44,6 +44,10 @@
 		<TabItem Header="Корзина">
 			<pages:CartPage DataContext="{Binding CartVM}" />
 		</TabItem>
+
+		<TabItem Header="Заказы">
+			<pages:OrdersPage DataContext="{Binding OrdersVM}" />
+		</TabItem>
 	</TabControl>
 	
 </Window>

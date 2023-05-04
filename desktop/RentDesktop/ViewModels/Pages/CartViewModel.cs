@@ -12,6 +12,13 @@ namespace RentDesktop.ViewModels.Pages
 {
     public class CartViewModel : ViewModelBase
     {
+        #region Events
+
+        public delegate void OrdersTabOpeningHandler();
+        public event OrdersTabOpeningHandler? OrdersTabOpening;
+
+        #endregion
+
         #region Properties
 
         #region Cart Subpage
@@ -119,7 +126,20 @@ namespace RentDesktop.ViewModels.Pages
 
         #region Order Payment Subpage
 
+        private bool _isOrderPaidFor = false;
+        public bool IsOrderPaidFor
+        {
+            get => _isOrderPaidFor;
+            private set => this.RaiseAndSetIfChanged(ref _isOrderPaidFor, value);
+        }
+
         #endregion
+
+        #endregion
+
+        #region Private Fields
+
+        private readonly ObservableCollection<Order> _orders;
 
         #endregion
 
@@ -133,10 +153,18 @@ namespace RentDesktop.ViewModels.Pages
 
         public ReactiveCommand<Unit, Unit> OpenCartPageCommand { get; }
         public ReactiveCommand<Unit, Unit> OpenOrderPaymentPageCommand { get; }
+        public ReactiveCommand<Unit, Unit> CloseOrderPaymentPageCommand { get; }
+        public ReactiveCommand<Unit, Unit> PayOrderCommand { get; }
+        public ReactiveCommand<Unit, Unit> DownloadReceiptCommand { get; }
+        public ReactiveCommand<Unit, Unit> DownloadSummaryStatementCommand { get; }
 
         #endregion
 
-        public CartViewModel()
+        public CartViewModel() : this(new ObservableCollection<Order>())
+        {
+        }
+
+        public CartViewModel(ObservableCollection<Order> orders)
         {
             PaymentMethods = GetSupportedPaymentMethods();
             Cart = new ObservableCollection<TransportRent>();
@@ -147,6 +175,8 @@ namespace RentDesktop.ViewModels.Pages
                 CheckCartIsEmpty();
             };
 
+            _orders = orders;
+
             PlaceOrderCommand = ReactiveCommand.Create(PlaceOrder);
             ClearCartCommand = ReactiveCommand.Create(ClearCart);
             RemoveFromCartCommand = ReactiveCommand.Create<TransportRent>(RemoveFromCart);
@@ -155,6 +185,10 @@ namespace RentDesktop.ViewModels.Pages
 
             OpenCartPageCommand = ReactiveCommand.Create(OpenCartPage);
             OpenOrderPaymentPageCommand = ReactiveCommand.Create(OpenOrderPaymentPage);
+            CloseOrderPaymentPageCommand = ReactiveCommand.Create(CloseOrderPaymentPage);
+            PayOrderCommand = ReactiveCommand.Create(PayOrder);
+            DownloadReceiptCommand = ReactiveCommand.Create(DownloadReceipt);
+            DownloadSummaryStatementCommand = ReactiveCommand.Create(DownloadSummaryStatement);
         }
 
         #region Private Methods
@@ -225,9 +259,47 @@ namespace RentDesktop.ViewModels.Pages
         {
             HideAllPages();
             IsOrderPaymentPageVisible = true;
+
+            this.RaisePropertyChanged(nameof(Cart));
         }
 
-        private ObservableCollection<string> GetSupportedPaymentMethods()
+        private void CloseOrderPaymentPage()
+        {
+            HideAllPages();
+
+            IsCartPageVisible = true;
+            IsOrderPaidFor = false;
+
+            OrdersTabOpening?.Invoke();
+        }
+
+        private void PayOrder()
+        {
+            //throw new NotImplementedException();
+            IsOrderPaidFor = true;
+
+            int id = new Random().Next(0, 1000000);
+            double price = TotalPrice;
+            DateTime date = DateTime.Now;
+            var models = Cart.Select(t => t.Transport.Name);
+
+            var order = new Order(id, price, date, models);
+            _orders.Add(order);
+
+            ClearCart();
+        }
+
+        private void DownloadReceipt()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void DownloadSummaryStatement()
+        {
+            throw new NotImplementedException();
+        }
+
+        private static ObservableCollection<string> GetSupportedPaymentMethods()
         {
             return new ObservableCollection<string>()
             {

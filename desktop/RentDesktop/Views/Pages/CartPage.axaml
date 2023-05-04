@@ -7,6 +7,7 @@
 			 xmlns:img="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
 			 xmlns:vm="using:RentDesktop.ViewModels.Pages"
 			 xmlns:models="clr-namespace:RentDesktop.Models;assembly=RentDesktop"
+			 xmlns:converters="clr-namespace:RentDesktop.Infrastructure.Converters"
              mc:Ignorable="d"
 			 d:DesignWidth="650" d:DesignHeight="470"
              x:Class="RentDesktop.Views.Pages.CartPage">
@@ -215,8 +216,86 @@
 			</Grid>
 		</Grid>
 
-		<Grid IsVisible="{Binding IsOrderPaymentPageVisible}">
+		<Grid IsVisible="{Binding IsOrderPaymentPageVisible}" RowDefinitions="30, 1*, 40, 30, 5">
+			<Grid.Styles>
+				<Style Selector="TextBlock.header">
+					<Setter Property="FontWeight" Value="DemiBold" />
+					<Setter Property="HorizontalAlignment" Value="Center" />
+					<Setter Property="VerticalAlignment" Value="Center" />
+				</Style>
+
+				<Style Selector="TextBlock">
+					<Setter Property="VerticalAlignment" Value="Center" />
+				</Style>
+
+				<Style Selector="TextBlock.clickable">
+					<Setter Property="Cursor" Value="Hand" />
+					<Setter Property="VerticalAlignment" Value="Center" />
+				</Style>
+
+				<Style Selector="TextBlock.clickable:pointerover">
+					<Setter Property="FontWeight" Value="SemiBold" />
+					<Setter Property="Foreground" Value="DarkBlue" />
+				</Style>
+			</Grid.Styles>
 			
+			<TextBlock Grid.Row="0" Classes="header" Text="Вы собираетесь купить" />
+			
+			<ListBox Grid.Row="1" Items="{Binding Cart}">
+				<ListBox.DataTemplates>
+					<DataTemplate DataType="{x:Type models:TransportRent}">
+						<TextBlock Text="{Binding Presenter}" />
+					</DataTemplate>
+				</ListBox.DataTemplates>
+			</ListBox>
+
+			<Grid Grid.Row="2" ColumnDefinitions="Auto, 5, 1*, Auto">
+				<TextBlock Grid.Column="0" Text="Итого к оплате:" />
+				<TextBlock Grid.Column="2" Text="{Binding TotalPrice}" />
+
+				<Grid Grid.Column="3"
+					  ColumnDefinitions="Auto, 10, Auto"
+					  IsVisible="{Binding IsOrderPaidFor}">
+
+					<TextBlock Grid.Column="0" Classes="clickable" Text="Скачать чек">
+						<i:Interaction.Behaviors>
+							<ia:EventTriggerBehavior EventName="PointerPressed">
+								<ia:InvokeCommandAction Command="{Binding DownloadReceiptCommand}" />
+							</ia:EventTriggerBehavior>
+						</i:Interaction.Behaviors>
+					</TextBlock>
+
+					<TextBlock Grid.Column="2" Classes="clickable" Text="Скачать ведомость">
+						<i:Interaction.Behaviors>
+							<ia:EventTriggerBehavior EventName="PointerPressed">
+								<ia:InvokeCommandAction Command="{Binding DownloadSummaryStatementCommand}" />
+							</ia:EventTriggerBehavior>
+						</i:Interaction.Behaviors>
+					</TextBlock>
+				</Grid>
+			</Grid>
+
+			<Grid Grid.Row="3" ColumnDefinitions="1*, 120, 10, 120, 1*">
+				<Grid.Resources>
+					<converters:InverseBoolConverter x:Key="inverseBoolConverter" />
+				</Grid.Resources>
+				
+				<Grid.Styles>
+					<Style Selector="Button">
+						<Setter Property="HorizontalAlignment" Value="Stretch" />
+						<Setter Property="HorizontalContentAlignment" Value="Center" />
+					</Style>
+				</Grid.Styles>
+
+				<Button Grid.Column="1"
+						Content="Закрыть"
+						Command="{Binding CloseOrderPaymentPageCommand}" />
+
+				<Button Grid.Column="3"
+						Content="Оплатить"
+						Command="{Binding PayOrderCommand}"
+						IsEnabled="{Binding Path=IsOrderPaidFor, Converter={StaticResource inverseBoolConverter}}" />
+			</Grid>
 		</Grid>
 	</Grid>
 

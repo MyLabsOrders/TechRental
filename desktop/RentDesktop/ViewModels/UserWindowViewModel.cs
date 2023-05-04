@@ -15,6 +15,7 @@ namespace RentDesktop.ViewModels
         public UserProfileViewModel UserVM { get; }
         public TransportViewModel TransportVM { get; }
         public CartViewModel CartVM { get; }
+        public OrdersViewModel OrdersVM { get; }
 
         #endregion
 
@@ -36,6 +37,7 @@ namespace RentDesktop.ViewModels
         private const int USER_TAB_INDEX = 0;
         private const int TRANSPORT_TAB_INDEX = 1;
         private const int CART_TAB_INDEX = 2;
+        private const int ORDERS_TAB_INDEX = 3;
 
         private const int PRELOAD_TABS_TIMER_INTERVAL_MILLISECONDS = 5;
 
@@ -63,8 +65,12 @@ namespace RentDesktop.ViewModels
         public UserWindowViewModel()
         {
             UserVM = new UserProfileViewModel();
-            CartVM = new CartViewModel();
-            TransportVM = new TransportViewModel(OpenCartTab, CartVM.Cart);
+            OrdersVM = new OrdersViewModel();
+            CartVM = new CartViewModel(OrdersVM.Orders);
+            TransportVM = new TransportViewModel(CartVM.Cart);
+
+            CartVM.OrdersTabOpening += OpenOrdersTab;
+            TransportVM.CartTabOpening += OpenCartTab;
 
             _preloadTabsTimer = ConfigurePreloadTabsTimer();
             _preloadTabsTimer.Start();
@@ -128,6 +134,11 @@ namespace RentDesktop.ViewModels
             SelectedTabIndex = CART_TAB_INDEX;
         }
 
+        private void OpenOrdersTab()
+        {
+            SelectedTabIndex = ORDERS_TAB_INDEX;
+        }
+
         private void ShowMainWindow()
         {
             AppInteraction.ShowMainWindow();
@@ -149,6 +160,10 @@ namespace RentDesktop.ViewModels
 
                 case 1:
                     OpenCartTab();
+                    break;
+
+                case 2:
+                    OpenOrdersTab();
                     break;
 
                 default:
