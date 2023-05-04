@@ -216,7 +216,7 @@
 		</Grid>
 
 		<Grid IsVisible="{Binding IsOrderPaymentPageVisible}">
-
+			
 		</Grid>
 	</Grid>
 
