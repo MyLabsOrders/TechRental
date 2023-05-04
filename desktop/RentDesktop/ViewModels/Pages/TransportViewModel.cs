@@ -1,6 +1,8 @@
 ﻿using ReactiveUI;
+using RentDesktop.Infrastructure.Services.DB;
 using RentDesktop.Models;
 using RentDesktop.ViewModels.Base;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive;
 
@@ -8,6 +10,22 @@ namespace RentDesktop.ViewModels.Pages
 {
     public class TransportViewModel : ViewModelBase
     {
+        public TransportViewModel() : this(new ObservableCollection<TransportRent>())
+        {
+        }
+
+        public TransportViewModel(ObservableCollection<TransportRent> cart)
+        {
+            ShopService.GetTransports(out IEnumerable<Transport> transport);
+            Transports = new ObservableCollection<Transport>(transport);
+
+            _cart = cart;
+
+            SelectTransportCommand = ReactiveCommand.Create<Transport>(SelectTransport);
+            AddToCartCommand = ReactiveCommand.Create<Transport>(AddToCart);
+            OpenCartCommand = ReactiveCommand.Create(OpenCartTab);
+        }
+
         #region Events
 
         public delegate void CartTabOpeningHandler();
@@ -59,7 +77,7 @@ namespace RentDesktop.ViewModels.Pages
         public bool IsTransportSelected
         {
             get => _isTransportSelected;
-            set => this.RaiseAndSetIfChanged(ref _isTransportSelected, value);
+            private set => this.RaiseAndSetIfChanged(ref _isTransportSelected, value);
         }
 
         #endregion
@@ -78,29 +96,6 @@ namespace RentDesktop.ViewModels.Pages
 
         #endregion
 
-        public TransportViewModel() : this(new ObservableCollection<TransportRent>())
-        {
-        }
-
-        public TransportViewModel(ObservableCollection<TransportRent> cart)
-        {
-            // temp
-            Transports = new ObservableCollection<Transport>()
-            {
-                new Transport("Opel", "Company 1", 100000),
-                new Transport("Mazda", "Company 2", 5900000),
-                new Transport("BMW", "Company 3", 30000),
-                new Transport("Mercedes", "Company 4", 4500000)
-            };
-            // end temp
-
-            _cart = cart;
-
-            SelectTransportCommand = ReactiveCommand.Create<Transport>(SelectTransport);
-            AddToCartCommand = ReactiveCommand.Create<Transport>(AddToCart);
-            OpenCartCommand = ReactiveCommand.Create(OpenCartTab);
-        }
-
         #region Private Methods
 
         private void SelectTransport(Transport transport)
@@ -111,9 +106,9 @@ namespace RentDesktop.ViewModels.Pages
         private void AddToCart(Transport transport)
         {
             var transportCopy = transport.Copy();
-            var item = new TransportRent(transportCopy, 1);
+            var transportRent = new TransportRent(transportCopy, 1);
 
-            _cart.Add(item);
+            _cart.Add(transportRent);
 
             SelectedTransport = null;
         }
