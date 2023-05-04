@@ -1,16 +1,35 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Media.Imaging;
-using MessageBox.Avalonia;
 using ReactiveUI;
 using RentDesktop.Infrastructure.App;
+using RentDesktop.Infrastructure.Services;
+using RentDesktop.Infrastructure.Services.DB;
+using RentDesktop.Models.Communication;
+using RentDesktop.Models.Informing;
 using RentDesktop.ViewModels.Base;
 using System;
+using System.Linq;
 using System.Reactive;
 
 namespace RentDesktop.ViewModels.Pages
 {
     public class RegisterViewModel : ViewModelBase
     {
+        public RegisterViewModel()
+        {
+            RegisterUserCommand = ReactiveCommand.Create(RegisterUser);
+            CloseRegisterPageCommand = ReactiveCommand.Create(CloseRegisterPage);
+            LoadUserImageCommand = ReactiveCommand.Create(LoadUserImage);
+            SetGenderCommand = ReactiveCommand.Create<string>(SetGender);
+        }
+
+        #region Events
+
+        public delegate void RegisterPageClosingHandler();
+        public event RegisterPageClosingHandler? RegisterPageClosing;
+
+        #endregion
+
         #region Properties
 
         private string _login = string.Empty;
@@ -83,42 +102,34 @@ namespace RentDesktop.ViewModels.Pages
             private set => this.RaiseAndSetIfChanged(ref _userImage, value);
         }
 
-        private string _userImagePath = string.Empty;
-        public string UserImagePath
+        private char? _passwordChar = HIDDEN_PASSWORD_CHAR;
+        public char? PasswordChar
         {
-            get => _userImagePath;
+            get => _passwordChar;
+            private set => this.RaiseAndSetIfChanged(ref _passwordChar, value);
+        }
+
+        private bool _showPassword = false;
+        public bool ShowPassword
+        {
+            get => _showPassword;
             set
             {
-                if (value == _userImagePath)
-                    return;
-
-                this.RaiseAndSetIfChanged(ref _userImagePath, value);
-
-                UserImage?.Dispose();
-
-                try
-                {
-                    var image = new Bitmap(value);
-                    UserImage = image;
-                }
-                catch
-                {
-                    UserImage = null;
-
-                    if (WindowFinder.FindMainWindow() is not Window window)
-                        return;
-
-                    MessageBoxManager.GetMessageBoxStandardWindow("Ошибка",
-                        "Не удалось открыть фото").ShowDialog(window);
-                }
+                this.RaiseAndSetIfChanged(ref _showPassword, value);
+                PasswordChar = value ? null : HIDDEN_PASSWORD_CHAR;
             }
         }
 
         #endregion
 
-        #region Private fields
+        #region Private Fields
 
-        private readonly Action? _closeRegisterPage;
+        #region Constants
+
+        private const int PHONE_NUMBER_DIGITS = 11;
+        private const char HIDDEN_PASSWORD_CHAR = '*';
+
+        #endregion
 
         #endregion
 
@@ -131,30 +142,41 @@ namespace RentDesktop.ViewModels.Pages
 
         #endregion
 
-        public RegisterViewModel() : this(null)
-        {
-        }
-
-        public RegisterViewModel(Action? closeRegisterPage)
-        {
-            _closeRegisterPage = closeRegisterPage;
-
-            RegisterUserCommand = ReactiveCommand.Create(RegisterUser);
-            CloseRegisterPageCommand = ReactiveCommand.Create(CloseRegisterPage);
-            LoadUserImageCommand = ReactiveCommand.Create(LoadUserImage);
-            SetGenderCommand = ReactiveCommand.Create<string>(SetGender);
-        }
-
         #region Private Methods
 
         private void RegisterUser()
         {
-            throw new NotImplementedException();
-        }
+            if (!VerifyFieldsCorrectness())
+                return;
+            
+            byte[] userImageBytes = UserImage is not null
+                ? BitmapService.ConvertBitmapToBytes(UserImage)
+                : Array.Empty<byte>();
 
-        private void CloseRegisterPage()
-        {
-            _closeRegisterPage?.Invoke();
+            var userInfo = new UserInfo()
+            {
+                Login = Login,
+                Password = Password,
+                Name = Name,
+                Surname = Surname,
+                Patronymic = Patronymic,
+                PhoneNumber = PhoneNumber,
+                Gender = Gender,
+                Status = "User",
+                Icon = userImageBytes,
+                DateOfBirth = DateOfBirth!.Value
+            };
+
+            if (RegisterUserService.RegisterUser(userInfo))
+            {
+                ResetAllFields();
+                RegisterPageClosing?.Invoke();
+            }
+            else
+            {
+                var window = WindowFinder.FindMainWindow();
+                QuickMessage.Error("Не удалось зарегистрировать пользователя.").ShowDialog(window);
+            }
         }
 
         private async void LoadUserImage()
@@ -165,13 +187,109 @@ namespace RentDesktop.ViewModels.Pages
             OpenFileDialog dialog = DialogProvider.GetOpenImageDialog();
             string[]? paths = await dialog.ShowAsync(window);
 
-            if (paths is not null && paths.Length > 0)
-                UserImagePath = paths[0];
+            if (paths is null || paths.Length == 0)
+                return;
+
+            if (!TrySetUserImage(paths[0]))
+                QuickMessage.Error("Не удалось открыть фото.").ShowDialog(window);
+        }
+
+        private void CloseRegisterPage()
+        {
+            RegisterPageClosing?.Invoke();
         }
 
         private void SetGender(string gender)
         {
             Gender = gender;
+        }
+
+        private bool TrySetUserImage(string path)
+        {
+            UserImage?.Dispose();
+            UserImage = null;
+
+            try
+            {
+                var image = new Bitmap(path);
+                UserImage = image;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private bool VerifyFieldsCorrectness()
+        {
+            var window = WindowFinder.FindMainWindow();
+
+            if (string.IsNullOrEmpty(Login))
+            {
+                QuickMessage.Info("Введите логин.").ShowDialog(window);
+                return false;
+            }
+            if (!RegisterUserService.IsLoginFree(Login))
+            {
+                QuickMessage.Info("Логин уже занят.").ShowDialog(window);
+                return false;
+            }
+            if (string.IsNullOrEmpty(Password))
+            {
+                QuickMessage.Info("Введите пароль.").ShowDialog(window);
+                return false;
+            }
+            if (Password != PasswordConfirmation)
+            {
+                QuickMessage.Info("Пароли не совпадают.").ShowDialog(window);
+                return false;
+            }
+            if (string.IsNullOrEmpty(Name))
+            {
+                QuickMessage.Info("Введите имя.").ShowDialog(window);
+                return false;
+            }
+            if (string.IsNullOrEmpty(Surname))
+            {
+                QuickMessage.Info("Введите фамилию.").ShowDialog(window);
+                return false;
+            }
+            if (string.IsNullOrEmpty(Patronymic))
+            {
+                QuickMessage.Info("Введите отчество.").ShowDialog(window);
+                return false;
+            }
+            if (PhoneNumber.Where(t => char.IsDigit(t)).Count() != PHONE_NUMBER_DIGITS)
+            {
+                QuickMessage.Info("Введите корректный номер телефона.").ShowDialog(window);
+                return false;
+            }
+            if (string.IsNullOrEmpty(Gender))
+            {
+                QuickMessage.Info("Выберите пол.").ShowDialog(window);
+                return false;
+            }
+            if (DateOfBirth is null)
+            {
+                QuickMessage.Info("Введите дату рождения.").ShowDialog(window);
+                return false;
+            }
+
+            return true;
+        }
+
+        private void ResetAllFields()
+        {
+            Login = string.Empty;
+            Password = string.Empty;
+            Name = string.Empty;
+            Surname = string.Empty;
+            Patronymic = string.Empty;
+            PhoneNumber = string.Empty;
+            //Gender = string.Empty;
+            UserImage = null;
+            DateOfBirth = null;
         }
 
         #endregion

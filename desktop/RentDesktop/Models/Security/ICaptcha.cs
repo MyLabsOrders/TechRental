@@ -1,4 +1,4 @@
-﻿namespace RentDesktop.Models
+﻿namespace RentDesktop.Models.Security
 {
     public interface ICaptcha
     {

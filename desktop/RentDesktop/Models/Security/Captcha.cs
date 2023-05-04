@@ -1,7 +1,7 @@
 ﻿using RentDesktop.Models.Base;
 using System;
 
-namespace RentDesktop.Models
+namespace RentDesktop.Models.Security
 {
     public class Captcha : ReactiveModel, ICaptcha
     {

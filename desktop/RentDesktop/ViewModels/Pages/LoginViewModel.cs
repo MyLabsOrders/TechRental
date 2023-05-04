@@ -1,7 +1,7 @@
 ﻿using ReactiveUI;
 using RentDesktop.Infrastructure.App;
 using RentDesktop.Infrastructure.Services;
-using RentDesktop.Models;
+using RentDesktop.Models.Security;
 using RentDesktop.ViewModels.Base;
 using RentDesktop.Views;
 using System;
