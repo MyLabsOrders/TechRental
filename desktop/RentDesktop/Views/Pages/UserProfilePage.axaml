@@ -2,9 +2,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d"
+             xmlns:vm="using:RentDesktop.ViewModels.Pages"
+			 mc:Ignorable="d"
 			 d:DesignWidth="600" d:DesignHeight="400"
-             x:Class="RentDesktop.Views.Pages.UserPage">
+             x:Class="RentDesktop.Views.Pages.UserProfilePage">
+
+	<Design.DataContext>
+		<vm:UserProfileViewModel />
+	</Design.DataContext>
 
 	<Grid ColumnDefinitions="310, 10, 1*" RowDefinitions="Auto, 1*, 30" Margin="0, 5">
 		<Grid.Styles>
@@ -46,7 +51,7 @@
 			<TextBlock Grid.Row="14" Grid.Column="0" Text="Телефон" />
 			<MaskedTextBox Grid.Row="14" Grid.Column="2" Mask="8 (000) 000-0000" Text="{Binding PhoneNumber}" />
 			<TextBlock Grid.Row="16" Grid.Column="0" Text="Пол" />
-			
+
 			<Grid Grid.Row="16" Grid.Column="2" ColumnDefinitions="Auto, 10, Auto">
 				<RadioButton Grid.Column="0"
 							 Content="Мужской"
@@ -81,5 +86,5 @@
 			<Image Margin="10" Source="{Binding UserImage}" MaxHeight="288" />
 		</Border>
 	</Grid>
-	
+
 </UserControl>

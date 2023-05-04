@@ -9,7 +9,7 @@ using System.Reactive;
 
 namespace RentDesktop.ViewModels.Pages
 {
-    public class UserViewModel : ViewModelBase
+    public class UserProfileViewModel : ViewModelBase
     {
         #region Properties
 
@@ -125,7 +125,7 @@ namespace RentDesktop.ViewModels.Pages
 
         #endregion
 
-        public UserViewModel()
+        public UserProfileViewModel()
         {
             SwapEditModeCommand = ReactiveCommand.Create(SwapEditMode);
             ChangeUserImageCommand = ReactiveCommand.Create(ChangeUserImage);

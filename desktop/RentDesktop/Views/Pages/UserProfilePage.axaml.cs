@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace RentDesktop.Views.Pages
 {
-    public partial class UserPage : UserControl
+    public partial class UserProfilePage : UserControl
     {
-        public UserPage()
+        public UserProfilePage()
         {
             InitializeComponent();
         }

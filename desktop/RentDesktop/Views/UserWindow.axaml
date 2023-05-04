@@ -17,7 +17,7 @@
 	
 	<TabControl SelectedIndex="{Binding SelectedTabIndex}">
 		<TabItem Header="Пользователь">
-			<pages:UserPage DataContext="{Binding UserVM}" />
+			<pages:UserProfilePage DataContext="{Binding UserVM}" />
 		</TabItem>
 		
 		<TabItem Header="Транспорт">

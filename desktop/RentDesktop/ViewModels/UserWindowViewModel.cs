@@ -10,7 +10,7 @@ namespace RentDesktop.ViewModels
     {
         #region ViewModels
 
-        public UserViewModel UserVM { get; }
+        public UserProfileViewModel UserVM { get; }
         public TransportViewModel TransportVM { get; }
         public CartViewModel CartVM { get; }
 
@@ -46,7 +46,7 @@ namespace RentDesktop.ViewModels
 
         public UserWindowViewModel()
         {
-            UserVM = new UserViewModel();
+            UserVM = new UserProfileViewModel();
             CartVM = new CartViewModel();
             TransportVM = new TransportViewModel(OpenCartTab, CartVM.Cart);
 
