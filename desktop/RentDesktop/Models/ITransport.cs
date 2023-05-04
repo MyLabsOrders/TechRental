@@ -2,7 +2,7 @@
 
 namespace RentDesktop.Models
 {
-    public interface ITransport
+    internal interface ITransport
     {
         string Name { get; }
         string Company { get; }

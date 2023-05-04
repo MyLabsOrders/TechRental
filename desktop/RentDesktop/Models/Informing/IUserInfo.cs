@@ -2,7 +2,7 @@
 
 namespace RentDesktop.Models.Informing
 {
-    public interface IUserInfo
+    internal interface IUserInfo
     {
         string Login { get; set; }
         string Password { get; set; }

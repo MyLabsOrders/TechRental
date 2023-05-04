@@ -2,7 +2,7 @@
 
 namespace RentDesktop.Models.Informing
 {
-    public class UserInfo : IUserInfo
+    internal class UserInfo : IUserInfo
     {
         public string Login { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;

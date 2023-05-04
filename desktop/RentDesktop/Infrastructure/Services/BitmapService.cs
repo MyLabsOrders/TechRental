@@ -4,7 +4,7 @@ using System.IO;
 
 namespace RentDesktop.Infrastructure.Services
 {
-    public static class BitmapService
+    internal static class BitmapService
     {
         public static byte[] ConvertBitmapToBytes(Bitmap bitmap)
         {

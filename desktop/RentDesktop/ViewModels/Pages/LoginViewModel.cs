@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace RentDesktop.ViewModels.Pages
 {
-    public class LoginViewModel : ViewModelBase
+    internal class LoginViewModel : ViewModelBase
     {
         public LoginViewModel()
         {

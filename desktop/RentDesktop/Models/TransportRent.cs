@@ -2,7 +2,7 @@
 
 namespace RentDesktop.Models
 {
-    public class TransportRent : ReactiveModel, ITransportRent
+    internal class TransportRent : ReactiveModel, ITransportRent
     {
         public TransportRent(Transport transport, int days)
         {

@@ -2,7 +2,7 @@
 
 namespace RentDesktop.Infrastructure.Services.DB
 {
-    public static class FileDownloadService
+    internal static class FileDownloadService
     {
         public static bool DownloadReceipt(IUserInfo userInfo)
         {

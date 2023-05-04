@@ -2,7 +2,7 @@
 
 namespace RentDesktop.Infrastructure.Services.DB
 {
-    public static class UserEditService
+    internal static class UserEditService
     {
         public static bool EditInfo(IUserInfo userInfo)
         {

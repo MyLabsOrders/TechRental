@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace RentDesktop.Infrastructure.App
 {
-    public static class DialogProvider
+    internal static class DialogProvider
     {
         public static OpenFileDialog GetOpenImageDialog()
         {

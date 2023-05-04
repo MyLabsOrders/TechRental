@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace RentDesktop.Models.Base
 {
-    public abstract class ReactiveModel : IReactiveModel, INotifyPropertyChanged
+    internal abstract class ReactiveModel : IReactiveModel, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string? property = "")

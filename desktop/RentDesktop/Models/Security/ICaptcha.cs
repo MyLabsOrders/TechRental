@@ -1,6 +1,6 @@
 ﻿namespace RentDesktop.Models.Security
 {
-    public interface ICaptcha
+    internal interface ICaptcha
     {
         string Text { get; }
         int Length { get; set; }

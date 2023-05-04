@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace RentDesktop.Infrastructure.App
 {
-    public static class WindowFinder
+    internal static class WindowFinder
     {
         public static Window? FindMainWindow()
         {

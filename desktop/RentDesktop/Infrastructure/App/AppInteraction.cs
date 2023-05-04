@@ -6,7 +6,7 @@ using RentDesktop.Views;
 
 namespace RentDesktop.Infrastructure.App
 {
-    public static class AppInteraction
+    internal static class AppInteraction
     {
         public static void CloseCurrentApp()
         {

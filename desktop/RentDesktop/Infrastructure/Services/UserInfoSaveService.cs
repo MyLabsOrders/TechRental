@@ -4,7 +4,7 @@ using System.IO;
 
 namespace RentDesktop.Infrastructure.Services
 {
-    public static class UserInfoSaveService
+    internal static class UserInfoSaveService
     {
         private const string PATH = "saved_user.txt";
 

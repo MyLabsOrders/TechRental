@@ -2,7 +2,7 @@
 
 namespace RentDesktop.Models
 {
-    public class Transport : ITransport
+    internal class Transport : ITransport
     {
         public Transport(string name, string company, int price, Bitmap? icon = null)
         {

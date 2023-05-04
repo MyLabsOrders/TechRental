@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace RentDesktop.Infrastructure.Services.DB
 {
-    public static class OrdersService
+    internal static class OrdersService
     {
         public static bool SaveOrdersStatus(IEnumerable<Order> orders, IUserInfo userInfo)
         {

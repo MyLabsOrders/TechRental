@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace RentDesktop.Infrastructure.Services.DB
 {
-    public static class ShopService
+    internal static class ShopService
     {
         public static bool GetTransports(out IEnumerable<Transport> transports)
         {

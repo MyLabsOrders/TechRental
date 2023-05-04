@@ -9,7 +9,7 @@ using System.Reactive;
 
 namespace RentDesktop.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase
+    internal class MainWindowViewModel : ViewModelBase
     {
         public MainWindowViewModel()
         {

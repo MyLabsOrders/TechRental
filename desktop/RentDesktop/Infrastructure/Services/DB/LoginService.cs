@@ -3,7 +3,7 @@ using System;
 
 namespace RentDesktop.Infrastructure.Services.DB
 {
-    public static class LoginService
+    internal static class LoginService
     {
         public static bool Login(string login, string password, out IUserInfo? userInfo)
         {

@@ -4,7 +4,7 @@ using System.Globalization;
 
 namespace RentDesktop.Infrastructure.Converters
 {
-    public class InverseBoolConverter : IValueConverter
+    internal class InverseBoolConverter : IValueConverter
     {
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {

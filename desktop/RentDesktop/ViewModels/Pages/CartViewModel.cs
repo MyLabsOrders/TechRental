@@ -14,7 +14,7 @@ using System.Reactive;
 
 namespace RentDesktop.ViewModels.Pages
 {
-    public class CartViewModel : ViewModelBase
+    internal class CartViewModel : ViewModelBase
     {
         public CartViewModel() : this(new UserInfo(), new ObservableCollection<Order>())
         {

@@ -2,7 +2,7 @@
 
 namespace RentDesktop.Infrastructure.Services.DB
 {
-    public static class UserRegisterService
+    internal static class UserRegisterService
     {
         public static bool RegisterUser(IUserInfo userInfo)
         {
