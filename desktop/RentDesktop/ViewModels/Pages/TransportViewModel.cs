@@ -114,6 +114,8 @@ namespace RentDesktop.ViewModels.Pages
             var item = new TransportRent(transportCopy, 1);
 
             _cart.Add(item);
+
+            SelectedTransport = null;
         }
 
         private void OpenCartTab()
