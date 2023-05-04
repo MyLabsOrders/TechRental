@@ -1,5 +1,4 @@
-﻿using Avalonia.Threading;
-using ReactiveUI;
+﻿using ReactiveUI;
 using RentDesktop.Models;
 using RentDesktop.ViewModels.Base;
 using System;
@@ -61,9 +60,8 @@ namespace RentDesktop.ViewModels.Pages
 
         #region Private Fields
 
-        private readonly Action? _openCartTab = null;
-        private readonly Action? _openUserTab = null;
-        private readonly DispatcherTimer _openUserTabTimer = new(DispatcherPriority.MaxValue);
+        private readonly Action? _openCartTab;
+        private readonly ObservableCollection<TransportRent> _cart;
 
         #endregion
 
@@ -75,11 +73,11 @@ namespace RentDesktop.ViewModels.Pages
 
         #endregion
 
-        public TransportViewModel() : this(null, null)
+        public TransportViewModel() : this(null, new ObservableCollection<TransportRent>())
         {
         }
 
-        public TransportViewModel(Action? openCartTab, Action? openUserTab)
+        public TransportViewModel(Action? openCartTab, ObservableCollection<TransportRent> cart)
         {
             // temp
             Transports = new ObservableCollection<Transport>()
@@ -92,25 +90,11 @@ namespace RentDesktop.ViewModels.Pages
             // end temp
 
             _openCartTab = openCartTab;
-            _openUserTab = openUserTab;
+            _cart = cart;
 
             SelectTransportCommand = ReactiveCommand.Create<Transport>(SelectTransport);
             AddToCartCommand = ReactiveCommand.Create<Transport>(AddToCart);
             OpenCartCommand = ReactiveCommand.Create(OpenCartTab);
-
-            #region Configure _openUserTabTimer
-
-            _openUserTabTimer.Interval = new TimeSpan(0, 0, 0, 0, 10);
-
-            _openUserTabTimer.Tick += (object? s, EventArgs e) =>
-            {
-                OpenUserTab();
-                _openUserTabTimer.Stop();
-            };
-
-            _openUserTabTimer.Start();
-
-            #endregion
         }
 
         #region Private Methods
@@ -122,18 +106,15 @@ namespace RentDesktop.ViewModels.Pages
 
         private void AddToCart(Transport transport)
         {
-            Transports.Add(transport);
-            throw new NotImplementedException();
+            var transportCopy = transport.Copy();
+            var item = new TransportRent(transportCopy, 1);
+
+            _cart.Add(item);
         }
 
         private void OpenCartTab()
         {
             _openCartTab?.Invoke();
-        }
-
-        private void OpenUserTab()
-        {
-            _openUserTab?.Invoke();
         }
 
         #endregion

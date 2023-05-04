@@ -2,6 +2,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+			 xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
 			 xmlns:img="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
 			 xmlns:vm="using:RentDesktop.ViewModels.Pages"
 			 xmlns:models="clr-namespace:RentDesktop.Models;assembly=RentDesktop"
@@ -14,7 +16,7 @@
 	</Design.DataContext>
 
 	<Grid ColumnDefinitions="1*, 200">
-		<ItemsControl Grid.Column="0" Items="{Binding Transports}">
+		<ItemsControl Grid.Column="0" Items="{Binding Cart}">
 			<ItemsControl.Styles>
 				<Style Selector="Button">
 					<Setter Property="Margin" Value="3" />
@@ -32,7 +34,7 @@
 			<ItemsControl.Template>
 				<ControlTemplate>
 					<ScrollViewer>
-						<ItemsPresenter Items="{Binding Transports}">
+						<ItemsPresenter>
 							<ItemsPresenter.ItemsPanel>
 								<ItemsPanelTemplate>
 									<WrapPanel ItemWidth="220" ItemHeight="140" />
@@ -44,33 +46,36 @@
 			</ItemsControl.Template>
 
 			<ItemsControl.DataTemplates>
-				<DataTemplate DataType="{x:Type models:Transport}">
-					<Button Classes="cell">
+				<DataTemplate DataType="{x:Type models:TransportRent}">
+					<Button Classes="cell"
+							Command="{Binding DataContext.SelectTransportRentCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+							CommandParameter="{Binding Self}">
 						<Grid RowDefinitions="1*, 30">
-							<Button Name="FavoriteIcon"
-									Width="25"
+							<Button Width="25"
 									Height="25"
 									Opacity="0.7"
 									Margin="0, 5, 5, 0"
 									Background="#b7b7b7"
 									VerticalAlignment="Top"
 									HorizontalAlignment="Right"
-									img:Attached.Icon="fa-times" />
+									img:Attached.Icon="fa-times"
+									Command="{Binding DataContext.RemoveFromCartCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+									CommandParameter="{Binding Self}" />
 
 							<Border BorderBrush="DarkGray" BorderThickness="2" Margin="5, 5, 35, 0">
-								<Image Grid.Row="0" />
+								<Image Source="{Binding Transport.Icon}" MaxHeight="92" />
 							</Border>
 
 							<Grid Grid.Row="1" Margin="5, 0">
 								<TextBlock Grid.Column="0"
 										   VerticalAlignment="Center"
 										   HorizontalAlignment="Left"
-										   Text="{Binding Name}" />
+										   Text="{Binding Transport.Name}" />
 
 								<TextBlock Grid.Column="0"
 										   VerticalAlignment="Center"
 										   HorizontalAlignment="Right"
-										   Text="{Binding PricePresenter}" />
+										   Text="{Binding Transport.PricePresenter}" />
 							</Grid>
 						</Grid>
 					</Button>
@@ -89,10 +94,10 @@
 
 			<Grid Grid.Row="0" RowDefinitions="160, 5, Auto, 1*" Margin="5">
 				<Border Grid.Row="0" BorderBrush="Gray" BorderThickness="2">
-					<Image />
+					<Image MaxHeight="156" Source="{Binding SelectedTransportRent.Translort.Icon}" />
 				</Border>
 
-				<Grid Grid.Row="2" RowDefinitions="30, 1*">
+				<Grid Grid.Row="2" RowDefinitions="30, 30, 1*">
 					<Grid.Styles>
 						<Style Selector="TextBlock">
 							<Setter Property="Margin" Value="0, 3, 0, 0" />
@@ -100,9 +105,10 @@
 						</Style>
 					</Grid.Styles>
 
-					<TextBlock Grid.Row="0" Text="{Binding SelectedTransport.Name}" />
+					<TextBlock Grid.Row="0" Text="{Binding SelectedTransportName}" />
+					<TextBlock Grid.Row="1" Text="{Binding SelectedTransportPrice}" />
 
-					<Grid Grid.Row="1" RowDefinitions="30, 10, 30, 1*" ColumnDefinitions="Auto, 5, 1*">
+					<Grid Grid.Row="2" RowDefinitions="30, 10, 30, 1*" ColumnDefinitions="Auto, 5, 1*">
 						<Grid.Styles>
 							<Style Selector="TextBlock">
 								<Setter Property="VerticalAlignment" Value="Center" />
@@ -110,15 +116,29 @@
 						</Grid.Styles>
 
 						<TextBlock Text="Дней" Grid.Row="0" Grid.Column="0" />
-						<NumericUpDown Grid.Row="0" Grid.Column="2" Value="1" />
+
+						<NumericUpDown Grid.Row="0"
+									   Grid.Column="2"
+									   Minimum="1"
+									   IsEnabled="{Binding IsTransportRentSelected}"
+									   Value="{Binding SelectedTransportRent.Days}">
+							<i:Interaction.Behaviors>
+								<ia:EventTriggerBehavior EventName="ValueChanged">
+									<ia:InvokeCommandAction
+										Command="{Binding UpdateTotalPriceCommand}"
+										PassEventArgsToCommand="True" />
+								</ia:EventTriggerBehavior>
+							</i:Interaction.Behaviors>
+						</NumericUpDown>
+						
 						<TextBlock Grid.Row="2" Grid.Column="0" Text="Итого" />
-						<TextBox Grid.Row="2" Grid.Column="2" IsReadOnly="True" />
+						<TextBox Grid.Row="2" Grid.Column="2" IsReadOnly="True" Text="{Binding TotalPrice}" />
 					</Grid>
 				</Grid>
 			</Grid>
 
-			<Button Grid.Row="2" Content="Оформить заказ" />
-			<Button Grid.Row="4" Content="Отменить заказ" />
+			<Button Grid.Row="2" Content="Оформить заказ" Command="{Binding PlaceOrderCommand}" />
+			<Button Grid.Row="4" Content="Очистить корзину" Command="{Binding ClearCartCommand}" />
 		</Grid>
 	</Grid>
 

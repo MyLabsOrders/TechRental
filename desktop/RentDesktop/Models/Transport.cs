@@ -18,5 +18,11 @@ namespace RentDesktop.Models
         public Bitmap? Icon { get; }
 
         public Transport Self => this;
+        public string PricePresenter => $"Цена: {Price}";
+
+        public Transport Copy()
+        {
+            return new Transport(Name, Company, Price, Icon);
+        }
     }
 }
