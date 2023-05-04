@@ -51,6 +51,7 @@
 							 Content="Мужской"
 							 GroupName="Gender"
 							 Name="MaleGenderRadioButton"
+							 IsChecked="{Binding IsMaleGenderChecked}"
 							 Command="{Binding SetGenderCommand}"
 							 CommandParameter="{Binding ElementName=MaleGenderRadioButton, Path=Content}" />
 				
@@ -58,6 +59,7 @@
 							 Content="Женский"
 							 GroupName="Gender"
 							 Name="FemaleGenderRadioButton"
+							 IsChecked="{Binding IsFemaleGenderChecked}"
 							 Command="{Binding SetGenderCommand}"
 							 CommandParameter="{Binding ElementName=FemaleGenderRadioButton, Path=Content}" />
 			</Grid>

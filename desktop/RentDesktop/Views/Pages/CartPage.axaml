@@ -142,7 +142,7 @@
 				<Button Grid.Row="2"
 						Content="Оформить заказ"
 						IsEnabled="{Binding IsCartNotEmpty}"
-						Command="{Binding PlaceOrderCommand}" />
+						Command="{Binding OpenOrderPlacingPageCommand}" />
 				
 				<Button Grid.Row="4"
 						Content="Очистить корзину"

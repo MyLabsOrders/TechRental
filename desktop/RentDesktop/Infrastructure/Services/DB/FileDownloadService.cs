@@ -2,15 +2,15 @@
 
 namespace RentDesktop.Infrastructure.Services.DB
 {
-    public static class RegisterUserService
+    public static class FileDownloadService
     {
-        public static bool RegisterUser(IUserInfo userInfo)
+        public static bool DownloadReceipt(IUserInfo userInfo)
         {
             //throw new NotImplementedException();
             return true;
         }
 
-        public static bool IsLoginFree(string login)
+        public static bool DownloadSummaryStatement(IUserInfo userInfo)
         {
             //throw new NotImplementedException();
             return true;

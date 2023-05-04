@@ -20,7 +20,8 @@
 	<i:Interaction.Behaviors>
 		<ia:EventTriggerBehavior EventName="Closing">
 			<ia:InvokeCommandAction Command="{Binding ShowMainWindowCommand}" />
-			<ia:InvokeCommandAction Command="{Binding SaveOrderStatusCommand}" />
+			<ia:InvokeCommandAction Command="{Binding SaveOrdersStatusCommand}" />
+			<ia:InvokeCommandAction Command="{Binding DisposeUserImageCommand}" />
 		</ia:EventTriggerBehavior>
 
 		<ia:EventTriggerBehavior EventName="PointerMoved">
@@ -34,7 +35,7 @@
 	
 	<TabControl SelectedIndex="{Binding SelectedTabIndex}">
 		<TabItem Header="Пользователь">
-			<pages:UserProfilePage DataContext="{Binding UserVM}" />
+			<pages:UserProfilePage DataContext="{Binding UserProfileVM}" />
 		</TabItem>
 		
 		<TabItem Header="Транспорт">

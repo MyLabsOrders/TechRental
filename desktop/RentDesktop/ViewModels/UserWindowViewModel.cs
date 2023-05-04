@@ -1,6 +1,7 @@
 ﻿using Avalonia.Threading;
 using ReactiveUI;
 using RentDesktop.Infrastructure.App;
+using RentDesktop.Infrastructure.Services.DB;
 using RentDesktop.Models.Informing;
 using RentDesktop.ViewModels.Base;
 using RentDesktop.ViewModels.Pages;
@@ -11,9 +12,38 @@ namespace RentDesktop.ViewModels
 {
     public class UserWindowViewModel : ViewModelBase
     {
+        public UserWindowViewModel() : this(new UserInfo())
+        {
+        }
+
+        public UserWindowViewModel(IUserInfo userInfo)
+        {
+            UserProfileVM = new UserProfileViewModel(userInfo);
+            OrdersVM = new OrdersViewModel();
+            CartVM = new CartViewModel(userInfo, OrdersVM.Orders);
+            TransportVM = new TransportViewModel(CartVM.Cart);
+
+            UserProfileVM.UserInfoUpdated += CartVM.UpdateUserInfo;
+            CartVM.OrdersTabOpening += OpenOrdersTab;
+            TransportVM.CartTabOpening += OpenCartTab;
+
+            UserInfo = userInfo;
+
+            _preloadTabsTimer = ConfigurePreloadTabsTimer();
+            _preloadTabsTimer.Start();
+
+            _inactivity_timer = ConfigureInactivityTimer();
+            _inactivity_timer.Start();
+
+            ResetInactivitySecondsCommand = ReactiveCommand.Create(ResetInactivitySeconds);
+            ShowMainWindowCommand = ReactiveCommand.Create(ShowMainWindow);
+            SaveOrdersStatusCommand = ReactiveCommand.Create(SaveOrdersStatus);
+            DisposeUserImageCommand = ReactiveCommand.Create(DisposeUserImage);
+        }
+
         #region ViewModels
 
-        public UserProfileViewModel UserVM { get; }
+        public UserProfileViewModel UserProfileVM { get; }
         public TransportViewModel TransportVM { get; }
         public CartViewModel CartVM { get; }
         public OrdersViewModel OrdersVM { get; }
@@ -21,6 +51,8 @@ namespace RentDesktop.ViewModels
         #endregion
 
         #region Properties
+
+        public IUserInfo UserInfo { get; }
 
         private int _selectedTabIndex = 1;
         public int SelectedTabIndex
@@ -59,34 +91,10 @@ namespace RentDesktop.ViewModels
 
         public ReactiveCommand<Unit, Unit> ResetInactivitySecondsCommand { get; }
         public ReactiveCommand<Unit, Unit> ShowMainWindowCommand { get; }
-        public ReactiveCommand<Unit, Unit> SaveOrderStatusCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveOrdersStatusCommand { get; }
+        public ReactiveCommand<Unit, Unit> DisposeUserImageCommand { get; }
 
         #endregion
-
-        public UserWindowViewModel() : this(new UserInfo())
-        {
-        }
-
-        public UserWindowViewModel(IUserInfo userInfo)
-        {
-            UserVM = new UserProfileViewModel();
-            OrdersVM = new OrdersViewModel();
-            CartVM = new CartViewModel(OrdersVM.Orders);
-            TransportVM = new TransportViewModel(CartVM.Cart);
-
-            CartVM.OrdersTabOpening += OpenOrdersTab;
-            TransportVM.CartTabOpening += OpenCartTab;
-
-            _preloadTabsTimer = ConfigurePreloadTabsTimer();
-            _preloadTabsTimer.Start();
-
-            _inactivity_timer = ConfigureInactivityTimer();
-            _inactivity_timer.Start();
-
-            ResetInactivitySecondsCommand = ReactiveCommand.Create(ResetInactivitySeconds);
-            ShowMainWindowCommand = ReactiveCommand.Create(ShowMainWindow);
-            SaveOrderStatusCommand = ReactiveCommand.Create(SaveOrderStatus);
-        }
 
         #region Private Methods
 
@@ -149,10 +157,14 @@ namespace RentDesktop.ViewModels
             AppInteraction.ShowMainWindow();
         }
 
-        private void SaveOrderStatus()
+        private void SaveOrdersStatus()
         {
-            // TODO
-            // throw new NotImplementedException();
+            OrdersService.SaveOrdersStatus(OrdersVM.Orders, UserInfo);
+        }
+
+        private void DisposeUserImage()
+        {
+            UserProfileVM.UserImage?.Dispose();
         }
 
         private void PreloadTabs()

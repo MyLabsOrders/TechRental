@@ -14,5 +14,7 @@ namespace RentDesktop.Models.Informing
         string Status { get; set; }
         byte[] Icon { get; set; }
         DateTime DateOfBirth { get; set; }
+
+        void CopyTo(IUserInfo other);
     }
 }

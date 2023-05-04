@@ -38,7 +38,7 @@
 			<TextBlock Grid.Row="8" Grid.Column="0" Text="Отчество" />
 			<TextBox Grid.Row="8" Grid.Column="2" Text="{Binding Patronymic}" />
 			<TextBlock Grid.Row="10" Grid.Column="0" Text="Должность" />
-			<TextBox Grid.Row="10" Grid.Column="2" IsReadOnly="True" />
+			<TextBox Grid.Row="10" Grid.Column="2" IsReadOnly="True" Text="{Binding Status}" />
 
 			<TextBlock Grid.Row="12" Grid.Column="0" Text="Дата рождения" />
 
@@ -57,6 +57,7 @@
 							 Content="Мужской"
 							 GroupName="Gender"
 							 Name="MaleGenderRadioButton"
+							 IsChecked="{Binding IsMaleGenderChecked}"
 							 Command="{Binding SetGenderCommand}"
 							 CommandParameter="{Binding ElementName=MaleGenderRadioButton, Path=Content}" />
 
@@ -64,6 +65,7 @@
 							 Content="Женский"
 							 GroupName="Gender"
 							 Name="FemaleGenderRadioButton"
+							 IsChecked="{Binding IsFemaleGenderChecked}"
 							 Command="{Binding SetGenderCommand}"
 							 CommandParameter="{Binding ElementName=FemaleGenderRadioButton, Path=Content}" />
 			</Grid>

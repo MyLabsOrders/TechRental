@@ -1,8 +1,12 @@
 ﻿using Avalonia.Controls;
 using ReactiveUI;
+using RentDesktop.Infrastructure.App;
+using RentDesktop.Infrastructure.Services.DB;
 using RentDesktop.Models;
+using RentDesktop.Models.Communication;
+using RentDesktop.Models.Informing;
 using RentDesktop.ViewModels.Base;
-using System;
+using RentDesktop.Views;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
@@ -12,6 +16,40 @@ namespace RentDesktop.ViewModels.Pages
 {
     public class CartViewModel : ViewModelBase
     {
+        public CartViewModel() : this(new UserInfo(), new ObservableCollection<Order>())
+        {
+        }
+
+        public CartViewModel(IUserInfo userInfo, ObservableCollection<Order> orders)
+        {
+            PaymentMethods = GetSupportedPaymentMethods();
+            Cart = new ObservableCollection<TransportRent>();
+
+            Cart.CollectionChanged += (object? s, NotifyCollectionChangedEventArgs e) =>
+            {
+                CalcTotalPrice();
+                CheckCartIsEmpty();
+            };
+
+            _userInfo = userInfo;
+            _orders = orders;
+
+            UpdateUserInfo();
+
+            OpenOrderPlacingPageCommand = ReactiveCommand.Create(OpenOrderPlacingPage);
+            ClearCartCommand = ReactiveCommand.Create(ClearCart);
+            RemoveFromCartCommand = ReactiveCommand.Create<TransportRent>(RemoveFromCart);
+            SelectTransportRentCommand = ReactiveCommand.Create<TransportRent>(SelectTransportRent);
+            UpdateTotalPriceCommand = ReactiveCommand.Create<NumericUpDownValueChangedEventArgs>(UpdateTotalPrice);
+
+            OpenCartPageCommand = ReactiveCommand.Create(OpenCartPage);
+            OpenOrderPaymentPageCommand = ReactiveCommand.Create(OpenOrderPaymentPage);
+            CloseOrderPaymentPageCommand = ReactiveCommand.Create(CloseOrderPaymentPage);
+            PayOrderCommand = ReactiveCommand.Create(PayOrder);
+            DownloadReceiptCommand = ReactiveCommand.Create(DownloadReceipt);
+            DownloadSummaryStatementCommand = ReactiveCommand.Create(DownloadSummaryStatement);
+        }
+
         #region Events
 
         public delegate void OrdersTabOpeningHandler();
@@ -139,13 +177,14 @@ namespace RentDesktop.ViewModels.Pages
 
         #region Private Fields
 
+        private readonly IUserInfo _userInfo;
         private readonly ObservableCollection<Order> _orders;
 
         #endregion
 
         #region Commands
 
-        public ReactiveCommand<Unit, Unit> PlaceOrderCommand { get; }
+        public ReactiveCommand<Unit, Unit> OpenOrderPlacingPageCommand { get; }
         public ReactiveCommand<Unit, Unit> ClearCartCommand { get; }
         public ReactiveCommand<TransportRent, Unit> RemoveFromCartCommand { get; }
         public ReactiveCommand<TransportRent, Unit> SelectTransportRentCommand { get; }
@@ -160,44 +199,17 @@ namespace RentDesktop.ViewModels.Pages
 
         #endregion
 
-        public CartViewModel() : this(new ObservableCollection<Order>())
+        #region Public Methods
+
+        public void UpdateUserInfo()
         {
+            UserName = $"{_userInfo.Name} {_userInfo.Surname} {_userInfo.Patronymic}";
+            UserPhoneNumber = _userInfo.PhoneNumber;
         }
 
-        public CartViewModel(ObservableCollection<Order> orders)
-        {
-            PaymentMethods = GetSupportedPaymentMethods();
-            Cart = new ObservableCollection<TransportRent>();
-
-            Cart.CollectionChanged += (object? s, NotifyCollectionChangedEventArgs e) =>
-            {
-                CalcTotalPrice();
-                CheckCartIsEmpty();
-            };
-
-            _orders = orders;
-
-            PlaceOrderCommand = ReactiveCommand.Create(PlaceOrder);
-            ClearCartCommand = ReactiveCommand.Create(ClearCart);
-            RemoveFromCartCommand = ReactiveCommand.Create<TransportRent>(RemoveFromCart);
-            SelectTransportRentCommand = ReactiveCommand.Create<TransportRent>(SelectTransportRent);
-            UpdateTotalPriceCommand = ReactiveCommand.Create<NumericUpDownValueChangedEventArgs>(UpdateTotalPrice);
-
-            OpenCartPageCommand = ReactiveCommand.Create(OpenCartPage);
-            OpenOrderPaymentPageCommand = ReactiveCommand.Create(OpenOrderPaymentPage);
-            CloseOrderPaymentPageCommand = ReactiveCommand.Create(CloseOrderPaymentPage);
-            PayOrderCommand = ReactiveCommand.Create(PayOrder);
-            DownloadReceiptCommand = ReactiveCommand.Create(DownloadReceipt);
-            DownloadSummaryStatementCommand = ReactiveCommand.Create(DownloadSummaryStatement);
-        }
+        #endregion
 
         #region Private Methods
-
-        private void PlaceOrder()
-        {
-            //throw new NotImplementedException();
-            OpenOrderPlacingPage();
-        }
 
         private void ClearCart()
         {
@@ -259,8 +271,6 @@ namespace RentDesktop.ViewModels.Pages
         {
             HideAllPages();
             IsOrderPaymentPageVisible = true;
-
-            this.RaisePropertyChanged(nameof(Cart));
         }
 
         private void CloseOrderPaymentPage()
@@ -275,28 +285,43 @@ namespace RentDesktop.ViewModels.Pages
 
         private void PayOrder()
         {
-            //throw new NotImplementedException();
-            IsOrderPaidFor = true;
+            var window = WindowFinder.FindByType(typeof(UserWindow));
 
-            int id = new Random().Next(0, 1000000);
-            double price = TotalPrice;
-            DateTime date = DateTime.Now;
-            var models = Cart.Select(t => t.Transport.Name);
+            if (!OrdersService.CanPayOrder(Cart, _userInfo))
+            {
+                QuickMessage.Error("У вас не хватает средств для оплаты.").ShowDialog(window);
+                return;
+            }
+            if (!OrdersService.CreateOrder(Cart, _userInfo, out Order order))
+            {
+                QuickMessage.Error("Не удалось оплатить заказ.").ShowDialog(window);
+                return;
+            }
 
-            var order = new Order(id, price, date, models);
             _orders.Add(order);
+            IsOrderPaidFor = true;
 
             ClearCart();
         }
 
         private void DownloadReceipt()
         {
-            throw new NotImplementedException();
+            var window = WindowFinder.FindByType(typeof(UserWindow));
+
+            if (!FileDownloadService.DownloadReceipt(_userInfo))
+                QuickMessage.Error("Не удалось загрузить чек.").ShowDialog(window);
+            else
+                QuickMessage.Info("Чек успешно загружен.").ShowDialog(window);
         }
 
         private void DownloadSummaryStatement()
         {
-            throw new NotImplementedException();
+            var window = WindowFinder.FindByType(typeof(UserWindow));
+
+            if (!FileDownloadService.DownloadSummaryStatement(_userInfo))
+                QuickMessage.Error("Не удалось загрузить ведомость.").ShowDialog(window);
+            else
+                QuickMessage.Info("Ведомость успешно загружена.").ShowDialog(window);
         }
 
         private static ObservableCollection<string> GetSupportedPaymentMethods()

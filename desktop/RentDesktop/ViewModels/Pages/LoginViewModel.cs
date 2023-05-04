@@ -133,7 +133,7 @@ namespace RentDesktop.ViewModels.Pages
             else
                 ClearLoginInfo();
 
-            ResetAllFields(true);
+            ResetAllFields(RememberUser);
 
             var viewModel = new UserWindowViewModel(userInfo);
             var userWindow = new UserWindow() { DataContext = viewModel };

@@ -120,6 +120,20 @@ namespace RentDesktop.ViewModels.Pages
             }
         }
 
+        private bool _isMaleGenderChecked = false;
+        public bool IsMaleGenderChecked
+        {
+            get => _isMaleGenderChecked;
+            set => this.RaiseAndSetIfChanged(ref _isMaleGenderChecked, value);
+        }
+
+        private bool _isFemaleGenderChecked = false;
+        public bool IsFemaleGenderChecked
+        {
+            get => _isFemaleGenderChecked;
+            set => this.RaiseAndSetIfChanged(ref _isFemaleGenderChecked, value);
+        }
+
         #endregion
 
         #region Private Fields
@@ -167,7 +181,7 @@ namespace RentDesktop.ViewModels.Pages
                 DateOfBirth = DateOfBirth!.Value
             };
 
-            if (RegisterUserService.RegisterUser(userInfo))
+            if (UserRegisterService.RegisterUser(userInfo))
             {
                 ResetAllFields();
                 RegisterPageClosing?.Invoke();
@@ -230,7 +244,7 @@ namespace RentDesktop.ViewModels.Pages
                 QuickMessage.Info("Введите логин.").ShowDialog(window);
                 return false;
             }
-            if (!RegisterUserService.IsLoginFree(Login))
+            if (!UserRegisterService.IsLoginFree(Login))
             {
                 QuickMessage.Info("Логин уже занят.").ShowDialog(window);
                 return false;
@@ -287,9 +301,15 @@ namespace RentDesktop.ViewModels.Pages
             Surname = string.Empty;
             Patronymic = string.Empty;
             PhoneNumber = string.Empty;
-            //Gender = string.Empty;
+            Gender = string.Empty;
+
+            UserImage?.Dispose();
             UserImage = null;
             DateOfBirth = null;
+
+            ShowPassword = false;
+            IsMaleGenderChecked = false;
+            IsFemaleGenderChecked = false;
         }
 
         #endregion
