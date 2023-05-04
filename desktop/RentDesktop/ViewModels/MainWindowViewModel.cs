@@ -58,9 +58,10 @@ namespace RentDesktop.ViewModels
 
         public MainWindowViewModel()
         {
-            LoginVM = new LoginViewModel(OpenRegisterPage);
+            LoginVM = new LoginViewModel();
             RegisterVM = new RegisterViewModel();
 
+            LoginVM.RegisterPageOpening += OpenRegisterPage;
             RegisterVM.RegisterPageClosing += OpenLoginPage;
 
             _inactivity_timer = ConfigureInactivityTimer();

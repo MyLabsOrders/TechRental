@@ -1,16 +1,36 @@
-﻿using ReactiveUI;
+﻿using Avalonia.Threading;
+using ReactiveUI;
 using RentDesktop.Infrastructure.App;
 using RentDesktop.Infrastructure.Services;
+using RentDesktop.Infrastructure.Services.DB;
+using RentDesktop.Models.Communication;
+using RentDesktop.Models.Informing;
 using RentDesktop.Models.Security;
 using RentDesktop.ViewModels.Base;
 using RentDesktop.Views;
-using System;
 using System.Reactive;
+using System.Threading.Tasks;
 
 namespace RentDesktop.ViewModels.Pages
 {
     public class LoginViewModel : ViewModelBase
     {
+        public LoginViewModel()
+        {
+            LoadLoginInfoCommand = ReactiveCommand.Create(LoadLoginInfo);
+            UpdateCaptchaCommand = ReactiveCommand.Create(UpdateCaptcha);
+            EnterSystemCommand = ReactiveCommand.Create(EnterSystem);
+            OpenRegisterPageCommand = ReactiveCommand.Create(OpenRegisterPage);
+            CloseProgramCommand = ReactiveCommand.Create(CloseProgram);
+        }
+
+        #region Events
+
+        public delegate void RegisterPageOpeningHandler();
+        public event RegisterPageOpeningHandler? RegisterPageOpening;
+
+        #endregion
+
         #region Properties
 
         public ICaptcha Captcha { get; } = new Captcha();
@@ -68,10 +88,9 @@ namespace RentDesktop.ViewModels.Pages
         #region Constants
 
         private const char HIDDEN_PASSWORD_CHAR = '*';
+        private const int HIDE_MAIN_WINDOW_AFTER_MILLISECONDS = 10;
 
         #endregion
-
-        private readonly Action? _openRegisterPage;
 
         #endregion
 
@@ -85,21 +104,6 @@ namespace RentDesktop.ViewModels.Pages
 
         #endregion
 
-        public LoginViewModel() : this(null)
-        {
-        }
-
-        public LoginViewModel(Action? openRegisterPage)
-        {
-            _openRegisterPage = openRegisterPage;
-
-            LoadLoginInfoCommand = ReactiveCommand.Create(LoadLoginInfo);
-            UpdateCaptchaCommand = ReactiveCommand.Create(UpdateCaptcha);
-            EnterSystemCommand = ReactiveCommand.Create(EnterSystem);
-            OpenRegisterPageCommand = ReactiveCommand.Create(OpenRegisterPage);
-            CloseProgramCommand = ReactiveCommand.Create(CloseProgram);
-        }
-
         #region Private Methods
 
         private void UpdateCaptcha()
@@ -109,21 +113,37 @@ namespace RentDesktop.ViewModels.Pages
 
         private void OpenRegisterPage()
         {
-            _openRegisterPage?.Invoke();
+            RegisterPageOpening?.Invoke();
         }
 
         private void EnterSystem()
         {
+            if (!VerifyFieldsCorrectness())
+                return;
+
+            if (!LoginService.Login(Login, Password, out IUserInfo? userInfo) || userInfo is null)
+            {
+                var window = WindowFinder.FindMainWindow();
+                QuickMessage.Error("Не удалось войти в систему.").ShowDialog(window);
+                return;
+            }
+
             if (RememberUser)
                 SaveLoginInfo();
+            else
+                ClearLoginInfo();
 
-            // temp
-            var window = new UserWindow() { DataContext = new UserWindowViewModel() };
-            window.Show();
-            AppInteraction.HideMainWindow();
-            // end temp
+            ResetAllFields(true);
 
-            //throw new NotImplementedException();
+            var viewModel = new UserWindowViewModel(userInfo);
+            var userWindow = new UserWindow() { DataContext = viewModel };
+
+            userWindow.Show();
+
+            _ = Task.Delay(HIDE_MAIN_WINDOW_AFTER_MILLISECONDS).ContinueWith(t =>
+            {
+                Dispatcher.UIThread.Post(AppInteraction.HideMainWindow);
+            });
         }
 
         private void CloseProgram()
@@ -142,7 +162,51 @@ namespace RentDesktop.ViewModels.Pages
 
         private void SaveLoginInfo()
         {
-            UserInfoSaveService.TrySaveInfo(Login, Password);
+            _ = UserInfoSaveService.TrySaveInfo(Login, Password);
+        }
+
+        private void ClearLoginInfo()
+        {
+            _ = UserInfoSaveService.TryClearInfo();
+        }
+
+        private bool VerifyFieldsCorrectness()
+        {
+            var window = WindowFinder.FindMainWindow();
+
+            if (string.IsNullOrEmpty(Login))
+            {
+                QuickMessage.Info("Введите логин.").ShowDialog(window);
+                return false;
+            }
+            if (string.IsNullOrEmpty(Password))
+            {
+                QuickMessage.Info("Введите пароль.").ShowDialog(window);
+                return false;
+            }
+            if (UserCaptchaText != Captcha.Text)
+            {
+                QuickMessage.Info("Текст с картинки введен неверно.").ShowDialog(window);
+                UpdateCaptcha();
+                return false;
+            }
+
+            return true;
+        }
+
+        private void ResetAllFields(bool leaveLoginInfo = false)
+        {
+            if (!leaveLoginInfo)
+            {
+                Login = string.Empty;
+                Password = string.Empty;
+                RememberUser = true;
+            }
+
+            UserCaptchaText = string.Empty;
+            ShowPassword = false;
+
+            UpdateCaptcha();
         }
 
         #endregion

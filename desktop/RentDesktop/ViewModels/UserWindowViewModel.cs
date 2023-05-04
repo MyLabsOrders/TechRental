@@ -1,6 +1,7 @@
 ﻿using Avalonia.Threading;
 using ReactiveUI;
 using RentDesktop.Infrastructure.App;
+using RentDesktop.Models.Informing;
 using RentDesktop.ViewModels.Base;
 using RentDesktop.ViewModels.Pages;
 using System;
@@ -62,7 +63,11 @@ namespace RentDesktop.ViewModels
 
         #endregion
 
-        public UserWindowViewModel()
+        public UserWindowViewModel() : this(new UserInfo())
+        {
+        }
+
+        public UserWindowViewModel(IUserInfo userInfo)
         {
             UserVM = new UserProfileViewModel();
             OrdersVM = new OrdersViewModel();
