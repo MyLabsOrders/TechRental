@@ -33,7 +33,7 @@ namespace RentDesktop.Infrastructure.App
             Window? mainWindow = WindowFinder.FindMainWindow();
             var viewModel = mainWindow?.DataContext as MainWindowViewModel;
 
-            viewModel?.HideWindow();
+            viewModel?.HideMainWindow();
         }
 
         public static void ShowMainWindow()
@@ -41,7 +41,7 @@ namespace RentDesktop.Infrastructure.App
             Window? mainWindow = WindowFinder.FindMainWindow();
             var viewModel = mainWindow?.DataContext as MainWindowViewModel;
 
-            viewModel?.ShowWindow();
+            viewModel?.ShowMainWindow();
         }
     }
 }

@@ -11,6 +11,20 @@ namespace RentDesktop.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        public MainWindowViewModel()
+        {
+            LoginVM = new LoginViewModel();
+            RegisterVM = new RegisterViewModel();
+
+            LoginVM.RegisterPageOpening += OpenRegisterPage;
+            RegisterVM.RegisterPageClosing += OpenLoginPage;
+
+            _inactivity_timer = ConfigureInactivityTimer();
+            _inactivity_timer.Start();
+
+            ResetInactivitySecondsCommand = ReactiveCommand.Create(ResetInactivitySeconds);
+        }
+
         #region ViewModels
 
         public LoginViewModel LoginVM { get; }
@@ -56,23 +70,9 @@ namespace RentDesktop.ViewModels
 
         #endregion
 
-        public MainWindowViewModel()
-        {
-            LoginVM = new LoginViewModel();
-            RegisterVM = new RegisterViewModel();
-
-            LoginVM.RegisterPageOpening += OpenRegisterPage;
-            RegisterVM.RegisterPageClosing += OpenLoginPage;
-
-            _inactivity_timer = ConfigureInactivityTimer();
-            _inactivity_timer.Start();
-
-            ResetInactivitySecondsCommand = ReactiveCommand.Create(ResetInactivitySeconds);
-        }
-
         #region Public Methods
 
-        public void HideWindow()
+        public void HideMainWindow()
         {
             ResetInactivitySeconds();
             _inactivity_timer.Stop();
@@ -81,7 +81,7 @@ namespace RentDesktop.ViewModels
             mainWindow?.Hide();
         }
 
-        public void ShowWindow()
+        public void ShowMainWindow()
         {
             ResetInactivitySeconds();
             _inactivity_timer.Start();

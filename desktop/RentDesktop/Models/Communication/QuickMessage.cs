@@ -2,7 +2,6 @@
 using MessageBox.Avalonia;
 using MessageBox.Avalonia.BaseWindows.Base;
 using MessageBox.Avalonia.Enums;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace RentDesktop.Models.Communication
 {

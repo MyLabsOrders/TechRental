@@ -148,7 +148,7 @@ namespace RentDesktop.ViewModels.Pages
         {
             if (!VerifyFieldsCorrectness())
                 return;
-            
+
             byte[] userImageBytes = UserImage is not null
                 ? BitmapService.ConvertBitmapToBytes(UserImage)
                 : Array.Empty<byte>();
