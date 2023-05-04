@@ -1,10 +1,9 @@
-using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls;
 using Avalonia.Threading;
 using ReactiveUI;
+using RentDesktop.Infrastructure.App;
 using RentDesktop.ViewModels.Base;
 using RentDesktop.ViewModels.Pages;
-using RentDesktop.Views;
 using System;
 using System.Reactive;
 
@@ -62,22 +61,43 @@ namespace RentDesktop.ViewModels
             LoginVM = new LoginViewModel(OpenRegisterPage);
             RegisterVM = new RegisterViewModel(OpenLoginPage);
 
-            _inactivity_timer = new DispatcherTimer(
-                new TimeSpan(0, 0, INACTIVITY_TIMER_INTERVAL_SECONDS),
-                DispatcherPriority.Background,
-                (sender, e) => VerifyInactivityStatus());
-
+            _inactivity_timer = ConfigureInactivityTimer();
             _inactivity_timer.Start();
 
             ResetInactivitySecondsCommand = ReactiveCommand.Create(ResetInactivitySeconds);
-
-            // temp
-            var window = new UserWindow() { DataContext = new UserWindowViewModel() };
-            window.Show();
-            // end temp
         }
 
+        #region Public Methods
+
+        public void HideWindow()
+        {
+            ResetInactivitySeconds();
+            _inactivity_timer.Stop();
+
+            Window? mainWindow = WindowFinder.FindMainWindow();
+            mainWindow?.Hide();
+        }
+
+        public void ShowWindow()
+        {
+            ResetInactivitySeconds();
+            _inactivity_timer.Start();
+
+            Window? mainWindow = WindowFinder.FindMainWindow();
+            mainWindow?.Show();
+        }
+
+        #endregion
+
         #region Private Methods
+
+        private DispatcherTimer ConfigureInactivityTimer()
+        {
+            return new DispatcherTimer(
+                new TimeSpan(0, 0, INACTIVITY_TIMER_INTERVAL_SECONDS),
+                DispatcherPriority.Background,
+                (sender, e) => VerifyInactivityStatus());
+        }
 
         private void VerifyInactivityStatus()
         {
@@ -86,8 +106,17 @@ namespace RentDesktop.ViewModels
             if (_inactivity_seconds < MAX_INACTIVITY_SECONDS)
                 return;
 
-            if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime)
-                lifetime.Shutdown();
+            ResetInactivitySeconds();
+
+            if (IsRegisterPageVisible)
+            {
+                OpenLoginPage();
+            }
+            else
+            {
+                _inactivity_timer.Stop();
+                AppInteraction.CloseCurrentApp();
+            }
         }
 
         private void ResetInactivitySeconds()

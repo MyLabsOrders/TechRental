@@ -26,5 +26,10 @@ namespace RentDesktop.Infrastructure.App
         {
             return Find(t => t.Name == name);
         }
+
+        public static Window? FindByType(Type type)
+        {
+            return Find(t => t.GetType() == type);
+        }
     }
 }

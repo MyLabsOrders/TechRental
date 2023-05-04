@@ -1,8 +1,10 @@
 ﻿using Avalonia.Threading;
 using ReactiveUI;
+using RentDesktop.Infrastructure.App;
 using RentDesktop.ViewModels.Base;
 using RentDesktop.ViewModels.Pages;
 using System;
+using System.Reactive;
 
 namespace RentDesktop.ViewModels
 {
@@ -37,10 +39,24 @@ namespace RentDesktop.ViewModels
 
         private const int PRELOAD_TABS_TIMER_INTERVAL_MILLISECONDS = 5;
 
+        private const int MAX_INACTIVITY_SECONDS = 60 * 2;
+        private const int INACTIVITY_TIMER_INTERVAL_SECONDS = 1;
+
         #endregion
 
+        private readonly DispatcherTimer _preloadTabsTimer;
         private int _preloadedTabs = 0;
-        private readonly DispatcherTimer _preloadTabsTimer = new(DispatcherPriority.MaxValue);
+
+        private readonly DispatcherTimer _inactivity_timer;
+        private int _inactivity_seconds = 0;
+
+        #endregion
+
+        #region Commands
+
+        public ReactiveCommand<Unit, Unit> ResetInactivitySecondsCommand { get; }
+        public ReactiveCommand<Unit, Unit> ShowMainWindowCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveOrderStatusCommand { get; }
 
         #endregion
 
@@ -50,12 +66,52 @@ namespace RentDesktop.ViewModels
             CartVM = new CartViewModel();
             TransportVM = new TransportViewModel(OpenCartTab, CartVM.Cart);
 
-            _preloadTabsTimer.Interval = new TimeSpan(0, 0, 0, 0, PRELOAD_TABS_TIMER_INTERVAL_MILLISECONDS);
-            _preloadTabsTimer.Tick += PreloadTabs;
+            _preloadTabsTimer = ConfigurePreloadTabsTimer();
             _preloadTabsTimer.Start();
+
+            _inactivity_timer = ConfigureInactivityTimer();
+            _inactivity_timer.Start();
+
+            ResetInactivitySecondsCommand = ReactiveCommand.Create(ResetInactivitySeconds);
+            ShowMainWindowCommand = ReactiveCommand.Create(ShowMainWindow);
+            SaveOrderStatusCommand = ReactiveCommand.Create(SaveOrderStatus);
         }
 
         #region Private Methods
+
+        private DispatcherTimer ConfigurePreloadTabsTimer()
+        {
+            return new DispatcherTimer(
+                new TimeSpan(0, 0, 0, 0, PRELOAD_TABS_TIMER_INTERVAL_MILLISECONDS),
+                DispatcherPriority.MaxValue,
+                (sender, e) => PreloadTabs());
+        }
+
+        private DispatcherTimer ConfigureInactivityTimer()
+        {
+            return new DispatcherTimer(
+                new TimeSpan(0, 0, INACTIVITY_TIMER_INTERVAL_SECONDS),
+                DispatcherPriority.Background,
+                (sender, e) => VerifyInactivityStatus());
+        }
+
+        private void VerifyInactivityStatus()
+        {
+            _inactivity_seconds += INACTIVITY_TIMER_INTERVAL_SECONDS;
+
+            if (_inactivity_seconds < MAX_INACTIVITY_SECONDS)
+                return;
+
+            _inactivity_timer.Stop();
+            ResetInactivitySeconds();
+
+            AppInteraction.CloseUserWindow();
+        }
+
+        private void ResetInactivitySeconds()
+        {
+            _inactivity_seconds = 0;
+        }
 
         private void OpenUserTab()
         {
@@ -72,7 +128,18 @@ namespace RentDesktop.ViewModels
             SelectedTabIndex = CART_TAB_INDEX;
         }
 
-        private void PreloadTabs(object? sender, EventArgs e)
+        private void ShowMainWindow()
+        {
+            AppInteraction.ShowMainWindow();
+        }
+
+        private void SaveOrderStatus()
+        {
+            // TODO
+            // throw new NotImplementedException();
+        }
+
+        private void PreloadTabs()
         {
             switch (_preloadedTabs++)
             {

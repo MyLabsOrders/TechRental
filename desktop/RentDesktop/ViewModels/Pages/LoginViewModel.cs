@@ -1,9 +1,9 @@
-﻿using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
-using ReactiveUI;
+﻿using ReactiveUI;
+using RentDesktop.Infrastructure.App;
 using RentDesktop.Infrastructure.Services;
 using RentDesktop.Models;
 using RentDesktop.ViewModels.Base;
+using RentDesktop.Views;
 using System;
 using System.Reactive;
 
@@ -117,13 +117,18 @@ namespace RentDesktop.ViewModels.Pages
             if (RememberUser)
                 SaveLoginInfo();
 
-            throw new NotImplementedException();
+            // temp
+            var window = new UserWindow() { DataContext = new UserWindowViewModel() };
+            window.Show();
+            AppInteraction.HideMainWindow();
+            // end temp
+
+            //throw new NotImplementedException();
         }
 
         private void CloseProgram()
         {
-            if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime)
-                lifetime.Shutdown();
+            AppInteraction.CloseMainWindow();
         }
 
         private void LoadLoginInfo()

@@ -31,9 +31,4 @@
     <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="5.8.0" />
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.6.1" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Views\Pages\UserPage.axaml.cs">
-      <DependentUpon>UserPage.axaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
 </Project>
