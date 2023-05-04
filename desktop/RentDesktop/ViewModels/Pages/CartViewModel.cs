@@ -14,13 +14,15 @@ namespace RentDesktop.ViewModels.Pages
     {
         #region Properties
 
+        #region Cart Subpage
+
         public ObservableCollection<TransportRent> Cart { get; }
 
         private TransportRent? _selectedTransportRent = null;
         public TransportRent? SelectedTransportRent
         {
             get => _selectedTransportRent;
-            set
+            private set
             {
                 this.RaiseAndSetIfChanged(ref _selectedTransportRent, value);
 
@@ -34,29 +36,90 @@ namespace RentDesktop.ViewModels.Pages
         public string SelectedTransportName
         {
             get => $"Название: {_selectedTransportName}";
-            set => this.RaiseAndSetIfChanged(ref _selectedTransportName, value);
+            private set => this.RaiseAndSetIfChanged(ref _selectedTransportName, value);
         }
 
         private string _selectedTransportPrice = string.Empty;
         public string SelectedTransportPrice
         {
             get => $"Цена: {_selectedTransportPrice}";
-            set => this.RaiseAndSetIfChanged(ref _selectedTransportPrice, value);
+            private set => this.RaiseAndSetIfChanged(ref _selectedTransportPrice, value);
         }
 
         private bool _isTransportRentSelected = false;
         public bool IsTransportRentSelected
         {
             get => _isTransportRentSelected;
-            set => this.RaiseAndSetIfChanged(ref _isTransportRentSelected, value);
+            private set => this.RaiseAndSetIfChanged(ref _isTransportRentSelected, value);
         }
 
         private double _totalPrice = 0;
         public double TotalPrice
         {
             get => _totalPrice;
-            set => this.RaiseAndSetIfChanged(ref _totalPrice, value);
+            private set => this.RaiseAndSetIfChanged(ref _totalPrice, value);
         }
+
+        private bool _isCartNotEmpty = false;
+        public bool IsCartNotEmpty
+        {
+            get => _isCartNotEmpty;
+            private set => this.RaiseAndSetIfChanged(ref _isCartNotEmpty, value);
+        }
+
+        private bool _isCartPageVisible = true;
+        public bool IsCartPageVisible
+        {
+            get => _isCartPageVisible;
+            private set => this.RaiseAndSetIfChanged(ref _isCartPageVisible, value);
+        }
+
+        private bool _isOrderPlacingPageVisible = false;
+        public bool IsOrderPlacingPageVisible
+        {
+            get => _isOrderPlacingPageVisible;
+            private set => this.RaiseAndSetIfChanged(ref _isOrderPlacingPageVisible, value);
+        }
+
+        private bool _isOrderPaymentPageVisible = false;
+        public bool IsOrderPaymentPageVisible
+        {
+            get => _isOrderPaymentPageVisible;
+            private set => this.RaiseAndSetIfChanged(ref _isOrderPaymentPageVisible, value);
+        }
+
+        #endregion
+
+        #region Order Placing Subpage
+
+        public ObservableCollection<string> PaymentMethods { get; }
+
+        private string _userName = string.Empty;
+        public string UserName
+        {
+            get => _userName;
+            private set => this.RaiseAndSetIfChanged(ref _userName, value);
+        }
+
+        private string _userPhoneNumber = string.Empty;
+        public string UserPhoneNumber
+        {
+            get => _userPhoneNumber;
+            private set => this.RaiseAndSetIfChanged(ref _userPhoneNumber, value);
+        }
+
+        private int _paymentMethodIndex = 0;
+        public int PaymentMethodIndex
+        {
+            get => _paymentMethodIndex;
+            set => this.RaiseAndSetIfChanged(ref _paymentMethodIndex, value);
+        }
+
+        #endregion
+
+        #region Order Payment Subpage
+
+        #endregion
 
         #endregion
 
@@ -68,25 +131,38 @@ namespace RentDesktop.ViewModels.Pages
         public ReactiveCommand<TransportRent, Unit> SelectTransportRentCommand { get; }
         public ReactiveCommand<NumericUpDownValueChangedEventArgs, Unit> UpdateTotalPriceCommand { get; }
 
+        public ReactiveCommand<Unit, Unit> OpenCartPageCommand { get; }
+        public ReactiveCommand<Unit, Unit> OpenOrderPaymentPageCommand { get; }
+
         #endregion
 
         public CartViewModel()
         {
+            PaymentMethods = GetSupportedPaymentMethods();
             Cart = new ObservableCollection<TransportRent>();
-            Cart.CollectionChanged += (object? s, NotifyCollectionChangedEventArgs e) => CalcTotalPrice();
+
+            Cart.CollectionChanged += (object? s, NotifyCollectionChangedEventArgs e) =>
+            {
+                CalcTotalPrice();
+                CheckCartIsEmpty();
+            };
 
             PlaceOrderCommand = ReactiveCommand.Create(PlaceOrder);
             ClearCartCommand = ReactiveCommand.Create(ClearCart);
             RemoveFromCartCommand = ReactiveCommand.Create<TransportRent>(RemoveFromCart);
             SelectTransportRentCommand = ReactiveCommand.Create<TransportRent>(SelectTransportRent);
             UpdateTotalPriceCommand = ReactiveCommand.Create<NumericUpDownValueChangedEventArgs>(UpdateTotalPrice);
+
+            OpenCartPageCommand = ReactiveCommand.Create(OpenCartPage);
+            OpenOrderPaymentPageCommand = ReactiveCommand.Create(OpenOrderPaymentPage);
         }
 
         #region Private Methods
 
         private void PlaceOrder()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            OpenOrderPlacingPage();
         }
 
         private void ClearCart()
@@ -119,6 +195,44 @@ namespace RentDesktop.ViewModels.Pages
         private void CalcTotalPrice()
         {
             TotalPrice = Cart.Sum(t => t.TotalPrice);
+        }
+
+        private void CheckCartIsEmpty()
+        {
+            IsCartNotEmpty = Cart.Count != 0;
+        }
+
+        private void HideAllPages()
+        {
+            IsCartPageVisible = false;
+            IsOrderPlacingPageVisible = false;
+            IsOrderPaymentPageVisible = false;
+        }
+
+        private void OpenCartPage()
+        {
+            HideAllPages();
+            IsCartPageVisible = true;
+        }
+
+        private void OpenOrderPlacingPage()
+        {
+            HideAllPages();
+            IsOrderPlacingPageVisible = true;
+        }
+
+        private void OpenOrderPaymentPage()
+        {
+            HideAllPages();
+            IsOrderPaymentPageVisible = true;
+        }
+
+        private ObservableCollection<string> GetSupportedPaymentMethods()
+        {
+            return new ObservableCollection<string>()
+            {
+                "Онлайн оплата"
+            };
         }
 
         #endregion
