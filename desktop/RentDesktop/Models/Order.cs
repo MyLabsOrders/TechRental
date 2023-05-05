@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace RentDesktop.Models
 {
-    internal class Order : ReactiveModel, IOrder
+    public class Order : ReactiveModel, IOrder
     {
         public Order(int id, double price, DateTime dateOfCreation, IEnumerable<string> models)
         {

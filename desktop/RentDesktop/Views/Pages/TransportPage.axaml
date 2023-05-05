@@ -6,7 +6,7 @@
 			 xmlns:vm="using:RentDesktop.ViewModels.Pages"
 			 xmlns:models="clr-namespace:RentDesktop.Models;assembly=RentDesktop"
              mc:Ignorable="d"
-			 d:DesignWidth="650" d:DesignHeight="470"
+			 d:DesignWidth="670" d:DesignHeight="475"
              x:Class="RentDesktop.Views.Pages.TransportPage">
 
 	<Design.DataContext>
@@ -60,7 +60,7 @@
 									Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
 									CommandParameter="{Binding Self}" />
 
-							<Border BorderBrush="DarkGray" BorderThickness="2" Margin="5, 5, 35, 0">
+							<Border BorderBrush="DarkGray" BorderThickness="2" Background="White" Margin="5, 5, 35, 0">
 								<Image Source="{Binding Icon}" MaxHeight="92" />
 							</Border>
 

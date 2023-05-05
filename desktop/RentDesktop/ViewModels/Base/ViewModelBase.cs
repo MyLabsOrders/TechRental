@@ -2,7 +2,7 @@ using ReactiveUI;
 
 namespace RentDesktop.ViewModels.Base
 {
-    internal class ViewModelBase : ReactiveObject
+    public class ViewModelBase : ReactiveObject
     {
     }
 }

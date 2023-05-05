@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:RentDesktop.ViewModels.Pages"
 			 mc:Ignorable="d"
-			 d:DesignWidth="600" d:DesignHeight="400"
+			 d:DesignWidth="650" d:DesignHeight="400"
              x:Class="RentDesktop.Views.Pages.RegisterPage">
 
 	<Design.DataContext>

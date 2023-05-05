@@ -1,5 +1,6 @@
 ﻿using RentDesktop.Models.Informing;
 using System;
+using System.IO;
 
 namespace RentDesktop.Infrastructure.Services.DB
 {
@@ -20,7 +21,7 @@ namespace RentDesktop.Infrastructure.Services.DB
                 PhoneNumber = "8 (921) 123-4567",
                 Status = "User",
                 DateOfBirth = new DateTime(2000, 1, 21),
-                Icon = Array.Empty<byte>()
+                Icon = File.ReadAllBytes(@"D:\Testing\TechRental\human1.png")
             };
 
             return true;

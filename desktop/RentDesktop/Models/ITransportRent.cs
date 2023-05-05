@@ -1,6 +1,6 @@
 ﻿namespace RentDesktop.Models
 {
-    internal interface ITransportRent
+    public interface ITransportRent
     {
         Transport Transport { get; }
         int Days { get; set; }

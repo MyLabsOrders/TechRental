@@ -5,7 +5,7 @@
 			 xmlns:img="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
 			 xmlns:vm="using:RentDesktop.ViewModels.Pages"
              mc:Ignorable="d"
-			 d:DesignWidth="600" d:DesignHeight="450"
+			 d:DesignWidth="650" d:DesignHeight="400"
              x:Class="RentDesktop.Views.Pages.LoginPage">
 
 	<Design.DataContext>

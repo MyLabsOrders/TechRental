@@ -5,7 +5,7 @@
 			 xmlns:vm="using:RentDesktop.ViewModels.Pages"
 			 xmlns:models="clr-namespace:RentDesktop.Models;assembly=RentDesktop"
              mc:Ignorable="d"
-			 d:DesignWidth="650" d:DesignHeight="470"
+			 d:DesignWidth="670" d:DesignHeight="475"
              x:Class="RentDesktop.Views.Pages.OrdersPage">
 
 	<Design.DataContext>

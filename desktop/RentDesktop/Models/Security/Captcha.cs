@@ -3,7 +3,7 @@ using System;
 
 namespace RentDesktop.Models.Security
 {
-    internal class Captcha : ReactiveModel, ICaptcha
+    public class Captcha : ReactiveModel, ICaptcha
     {
         public Captcha(int length = 5)
         {

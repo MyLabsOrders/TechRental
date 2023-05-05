@@ -14,7 +14,7 @@ using System.Reactive;
 
 namespace RentDesktop.ViewModels.Pages
 {
-    internal class CartViewModel : ViewModelBase
+    public class CartViewModel : ViewModelBase
     {
         public CartViewModel() : this(new UserInfo(), new ObservableCollection<Order>())
         {
@@ -275,12 +275,12 @@ namespace RentDesktop.ViewModels.Pages
 
         private void CloseOrderPaymentPage()
         {
-            HideAllPages();
+            OpenCartPage();
 
-            IsCartPageVisible = true;
+            if (IsOrderPaidFor)
+                OrdersTabOpening?.Invoke();
+
             IsOrderPaidFor = false;
-
-            OrdersTabOpening?.Invoke();
         }
 
         private void PayOrder()

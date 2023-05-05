@@ -5,7 +5,7 @@ using MessageBox.Avalonia.Enums;
 
 namespace RentDesktop.Models.Communication
 {
-    internal class QuickMessage
+    public class QuickMessage
     {
         public QuickMessage(string message, string title = "", ButtonEnum buttons = ButtonEnum.Ok, Icon icon = Icon.None)
         {

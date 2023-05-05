@@ -7,8 +7,9 @@
 		xmlns:vm="using:RentDesktop.ViewModels"
 		xmlns:pages="using:RentDesktop.Views.Pages"
         mc:Ignorable="d"
-		d:DesignWidth="670" d:DesignHeight="460"
-		Width="670" Height="460"
+		d:DesignWidth="670" d:DesignHeight="475"
+		Width="670" Height="475"
+		MinWidth="670" MinHeight="475"
         x:Class="RentDesktop.Views.UserWindow"
 		Icon="/Assets/avalonia-logo.ico"
         Title="Пользователь">

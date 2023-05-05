@@ -13,7 +13,7 @@ using System.Reactive;
 
 namespace RentDesktop.ViewModels.Pages
 {
-    internal class UserProfileViewModel : ViewModelBase
+    public class UserProfileViewModel : ViewModelBase
     {
         public UserProfileViewModel() : this(new UserInfo())
         {

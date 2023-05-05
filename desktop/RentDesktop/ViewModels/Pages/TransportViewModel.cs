@@ -8,7 +8,7 @@ using System.Reactive;
 
 namespace RentDesktop.ViewModels.Pages
 {
-    internal class TransportViewModel : ViewModelBase
+    public class TransportViewModel : ViewModelBase
     {
         public TransportViewModel() : this(new ObservableCollection<TransportRent>())
         {

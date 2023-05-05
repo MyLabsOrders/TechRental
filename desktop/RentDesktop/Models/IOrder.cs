@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace RentDesktop.Models
 {
-    internal interface IOrder
+    public interface IOrder
     {
         int ID { get; }
         double Price { get; }

@@ -10,7 +10,7 @@ using System.Reactive;
 
 namespace RentDesktop.ViewModels
 {
-    internal class UserWindowViewModel : ViewModelBase
+    public class UserWindowViewModel : ViewModelBase
     {
         public UserWindowViewModel() : this(new UserInfo())
         {

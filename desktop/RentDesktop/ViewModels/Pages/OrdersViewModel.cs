@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 
 namespace RentDesktop.ViewModels.Pages
 {
-    internal class OrdersViewModel : ViewModelBase
+    public class OrdersViewModel : ViewModelBase
     {
         #region Properties
 
