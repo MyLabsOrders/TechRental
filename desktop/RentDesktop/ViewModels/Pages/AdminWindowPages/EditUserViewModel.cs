@@ -1,0 +1,34 @@
+﻿using ReactiveUI;
+using RentDesktop.Models.Informing;
+using System.Reactive;
+
+namespace RentDesktop.ViewModels.Pages.AdminWindowPages
+{
+    public class EditUserViewModel : AdminProfileViewModel
+    {
+        public EditUserViewModel() : this(new UserInfo())
+        {
+        }
+
+        public EditUserViewModel(IUserInfo userInfo) : base(userInfo)
+        {
+            ChangeUserCommand = ReactiveCommand.Create<IUserInfo>(ChangeUser);
+        }
+
+        #region Commands
+
+        public ReactiveCommand<IUserInfo, Unit> ChangeUserCommand { get; }
+
+        #endregion
+
+        #region Private Methods
+
+        private void ChangeUser(IUserInfo newUserInfo)
+        {
+            _userInfo = newUserInfo;
+            SetUserInfo(newUserInfo);
+        }
+
+        #endregion
+    }
+}

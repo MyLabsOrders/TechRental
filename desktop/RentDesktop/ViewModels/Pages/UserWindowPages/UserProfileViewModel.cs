@@ -133,15 +133,15 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
 
         #endregion
 
-        #region Private Fields
+        #region Protected Fields
 
         #region Constants
 
-        private const int PHONE_NUMBER_DIGITS = 11;
+        protected const int PHONE_NUMBER_DIGITS = 11;
 
         #endregion
 
-        private readonly IUserInfo _userInfo;
+        protected IUserInfo _userInfo;
 
         #endregion
 
@@ -194,6 +194,8 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
             Gender = userInfo.Gender;
             Position = userInfo.Position;
             DateOfBirth = userInfo.DateOfBirth;
+
+            UserImage?.Dispose();
 
             UserImage = userInfo.Icon.Length > 0
                 ? BitmapService.ConvertBytesToBitmap(userInfo.Icon)

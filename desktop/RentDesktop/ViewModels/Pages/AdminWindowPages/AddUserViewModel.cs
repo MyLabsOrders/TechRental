@@ -68,6 +68,8 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
         protected override void ResetAllFields()
         {
             base.ResetAllFields();
+
+            PasswordConfirmation = string.Empty;
             SelectedPositionIndex = 0;
         }
 

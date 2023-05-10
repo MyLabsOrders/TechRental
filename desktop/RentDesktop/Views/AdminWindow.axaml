@@ -39,15 +39,15 @@
 		</TabItem>
 
 		<TabItem Header="Пользователи">
-			<pages:AdminProfilePage DataContext="{Binding AllUsersVM}" />
+			<pages:AllUsersPage DataContext="{Binding AllUsersVM}" />
 		</TabItem>
 
 		<TabItem Header="Добавить">
 			<pages:AddUserPage DataContext="{Binding AddUserVM}" />
 		</TabItem>
 
-		<TabItem Header="Изменить">
-			<pages:AdminProfilePage DataContext="{Binding EditUserVM}" />
+		<TabItem Header="Изменить" IsEnabled="{Binding AllUsersVM.IsUserSelected}">
+			<pages:EditUserPage DataContext="{Binding EditUserVM}" />
 		</TabItem>
 	</TabControl>
 	
