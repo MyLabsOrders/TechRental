@@ -28,6 +28,12 @@ namespace RentDesktop.Infrastructure.App
             userWindow?.Close();
         }
 
+        public static void CloseAdminWindow()
+        {
+            Window? adminWindow = WindowFinder.FindByType(typeof(AdminWindow));
+            adminWindow?.Close();
+        }
+
         public static void HideMainWindow()
         {
             Window? mainWindow = WindowFinder.FindMainWindow();
