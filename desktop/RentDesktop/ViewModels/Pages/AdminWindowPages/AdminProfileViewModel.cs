@@ -1,5 +1,6 @@
 ﻿using ReactiveUI;
 using RentDesktop.Infrastructure.App;
+using RentDesktop.Infrastructure.Services.DB;
 using RentDesktop.Models.Communication;
 using RentDesktop.Models.Informing;
 using RentDesktop.ViewModels.Pages.UserWindowPages;
@@ -74,12 +75,8 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
 
         private static ObservableCollection<string> GetStatuses()
         {
-            // TODO
-            return new ObservableCollection<string>()
-            {
-                UserInfo.ACTIVE_STATUS,
-                UserInfo.INACTIVE_STATUS
-            };
+            var statuses = InfoService.GetAllStatuses();
+            return new ObservableCollection<string>(statuses);
         }
 
         #endregion

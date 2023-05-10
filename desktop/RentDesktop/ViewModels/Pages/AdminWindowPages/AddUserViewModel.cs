@@ -1,5 +1,6 @@
 ﻿using ReactiveUI;
 using RentDesktop.Infrastructure.App;
+using RentDesktop.Infrastructure.Services.DB;
 using RentDesktop.Models.Communication;
 using RentDesktop.Models.Informing;
 using RentDesktop.ViewModels.Pages.MainWindowPages;
@@ -79,11 +80,8 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
 
         private static ObservableCollection<string> GetPositions()
         {
-            return new ObservableCollection<string>()
-            {
-                UserInfo.USER_POSITION,
-                UserInfo.ADMIN_POSITION
-            };
+            var positions = InfoService.GetAllPositions();
+            return new ObservableCollection<string>(positions);
         }
 
         #endregion

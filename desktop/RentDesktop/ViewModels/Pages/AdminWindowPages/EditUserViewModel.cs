@@ -1,5 +1,7 @@
 ﻿using ReactiveUI;
+using RentDesktop.Infrastructure.Services.DB;
 using RentDesktop.Models.Informing;
+using System.Collections.ObjectModel;
 using System.Reactive;
 
 namespace RentDesktop.ViewModels.Pages.AdminWindowPages
@@ -12,8 +14,15 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
 
         public EditUserViewModel(IUserInfo userInfo) : base(userInfo)
         {
+            Positions = GetPositions();
             ChangeUserCommand = ReactiveCommand.Create<IUserInfo>(ChangeUser);
         }
+
+        #region Properties
+
+        public ObservableCollection<string> Positions { get; }
+
+        #endregion
 
         #region Commands
 
@@ -27,6 +36,16 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
         {
             _userInfo = newUserInfo ?? new UserInfo();
             SetUserInfo(_userInfo);
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private static ObservableCollection<string> GetPositions()
+        {
+            var positions = InfoService.GetAllPositions();
+            return new ObservableCollection<string>(positions);
         }
 
         #endregion

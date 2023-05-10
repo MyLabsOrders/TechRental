@@ -163,7 +163,7 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
 
         private void RefreshUsers()
         {
-            _databaseUsers = UserSearchService.GetAllUsers();
+            _databaseUsers = InfoService.GetAllUsers();
 
             ResetUsers(_databaseUsers);
             DeselectUser();
@@ -189,22 +189,18 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
 
         private static ObservableCollection<string> GetPositions()
         {
-            return new ObservableCollection<string>()
-            {
-                NOT_SPECIFIED,
-                UserInfo.USER_POSITION,
-                UserInfo.ADMIN_POSITION
-            };
+            var positions = InfoService.GetAllPositions();
+            positions.Insert(0, NOT_SPECIFIED);
+
+            return new ObservableCollection<string>(positions);
         }
 
         private static ObservableCollection<string> GetStatuses()
         {
-            return new ObservableCollection<string>()
-            {
-                NOT_SPECIFIED,
-                UserInfo.ACTIVE_STATUS,
-                UserInfo.INACTIVE_STATUS
-            };
+            var statuses = InfoService.GetAllStatuses();
+            statuses.Insert(0, NOT_SPECIFIED);
+
+            return new ObservableCollection<string>(statuses);
         }
 
         private static ObservableCollection<string> GetGenders()
