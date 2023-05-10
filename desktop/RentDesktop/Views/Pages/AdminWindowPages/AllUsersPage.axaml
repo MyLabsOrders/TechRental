@@ -10,5 +10,63 @@
 	<Design.DataContext>
 		<vm:AllUsersViewModel />
 	</Design.DataContext>
+
+	<Grid Margin="0, 0, 0, 5" RowDefinitions="1*, 10, Auto, 15, Auto">
+		<DataGrid Grid.Row="0"
+				  IsReadOnly="True"
+				  AutoGenerateColumns="False"
+				  Items="{Binding Users}"
+				  SelectedItem="{Binding SelectedUser}">
+			
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="ID" IsReadOnly="True" Binding="{Binding ID}" />
+				<DataGridTextColumn Header="Имя" IsReadOnly="True" Binding="{Binding Name}" />
+				<DataGridTextColumn Header="Фамилия" IsReadOnly="True" Binding="{Binding Surname}" />
+				<DataGridTextColumn Header="Отчество" IsReadOnly="True" Binding="{Binding Patronymic}" />
+				<DataGridTextColumn Header="Телефон" IsReadOnly="True" Binding="{Binding PhoneNumber}" />	
+				<DataGridTextColumn Header="Дата рождения" IsReadOnly="True" Binding="{Binding DateOfBirth}" />
+				<DataGridTextColumn Header="Пол" IsReadOnly="True" Binding="{Binding Gender}" />
+				<DataGridTextColumn Header="Должность" IsReadOnly="True" Binding="{Binding Position}" />
+				<DataGridTextColumn Header="Статус" IsReadOnly="True" Binding="{Binding Status}" />
+				<DataGridTextColumn Header="Логин" IsReadOnly="True" Binding="{Binding Login}" />
+				<DataGridTextColumn Header="Пароль" IsReadOnly="True" Binding="{Binding Password}" />			
+			</DataGrid.Columns>
+		</DataGrid>
+
+		<Grid Grid.Row="2" RowDefinitions="22, 30" ColumnDefinitions="140, 10, 140, 10, 140, 10, 1*">
+			<Grid.Styles>
+				<Style Selector="ComboBox">
+					<Setter Property="HorizontalAlignment" Value="Stretch" />
+				</Style>
+			</Grid.Styles>
+			
+			<TextBlock Grid.Row="0" Grid.Column="0" Text="Должность" />
+			<ComboBox Grid.Row="1" Grid.Column="0" Items="{Binding Positions}" SelectedIndex="{Binding SelectedPositionIndex}" />
+			<TextBlock Grid.Row="0" Grid.Column="2" Text="Статус" />
+			<ComboBox Grid.Row="1" Grid.Column="2" Items="{Binding Statuses}" SelectedIndex="{Binding SelectedStatusIndex}" />
+			<TextBlock Grid.Row="0" Grid.Column="4" Text="Пол" />
+			<ComboBox Grid.Row="1" Grid.Column="4" Items="{Binding Genders}" SelectedIndex="{Binding SelectedGenderIndex}" />
+			<TextBlock Grid.Row="0" Grid.Column="6" Text="Поиск" />
+
+			<TextBox Grid.Row="1" Grid.Column="6" Text="{Binding SearchQuery}">
+				<TextBox.KeyBindings>
+					<KeyBinding Gesture="Enter" Command="{Binding FindUsersCommand}" />
+				</TextBox.KeyBindings>
+			</TextBox>
+		</Grid>
+
+		<Grid Grid.Row="4" RowDefinitions="30" ColumnDefinitions="1*, 130, 10, 130, 10, 130, 1*">
+			<Grid.Styles>
+				<Style Selector="Button">
+					<Setter Property="HorizontalAlignment" Value="Stretch" />
+					<Setter Property="HorizontalContentAlignment" Value="Center" />
+				</Style>
+			</Grid.Styles>
+
+			<Button Grid.Column="1" Content="Найти" Command="{Binding FindUsersCommand}" />
+			<Button Grid.Column="3" Content="Сброс" Command="{Binding ResetSearchFieldsCommand}" />
+			<Button Grid.Column="5" Content="Обновить" Command="{Binding RefreshUsersCommand}" />
+		</Grid>
+	</Grid>
 	
 </UserControl>

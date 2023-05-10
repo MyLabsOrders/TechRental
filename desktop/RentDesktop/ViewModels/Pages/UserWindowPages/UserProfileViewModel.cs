@@ -169,6 +169,7 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
 
             return new UserInfo()
             {
+                ID = 0, //TODO
                 Login = Login,
                 Password = Password,
                 Name = Name,

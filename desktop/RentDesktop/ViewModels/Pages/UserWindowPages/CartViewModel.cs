@@ -8,7 +8,6 @@ using RentDesktop.Models.Informing;
 using RentDesktop.ViewModels.Base;
 using RentDesktop.Views;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive;
 

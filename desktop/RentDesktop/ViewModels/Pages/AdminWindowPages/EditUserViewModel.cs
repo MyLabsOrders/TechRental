@@ -21,12 +21,12 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
 
         #endregion
 
-        #region Private Methods
+        #region Public Methods
 
-        private void ChangeUser(IUserInfo newUserInfo)
+        public void ChangeUser(IUserInfo? newUserInfo)
         {
-            _userInfo = newUserInfo;
-            SetUserInfo(newUserInfo);
+            _userInfo = newUserInfo ?? new UserInfo();
+            SetUserInfo(_userInfo);
         }
 
         #endregion

@@ -25,10 +25,9 @@
 		</Grid.Styles>
 
 		<Grid Grid.Column="0"
-			  ColumnDefinitions="Auto, 5, 1*"
-			  RowDefinitions="30, 5, 30, 5, 30, 5, 30, 5, 30, 5, 30, 5, 30, 5, 32, 5, 30, 5, 30, 1*"
 			  Margin="0, 1, 0, 0"
-			  IsEnabled="{Binding IsEditModeEnabled}">
+			  ColumnDefinitions="Auto, 5, 1*"
+			  RowDefinitions="30, 5, 30, 5, 30, 5, 30, 5, 30, 5, 30, 5, 30, 5, 32, 5, 30, 5, 30, 1*">
 
 			<TextBlock Grid.Row="0" Grid.Column="0" Text="Логин" />
 			<TextBox Grid.Row="0" Grid.Column="2" Text="{Binding Login}" />
@@ -89,7 +88,7 @@
 			</Grid.Styles>
 
 			<Button Grid.Column="1" Content="Подтвердить" Command="{Binding SaveUserInfoCommand}" />
-			<Button Grid.Column="3" Content="Изменить фото" Command="{Binding ChangeUserImageCommand}" IsEnabled="{Binding IsEditModeEnabled}" />
+			<Button Grid.Column="3" Content="Изменить фото" Command="{Binding ChangeUserImageCommand}" />
 		</Grid>
 
 		<Border Grid.Column="2" BorderThickness="2" BorderBrush="LightGray">

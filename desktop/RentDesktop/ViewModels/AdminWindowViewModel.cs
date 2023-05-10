@@ -22,6 +22,8 @@ namespace RentDesktop.ViewModels
             AddUserVM = new AddUserViewModel();
             EditUserVM = new EditUserViewModel();
 
+            AllUsersVM.SelectedUserChanged += EditUserVM.ChangeUser;
+
             UserInfo = userInfo;
 
             _inactivity_timer = ConfigureInactivityTimer();
