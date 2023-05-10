@@ -11,10 +11,13 @@ namespace RentDesktop.Models.Informing
         string Patronymic { get; set; }
         string PhoneNumber { get; set; }
         string Gender { get; set; }
+        string Position { get; set; }
         string Status { get; set; }
         byte[] Icon { get; set; }
         DateTime DateOfBirth { get; set; }
 
         void CopyTo(IUserInfo other);
+        bool IsAdmin();
+        bool IsUser();
     }
 }

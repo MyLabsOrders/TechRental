@@ -1,0 +1,38 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+		xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+		xmlns:vm="using:RentDesktop.ViewModels"
+		xmlns:pages="using:RentDesktop.Views.Pages"
+		mc:Ignorable="d"
+		d:DesignWidth="670" d:DesignHeight="475"
+		Width="670" Height="475"
+		MinWidth="670" MinHeight="475"
+        x:Class="RentDesktop.Views.AdminWindow"
+        Title="AdminWindow">
+
+	<Design.DataContext>
+		<vm:AdminWindowViewModel />
+	</Design.DataContext>
+
+	<TabControl SelectedIndex="{Binding SelectedTabIndex}">
+		<TabItem Header="Профиль">
+			<pages:AdminProfilePage DataContext="{Binding AdminProfileVM}" />
+		</TabItem>
+
+		<TabItem Header="Пользователи">
+			<pages:AdminProfilePage DataContext="{Binding AllUsersVM}" />
+		</TabItem>
+
+		<TabItem Header="Добавить">
+			<pages:AdminProfilePage DataContext="{Binding AddUserVM}" />
+		</TabItem>
+
+		<TabItem Header="Изменить">
+			<pages:AdminProfilePage DataContext="{Binding EditUserVM}" />
+		</TabItem>
+	</TabControl>
+	
+</Window>

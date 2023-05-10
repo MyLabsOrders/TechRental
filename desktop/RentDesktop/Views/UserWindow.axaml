@@ -35,7 +35,7 @@
 	</i:Interaction.Behaviors>
 	
 	<TabControl SelectedIndex="{Binding SelectedTabIndex}">
-		<TabItem Header="Пользователь">
+		<TabItem Header="Профиль">
 			<pages:UserProfilePage DataContext="{Binding UserProfileVM}" />
 		</TabItem>
 		

@@ -176,7 +176,8 @@ namespace RentDesktop.ViewModels.Pages
                 Patronymic = Patronymic,
                 PhoneNumber = PhoneNumber,
                 Gender = Gender,
-                Status = "User",
+                Position = "User",
+                Status = "TODO",
                 Icon = userImageBytes,
                 DateOfBirth = DateOfBirth!.Value
             };

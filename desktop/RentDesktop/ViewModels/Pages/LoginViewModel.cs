@@ -135,10 +135,20 @@ namespace RentDesktop.ViewModels.Pages
 
             ResetAllFields(RememberUser);
 
-            var viewModel = new UserWindowViewModel(userInfo);
-            var userWindow = new UserWindow() { DataContext = viewModel };
+            if (userInfo.IsAdmin())
+            {
+                var viewModel = new AdminWindowViewModel(userInfo);
+                var adminWindow = new AdminWindow() { DataContext = viewModel };
 
-            userWindow.Show();
+                adminWindow.Show();
+            }
+            else
+            {
+                var viewModel = new UserWindowViewModel(userInfo);
+                var userWindow = new UserWindow() { DataContext = viewModel };
+
+                userWindow.Show();
+            }
 
             _ = Task.Delay(HIDE_MAIN_WINDOW_AFTER_MILLISECONDS).ContinueWith(t =>
             {

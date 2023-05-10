@@ -7,6 +7,7 @@ using RentDesktop.Infrastructure.Services.DB;
 using RentDesktop.Models.Communication;
 using RentDesktop.Models.Informing;
 using RentDesktop.ViewModels.Base;
+using RentDesktop.Views;
 using System;
 using System.Linq;
 using System.Reactive;
@@ -88,11 +89,11 @@ namespace RentDesktop.ViewModels.Pages
             set => this.RaiseAndSetIfChanged(ref _phoneNumber, value);
         }
 
-        private string _status = string.Empty;
-        public string Status
+        private string _position = string.Empty;
+        public string Position
         {
-            get => _status;
-            private set => this.RaiseAndSetIfChanged(ref _status, value);
+            get => _position;
+            private set => this.RaiseAndSetIfChanged(ref _position, value);
         }
 
         private DateTime? _dateOfBirth = null;
@@ -153,38 +154,20 @@ namespace RentDesktop.ViewModels.Pages
 
         #endregion
 
-        #region Private Methods
+        #region Protected Methods
 
-        private void SwapEditMode()
+        protected virtual Type GetOwnerWindowType()
         {
-            IsEditModeEnabled = !IsEditModeEnabled;
+            return typeof(UserWindow);
         }
 
-        private async void ChangeUserImage()
+        protected virtual IUserInfo GetUserInfo()
         {
-            if (WindowFinder.FindMainWindow() is not Window window)
-                return;
-
-            OpenFileDialog dialog = DialogProvider.GetOpenImageDialog();
-            string[]? paths = await dialog.ShowAsync(window);
-
-            if (paths is null || paths.Length == 0)
-                return;
-
-            if (!TrySetUserImage(paths[0]))
-                QuickMessage.Error("Не удалось открыть фото.").ShowDialog(window);
-        }
-
-        private void SaveUserInfo()
-        {
-            if (!VerifyFieldsCorrectness())
-                return;
-
             byte[] userImageBytes = UserImage is not null
                ? BitmapService.ConvertBitmapToBytes(UserImage)
                : Array.Empty<byte>();
 
-            var newUserInfo = new UserInfo()
+            return new UserInfo()
             {
                 Login = Login,
                 Password = Password,
@@ -193,47 +176,14 @@ namespace RentDesktop.ViewModels.Pages
                 Patronymic = Patronymic,
                 PhoneNumber = PhoneNumber,
                 Gender = Gender,
-                Status = Status,
+                Position = Position,
+                Status = "TODO",
                 Icon = userImageBytes,
                 DateOfBirth = DateOfBirth!.Value
             };
-
-            if (!UserEditService.EditInfo(newUserInfo))
-            {
-                var window = WindowFinder.FindMainWindow();
-                QuickMessage.Error("Не удалось сохранить изменения.").ShowDialog(window);
-                return;
-            }
-
-            newUserInfo.CopyTo(_userInfo);
-            UserInfoUpdated?.Invoke();
-
-            IsEditModeEnabled = false;
         }
 
-        private void SetGender(string gender)
-        {
-            Gender = gender;
-        }
-
-        private bool TrySetUserImage(string path)
-        {
-            UserImage?.Dispose();
-            UserImage = null;
-
-            try
-            {
-                var image = new Bitmap(path);
-                UserImage = image;
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        private void SetUserInfo(IUserInfo userInfo)
+        protected virtual void SetUserInfo(IUserInfo userInfo)
         {
             Login = userInfo.Login;
             Password = userInfo.Password;
@@ -242,7 +192,7 @@ namespace RentDesktop.ViewModels.Pages
             Patronymic = userInfo.Patronymic;
             PhoneNumber = userInfo.PhoneNumber;
             Gender = userInfo.Gender;
-            Status = userInfo.Status;
+            Position = userInfo.Position;
             DateOfBirth = userInfo.DateOfBirth;
 
             UserImage = userInfo.Icon.Length > 0
@@ -256,9 +206,9 @@ namespace RentDesktop.ViewModels.Pages
                 IsFemaleGenderChecked = true;
         }
 
-        private bool VerifyFieldsCorrectness()
+        protected virtual bool VerifyFieldsCorrectness()
         {
-            var window = WindowFinder.FindMainWindow();
+            var window = WindowFinder.FindByType(GetOwnerWindowType());
 
             if (string.IsNullOrEmpty(Login))
             {
@@ -307,6 +257,72 @@ namespace RentDesktop.ViewModels.Pages
             }
 
             return true;
+        }
+
+        #endregion
+
+        #region Private Methods 
+
+        private void SwapEditMode()
+        {
+            IsEditModeEnabled = !IsEditModeEnabled;
+        }
+
+        private async void ChangeUserImage()
+        {
+            if (WindowFinder.FindByType(GetOwnerWindowType()) is not Window window)
+                return;
+
+            OpenFileDialog dialog = DialogProvider.GetOpenImageDialog();
+            string[]? paths = await dialog.ShowAsync(window);
+
+            if (paths is null || paths.Length == 0)
+                return;
+
+            if (!TrySetUserImage(paths[0]))
+                QuickMessage.Error("Не удалось открыть фото.").ShowDialog(window);
+        }
+
+        private void SaveUserInfo()
+        {
+            if (!VerifyFieldsCorrectness())
+                return;
+
+            IUserInfo newUserInfo = GetUserInfo();
+
+            if (!UserEditService.EditInfo(newUserInfo))
+            {
+                var window = WindowFinder.FindByType(GetOwnerWindowType());
+                QuickMessage.Error("Не удалось сохранить изменения.").ShowDialog(window);
+                return;
+            }
+
+            newUserInfo.CopyTo(_userInfo);
+            UserInfoUpdated?.Invoke();
+
+            IsEditModeEnabled = false;
+        }
+
+        private void SetGender(string gender)
+        {
+            Gender = gender;
+        }
+
+        private bool TrySetUserImage(string path)
+        {
+            UserImage?.Dispose();
+            UserImage = null;
+
+            try
+            {
+                var image = new Bitmap(path);
+                UserImage = image;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         #endregion

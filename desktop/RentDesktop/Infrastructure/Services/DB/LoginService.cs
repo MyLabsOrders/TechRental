@@ -19,9 +19,10 @@ namespace RentDesktop.Infrastructure.Services.DB
                 Patronymic = "Иванович",
                 Gender = "Мужской",
                 PhoneNumber = "8 (921) 123-4567",
-                Status = "User",
+                Position = UserInfo.ADMIN_POSITION,
+                Status = "TODO",
                 DateOfBirth = new DateTime(2000, 1, 21),
-                Icon = File.ReadAllBytes(@"D:\Testing\TechRental\human1.png")
+                Icon = File.ReadAllBytes(@"D:\Testing\TechRental\human1.jpg")
             };
 
             return true;

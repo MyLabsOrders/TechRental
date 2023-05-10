@@ -6,15 +6,15 @@ namespace RentDesktop.ViewModels.Pages
 {
     public class OrdersViewModel : ViewModelBase
     {
+        public OrdersViewModel()
+        {
+            Orders = new ObservableCollection<Order>();
+        }
+
         #region Properties
 
         public ObservableCollection<Order> Orders { get; }
 
         #endregion
-
-        public OrdersViewModel()
-        {
-            Orders = new ObservableCollection<Order>();
-        }
     }
 }
