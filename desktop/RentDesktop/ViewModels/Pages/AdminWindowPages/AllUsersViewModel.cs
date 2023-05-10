@@ -1,4 +1,6 @@
-﻿using ReactiveUI;
+﻿using Avalonia;
+using Avalonia.Interactivity;
+using ReactiveUI;
 using RentDesktop.Infrastructure.Extensions;
 using RentDesktop.Infrastructure.Services.DB;
 using RentDesktop.Models.Informing;
@@ -27,6 +29,7 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
             FindUsersCommand = ReactiveCommand.Create(FindUsers);
             ResetSearchFieldsCommand = ReactiveCommand.Create(ResetSearchFields);
             RefreshUsersCommand = ReactiveCommand.Create(RefreshUsers);
+            SelectUserCommand = ReactiveCommand.Create<RoutedEventArgs>(SelectClickedUser);
         }
 
         #region Events
@@ -49,9 +52,6 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
             get => _selectedUser;
             set
             {
-                if (value is null)
-                    return;
-
                 bool isChanged = _selectedUser != value;
 
                 this.RaiseAndSetIfChanged(ref _selectedUser, value);
@@ -116,6 +116,7 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
         public ReactiveCommand<Unit, Unit> FindUsersCommand { get; }
         public ReactiveCommand<Unit, Unit> ResetSearchFieldsCommand { get; }
         public ReactiveCommand<Unit, Unit> RefreshUsersCommand { get; }
+        public ReactiveCommand<RoutedEventArgs, Unit> SelectUserCommand { get; }
 
         #endregion
 
@@ -164,9 +165,9 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
         private void RefreshUsers()
         {
             _databaseUsers = InfoService.GetAllUsers();
+            SelectedUser = null;
 
             ResetUsers(_databaseUsers);
-            DeselectUser();
         }
 
         private void ResetUsers(IEnumerable<IUserInfo> newUsers)
@@ -174,17 +175,10 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
             Users.ResetItems(newUsers);
         }
 
-        private void DeselectUser()
+        private void SelectClickedUser(RoutedEventArgs e)
         {
-            bool isChanged = _selectedUser != null;
-
-            _selectedUser = null;
-            IsUserSelected = false;
-
-            if (isChanged)
-                SelectedUserChanged?.Invoke(null);
-
-            this.RaisePropertyChanged(nameof(SelectedUser));
+            if (e.Source is IDataContextProvider p && p.DataContext is IUserInfo userInfo)
+                SelectedUser = userInfo;
         }
 
         private static ObservableCollection<string> GetPositions()
