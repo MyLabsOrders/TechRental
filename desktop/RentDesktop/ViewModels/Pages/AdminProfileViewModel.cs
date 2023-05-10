@@ -17,18 +17,12 @@ namespace RentDesktop.ViewModels.Pages
         public AdminProfileViewModel(IUserInfo userInfo) : base(userInfo)
         {
             Statuses = GetStatuses();
+            SetUserInfo(userInfo);
         }
 
         #region Properties
 
         public ObservableCollection<string> Statuses { get; }
-
-        private string _status = string.Empty;
-        public string Status
-        {
-            get => _status;
-            set => this.RaiseAndSetIfChanged(ref _status, value);
-        }
 
         private int _selectedStatusIndex = 0;
         public int SelectedStatusIndex
@@ -49,7 +43,7 @@ namespace RentDesktop.ViewModels.Pages
         protected override IUserInfo GetUserInfo()
         {
             IUserInfo userInfo = base.GetUserInfo();
-            userInfo.Status = Status;
+            userInfo.Status = Statuses[SelectedStatusIndex];
 
             return userInfo;
         }
@@ -57,16 +51,16 @@ namespace RentDesktop.ViewModels.Pages
         protected override void SetUserInfo(IUserInfo userInfo)
         {
             base.SetUserInfo(userInfo);
-            Status = userInfo.Status;
+            SelectedStatusIndex = Statuses?.IndexOf(userInfo.Status) ?? -1;
         }
 
         protected override bool VerifyFieldsCorrectness()
         {
             var window = WindowFinder.FindByType(GetOwnerWindowType());
 
-            if (string.IsNullOrEmpty(Status))
+            if (SelectedStatusIndex < 0 || SelectedStatusIndex > Statuses.Count)
             {
-                QuickMessage.Info("Введите статус.").ShowDialog(window);
+                QuickMessage.Info("Выберите статус.").ShowDialog(window);
                 return false;
             }
 
@@ -77,13 +71,13 @@ namespace RentDesktop.ViewModels.Pages
 
         #region Private Methods
 
-        private ObservableCollection<string> GetStatuses()
+        private static ObservableCollection<string> GetStatuses()
         {
             // TODO
             return new ObservableCollection<string>()
             {
-                "Активен",
-                "Неактивен"
+                UserInfo.ACTIVE_STATUS,
+                UserInfo.INACTIVE_STATUS
             };
         }
 

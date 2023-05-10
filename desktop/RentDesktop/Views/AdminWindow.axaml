@@ -8,14 +8,30 @@
 		xmlns:pages="using:RentDesktop.Views.Pages"
 		mc:Ignorable="d"
 		d:DesignWidth="670" d:DesignHeight="475"
-		Width="670" Height="475"
-		MinWidth="670" MinHeight="475"
+		Width="680" Height="475"
+		MinWidth="680" MinHeight="475"
         x:Class="RentDesktop.Views.AdminWindow"
-        Title="AdminWindow">
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Админ">
 
 	<Design.DataContext>
 		<vm:AdminWindowViewModel />
 	</Design.DataContext>
+
+	<i:Interaction.Behaviors>
+		<ia:EventTriggerBehavior EventName="Closing">
+			<ia:InvokeCommandAction Command="{Binding ShowMainWindowCommand}" />
+			<ia:InvokeCommandAction Command="{Binding DisposeUserImageCommand}" />
+		</ia:EventTriggerBehavior>
+
+		<ia:EventTriggerBehavior EventName="PointerMoved">
+			<ia:InvokeCommandAction Command="{Binding ResetInactivitySecondsCommand}" />
+		</ia:EventTriggerBehavior>
+
+		<ia:EventTriggerBehavior EventName="KeyDown">
+			<ia:InvokeCommandAction Command="{Binding ResetInactivitySecondsCommand}" />
+		</ia:EventTriggerBehavior>
+	</i:Interaction.Behaviors>
 
 	<TabControl SelectedIndex="{Binding SelectedTabIndex}">
 		<TabItem Header="Профиль">
@@ -27,7 +43,7 @@
 		</TabItem>
 
 		<TabItem Header="Добавить">
-			<pages:AdminProfilePage DataContext="{Binding AddUserVM}" />
+			<pages:AddUserPage DataContext="{Binding AddUserVM}" />
 		</TabItem>
 
 		<TabItem Header="Изменить">

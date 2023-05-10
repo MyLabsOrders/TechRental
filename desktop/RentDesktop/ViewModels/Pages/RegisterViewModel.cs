@@ -7,6 +7,7 @@ using RentDesktop.Infrastructure.Services.DB;
 using RentDesktop.Models.Communication;
 using RentDesktop.Models.Informing;
 using RentDesktop.ViewModels.Base;
+using RentDesktop.Views;
 using System;
 using System.Linq;
 using System.Reactive;
@@ -15,18 +16,24 @@ namespace RentDesktop.ViewModels.Pages
 {
     public class RegisterViewModel : ViewModelBase
     {
-        public RegisterViewModel()
+        public RegisterViewModel() : this(UserInfo.USER_POSITION)
         {
+        }
+
+        public RegisterViewModel(string position)
+        {
+            _position = position;
+
             RegisterUserCommand = ReactiveCommand.Create(RegisterUser);
-            CloseRegisterPageCommand = ReactiveCommand.Create(CloseRegisterPage);
+            ClosePageCommand = ReactiveCommand.Create(ClosePage);
             LoadUserImageCommand = ReactiveCommand.Create(LoadUserImage);
             SetGenderCommand = ReactiveCommand.Create<string>(SetGender);
         }
 
         #region Events
 
-        public delegate void RegisterPageClosingHandler();
-        public event RegisterPageClosingHandler? RegisterPageClosing;
+        public delegate void PageClosingHandler();
+        public event PageClosingHandler? PageClosing;
 
         #endregion
 
@@ -145,29 +152,33 @@ namespace RentDesktop.ViewModels.Pages
 
         #endregion
 
+        private readonly string _position;
+
         #endregion
 
         #region Commands
 
         public ReactiveCommand<Unit, Unit> RegisterUserCommand { get; }
-        public ReactiveCommand<Unit, Unit> CloseRegisterPageCommand { get; }
+        public ReactiveCommand<Unit, Unit> ClosePageCommand { get; }
         public ReactiveCommand<Unit, Unit> LoadUserImageCommand { get; }
         public ReactiveCommand<string, Unit> SetGenderCommand { get; }
 
         #endregion
 
-        #region Private Methods
+        #region Protected Methods
 
-        private void RegisterUser()
+        protected virtual Type GetOwnerWindowType()
         {
-            if (!VerifyFieldsCorrectness())
-                return;
+            return typeof(MainWindow);
+        }
 
+        protected virtual IUserInfo GetUserInfo()
+        {
             byte[] userImageBytes = UserImage is not null
                 ? BitmapService.ConvertBitmapToBytes(UserImage)
                 : Array.Empty<byte>();
 
-            var userInfo = new UserInfo()
+            return new UserInfo()
             {
                 Login = Login,
                 Password = Password,
@@ -176,69 +187,16 @@ namespace RentDesktop.ViewModels.Pages
                 Patronymic = Patronymic,
                 PhoneNumber = PhoneNumber,
                 Gender = Gender,
-                Position = "User",
+                Position = _position,
                 Status = "TODO",
                 Icon = userImageBytes,
                 DateOfBirth = DateOfBirth!.Value
             };
-
-            if (UserRegisterService.RegisterUser(userInfo))
-            {
-                ResetAllFields();
-                RegisterPageClosing?.Invoke();
-            }
-            else
-            {
-                var window = WindowFinder.FindMainWindow();
-                QuickMessage.Error("Не удалось зарегистрировать пользователя.").ShowDialog(window);
-            }
         }
 
-        private async void LoadUserImage()
+        protected virtual bool VerifyFieldsCorrectness()
         {
-            if (WindowFinder.FindMainWindow() is not Window window)
-                return;
-
-            OpenFileDialog dialog = DialogProvider.GetOpenImageDialog();
-            string[]? paths = await dialog.ShowAsync(window);
-
-            if (paths is null || paths.Length == 0)
-                return;
-
-            if (!TrySetUserImage(paths[0]))
-                QuickMessage.Error("Не удалось открыть фото.").ShowDialog(window);
-        }
-
-        private void CloseRegisterPage()
-        {
-            RegisterPageClosing?.Invoke();
-        }
-
-        private void SetGender(string gender)
-        {
-            Gender = gender;
-        }
-
-        private bool TrySetUserImage(string path)
-        {
-            UserImage?.Dispose();
-            UserImage = null;
-
-            try
-            {
-                var image = new Bitmap(path);
-                UserImage = image;
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        private bool VerifyFieldsCorrectness()
-        {
-            var window = WindowFinder.FindMainWindow();
+            var window = WindowFinder.FindByType(GetOwnerWindowType());
 
             if (string.IsNullOrEmpty(Login))
             {
@@ -294,7 +252,7 @@ namespace RentDesktop.ViewModels.Pages
             return true;
         }
 
-        private void ResetAllFields()
+        protected virtual void ResetAllFields()
         {
             Login = string.Empty;
             Password = string.Empty;
@@ -311,6 +269,71 @@ namespace RentDesktop.ViewModels.Pages
             ShowPassword = false;
             IsMaleGenderChecked = false;
             IsFemaleGenderChecked = false;
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void RegisterUser()
+        {
+            if (!VerifyFieldsCorrectness())
+                return;
+
+            IUserInfo userInfo = GetUserInfo();
+
+            if (UserRegisterService.RegisterUser(userInfo))
+            {
+                ResetAllFields();
+                PageClosing?.Invoke();
+            }
+            else
+            {
+                var window = WindowFinder.FindByType(GetOwnerWindowType());
+                QuickMessage.Error("Не удалось зарегистрировать пользователя.").ShowDialog(window);
+            }
+        }
+
+        private async void LoadUserImage()
+        {
+            if (WindowFinder.FindByType(GetOwnerWindowType()) is not Window window)
+                return;
+
+            OpenFileDialog dialog = DialogProvider.GetOpenImageDialog();
+            string[]? paths = await dialog.ShowAsync(window);
+
+            if (paths is null || paths.Length == 0)
+                return;
+
+            if (!TrySetUserImage(paths[0]))
+                QuickMessage.Error("Не удалось открыть фото.").ShowDialog(window);
+        }
+
+        private void ClosePage()
+        {
+            PageClosing?.Invoke();
+        }
+
+        private void SetGender(string gender)
+        {
+            Gender = gender;
+        }
+
+        private bool TrySetUserImage(string path)
+        {
+            UserImage?.Dispose();
+            UserImage = null;
+
+            try
+            {
+                var image = new Bitmap(path);
+                UserImage = image;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         #endregion

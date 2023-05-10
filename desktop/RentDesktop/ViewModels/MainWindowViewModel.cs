@@ -17,7 +17,7 @@ namespace RentDesktop.ViewModels
             RegisterVM = new RegisterViewModel();
 
             LoginVM.RegisterPageOpening += OpenRegisterPage;
-            RegisterVM.RegisterPageClosing += OpenLoginPage;
+            RegisterVM.PageClosing += OpenLoginPage;
 
             _inactivity_timer = ConfigureInactivityTimer();
             _inactivity_timer.Start();

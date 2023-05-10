@@ -18,6 +18,7 @@ namespace RentDesktop.ViewModels
         public AdminWindowViewModel(IUserInfo userInfo)
         {
             AdminProfileVM = new AdminProfileViewModel(userInfo);
+            AddUserVM = new AddUserViewModel();
 
             UserInfo = userInfo;
 
@@ -32,6 +33,7 @@ namespace RentDesktop.ViewModels
         #region ViewModels
 
         public AdminProfileViewModel AdminProfileVM { get; }
+        public AddUserViewModel AddUserVM { get; }
 
         #endregion
 

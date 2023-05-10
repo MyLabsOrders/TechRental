@@ -20,7 +20,7 @@ namespace RentDesktop.Infrastructure.Services.DB
                 Gender = "Мужской",
                 PhoneNumber = "8 (921) 123-4567",
                 Position = UserInfo.ADMIN_POSITION,
-                Status = "TODO",
+                Status = UserInfo.ACTIVE_STATUS,
                 DateOfBirth = new DateTime(2000, 1, 21),
                 Icon = File.ReadAllBytes(@"D:\Testing\TechRental\human1.jpg")
             };

@@ -6,7 +6,9 @@ namespace RentDesktop.Models.Informing
     {
         public const string ADMIN_POSITION = "Admin";
         public const string USER_POSITION = "User";
-        
+        public const string ACTIVE_STATUS = "Активен";
+        public const string INACTIVE_STATUS = "Неактивен";
+
         public string Login { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
