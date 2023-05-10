@@ -2,12 +2,13 @@
 using RentDesktop.Infrastructure.App;
 using RentDesktop.Models.Communication;
 using RentDesktop.Models.Informing;
+using RentDesktop.ViewModels.Pages.MainWindowPages;
 using RentDesktop.Views;
 using System;
 using System.Collections.ObjectModel;
 using System.Reactive;
 
-namespace RentDesktop.ViewModels.Pages
+namespace RentDesktop.ViewModels.Pages.AdminWindowPages
 {
     public class AddUserViewModel : RegisterViewModel
     {

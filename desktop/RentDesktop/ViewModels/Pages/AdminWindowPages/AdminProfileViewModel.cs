@@ -2,11 +2,12 @@
 using RentDesktop.Infrastructure.App;
 using RentDesktop.Models.Communication;
 using RentDesktop.Models.Informing;
+using RentDesktop.ViewModels.Pages.UserWindowPages;
 using RentDesktop.Views;
 using System;
 using System.Collections.ObjectModel;
 
-namespace RentDesktop.ViewModels.Pages
+namespace RentDesktop.ViewModels.Pages.AdminWindowPages
 {
     public class AdminProfileViewModel : UserProfileViewModel
     {

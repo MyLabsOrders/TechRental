@@ -4,7 +4,7 @@ using RentDesktop.Infrastructure.App;
 using RentDesktop.Infrastructure.Services.DB;
 using RentDesktop.Models.Informing;
 using RentDesktop.ViewModels.Base;
-using RentDesktop.ViewModels.Pages;
+using RentDesktop.ViewModels.Pages.UserWindowPages;
 using System;
 using System.Reactive;
 

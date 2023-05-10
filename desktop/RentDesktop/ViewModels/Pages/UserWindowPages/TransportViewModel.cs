@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive;
 
-namespace RentDesktop.ViewModels.Pages
+namespace RentDesktop.ViewModels.Pages.UserWindowPages
 {
     public class TransportViewModel : ViewModelBase
     {

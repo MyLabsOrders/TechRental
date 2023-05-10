@@ -3,7 +3,7 @@ using Avalonia.Threading;
 using ReactiveUI;
 using RentDesktop.Infrastructure.App;
 using RentDesktop.ViewModels.Base;
-using RentDesktop.ViewModels.Pages;
+using RentDesktop.ViewModels.Pages.MainWindowPages;
 using System;
 using System.Reactive;
 

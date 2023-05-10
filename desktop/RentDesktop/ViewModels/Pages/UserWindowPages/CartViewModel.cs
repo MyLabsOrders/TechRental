@@ -12,7 +12,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive;
 
-namespace RentDesktop.ViewModels.Pages
+namespace RentDesktop.ViewModels.Pages.UserWindowPages
 {
     public class CartViewModel : ViewModelBase
     {
@@ -25,7 +25,7 @@ namespace RentDesktop.ViewModels.Pages
             PaymentMethods = GetSupportedPaymentMethods();
             Cart = new ObservableCollection<TransportRent>();
 
-            Cart.CollectionChanged += (object? s, NotifyCollectionChangedEventArgs e) =>
+            Cart.CollectionChanged += (s, e) =>
             {
                 CalcTotalPrice();
                 CheckCartIsEmpty();

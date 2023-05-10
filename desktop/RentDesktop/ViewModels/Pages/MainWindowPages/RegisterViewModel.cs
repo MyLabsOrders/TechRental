@@ -12,7 +12,7 @@ using System;
 using System.Linq;
 using System.Reactive;
 
-namespace RentDesktop.ViewModels.Pages
+namespace RentDesktop.ViewModels.Pages.MainWindowPages
 {
     public class RegisterViewModel : ViewModelBase
     {

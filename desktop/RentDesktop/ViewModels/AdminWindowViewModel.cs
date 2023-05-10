@@ -3,7 +3,7 @@ using ReactiveUI;
 using RentDesktop.Infrastructure.App;
 using RentDesktop.Models.Informing;
 using RentDesktop.ViewModels.Base;
-using RentDesktop.ViewModels.Pages;
+using RentDesktop.ViewModels.Pages.AdminWindowPages;
 using System;
 using System.Reactive;
 

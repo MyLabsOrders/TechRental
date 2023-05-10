@@ -12,7 +12,7 @@ using System;
 using System.Linq;
 using System.Reactive;
 
-namespace RentDesktop.ViewModels.Pages
+namespace RentDesktop.ViewModels.Pages.UserWindowPages
 {
     public class UserProfileViewModel : ViewModelBase
     {

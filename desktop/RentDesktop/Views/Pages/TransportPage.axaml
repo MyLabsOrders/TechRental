@@ -3,7 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:img="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
-			 xmlns:vm="using:RentDesktop.ViewModels.Pages"
+			 xmlns:vm="using:RentDesktop.ViewModels.Pages.UserWindowPages"
 			 xmlns:models="clr-namespace:RentDesktop.Models;assembly=RentDesktop"
              mc:Ignorable="d"
 			 d:DesignWidth="670" d:DesignHeight="475"

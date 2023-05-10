@@ -2,7 +2,7 @@
 using RentDesktop.ViewModels.Base;
 using System.Collections.ObjectModel;
 
-namespace RentDesktop.ViewModels.Pages
+namespace RentDesktop.ViewModels.Pages.UserWindowPages
 {
     public class OrdersViewModel : ViewModelBase
     {

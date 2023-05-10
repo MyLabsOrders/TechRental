@@ -11,7 +11,7 @@ using RentDesktop.Views;
 using System.Reactive;
 using System.Threading.Tasks;
 
-namespace RentDesktop.ViewModels.Pages
+namespace RentDesktop.ViewModels.Pages.MainWindowPages
 {
     public class LoginViewModel : ViewModelBase
     {
