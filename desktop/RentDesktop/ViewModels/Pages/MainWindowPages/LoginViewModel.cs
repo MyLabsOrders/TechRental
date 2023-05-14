@@ -197,7 +197,10 @@ namespace RentDesktop.ViewModels.Pages.MainWindowPages
             if (UserCaptchaText != Captcha.Text)
             {
                 QuickMessage.Info("Текст с картинки введен неверно.").ShowDialog(window);
+                
                 UpdateCaptcha();
+                UserCaptchaText = string.Empty;
+
                 return false;
             }
 

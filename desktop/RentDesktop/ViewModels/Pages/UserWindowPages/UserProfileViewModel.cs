@@ -292,6 +292,7 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
                 return;
 
             IUserInfo newUserInfo = GetUserInfo();
+            // TODO : ID, Status
 
             if (!UserEditService.EditInfo(newUserInfo))
             {

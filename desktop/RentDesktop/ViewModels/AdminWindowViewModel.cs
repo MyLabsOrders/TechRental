@@ -1,9 +1,11 @@
 ﻿using Avalonia.Threading;
 using ReactiveUI;
 using RentDesktop.Infrastructure.App;
+using RentDesktop.Models.Communication;
 using RentDesktop.Models.Informing;
 using RentDesktop.ViewModels.Base;
 using RentDesktop.ViewModels.Pages.AdminWindowPages;
+using RentDesktop.Views;
 using System;
 using System.Reactive;
 
@@ -23,6 +25,12 @@ namespace RentDesktop.ViewModels
             EditUserVM = new EditUserViewModel();
 
             AllUsersVM.SelectedUserChanged += EditUserVM.ChangeUser;
+
+            EditUserVM.UserInfoUpdated += () =>
+            {
+                var window = WindowFinder.FindByType(typeof(AdminWindow));
+                QuickMessage.Info("Изменения успешно сохранены.").ShowDialog(window);
+            };
 
             UserInfo = userInfo;
 

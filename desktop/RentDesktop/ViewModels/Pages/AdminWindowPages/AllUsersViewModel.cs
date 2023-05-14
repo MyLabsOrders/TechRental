@@ -133,7 +133,7 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
                 foundUsers = foundUsers.Where(t => t.Status == Statuses[SelectedStatusIndex]);
 
             if (SelectedGenderIndex > 0 && SelectedGenderIndex < Genders.Count)
-                foundUsers = foundUsers.Where(t => t.Gender == Positions[SelectedGenderIndex]);
+                foundUsers = foundUsers.Where(t => t.Gender == Genders[SelectedGenderIndex]);
 
             if (string.IsNullOrEmpty(SearchQuery))
             {
