@@ -167,21 +167,21 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
                ? BitmapService.ConvertBitmapToBytes(UserImage)
                : Array.Empty<byte>();
 
-            return new UserInfo()
-            {
-                ID = 0, //TODO
-                Login = Login,
-                Password = Password,
-                Name = Name,
-                Surname = Surname,
-                Patronymic = Patronymic,
-                PhoneNumber = PhoneNumber,
-                Gender = Gender,
-                Position = Position,
-                Status = "TODO",
-                Icon = userImageBytes,
-                DateOfBirth = DateOfBirth!.Value
-            };
+            var userInfo = new UserInfo();
+            _userInfo.CopyTo(userInfo);
+
+            userInfo.Login = Login;
+            userInfo.Password = Password;
+            userInfo.Name = Name;
+            userInfo.Surname = Surname;
+            userInfo.Patronymic = Patronymic;
+            userInfo.PhoneNumber = PhoneNumber;
+            userInfo.Gender = Gender;
+            userInfo.Position = Position;
+            userInfo.Icon = userImageBytes;
+            userInfo.DateOfBirth = DateOfBirth!.Value;
+
+            return userInfo;
         }
 
         protected virtual void SetUserInfo(IUserInfo userInfo)
@@ -292,7 +292,6 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
                 return;
 
             IUserInfo newUserInfo = GetUserInfo();
-            // TODO : ID, Status
 
             if (!UserEditService.EditInfo(newUserInfo))
             {

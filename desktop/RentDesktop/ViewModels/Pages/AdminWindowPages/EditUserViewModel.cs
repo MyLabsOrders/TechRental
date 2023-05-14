@@ -1,5 +1,7 @@
 ﻿using ReactiveUI;
+using RentDesktop.Infrastructure.App;
 using RentDesktop.Infrastructure.Services.DB;
+using RentDesktop.Models.Communication;
 using RentDesktop.Models.Informing;
 using System.Collections.ObjectModel;
 using System.Reactive;
@@ -22,6 +24,13 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
 
         public ObservableCollection<string> Positions { get; }
 
+        private int _selectedPositionIndex = 0;
+        public int SelectedPositionIndex
+        {
+            get => _selectedPositionIndex;
+            set => this.RaiseAndSetIfChanged(ref _selectedPositionIndex, value);
+        }
+
         #endregion
 
         #region Commands
@@ -36,6 +45,37 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
         {
             _userInfo = newUserInfo ?? new UserInfo();
             SetUserInfo(_userInfo);
+        }
+
+        #endregion
+
+        #region Protected Methods
+
+        protected override IUserInfo GetUserInfo()
+        {
+            IUserInfo userInfo = base.GetUserInfo();
+            userInfo.Position = Positions[SelectedPositionIndex];
+
+            return userInfo;
+        }
+
+        protected override void SetUserInfo(IUserInfo userInfo)
+        {
+            base.SetUserInfo(userInfo);
+            SelectedPositionIndex = Positions?.IndexOf(userInfo.Position) ?? -1;
+        }
+
+        protected override bool VerifyFieldsCorrectness()
+        {
+            var window = WindowFinder.FindByType(GetOwnerWindowType());
+
+            if (SelectedPositionIndex < 0 || SelectedPositionIndex > Positions.Count)
+            {
+                QuickMessage.Info("Выберите должность.").ShowDialog(window);
+                return false;
+            }
+
+            return base.VerifyFieldsCorrectness();
         }
 
         #endregion
