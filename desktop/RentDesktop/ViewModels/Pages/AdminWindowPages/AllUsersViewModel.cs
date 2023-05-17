@@ -1,10 +1,13 @@
 ﻿using Avalonia;
 using Avalonia.Interactivity;
 using ReactiveUI;
+using RentDesktop.Infrastructure.App;
 using RentDesktop.Infrastructure.Extensions;
 using RentDesktop.Infrastructure.Services.DB;
+using RentDesktop.Models.Communication;
 using RentDesktop.Models.Informing;
 using RentDesktop.ViewModels.Base;
+using RentDesktop.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -162,9 +165,27 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
             ResetUsers(_databaseUsers);
         }
 
-        private void RefreshUsers()
+        private async void RefreshUsers()
         {
-            _databaseUsers = InfoService.GetAllUsers();
+            List<IUserInfo> users;
+
+            try
+            {
+                users = await InfoService.GetAllUsersAsync();
+            }
+            catch (Exception ex)
+            {
+                var window = WindowFinder.FindByType(typeof(AdminWindow));
+                QuickMessage.Error("Не удалось обновить список пользователей.").ShowDialog(window);
+
+#if DEBUG
+                QuickMessage.Info($"Причина ошибки: {ex.Message}.");
+#endif
+
+                return;
+            }
+
+            _databaseUsers = users;
             SelectedUser = null;
 
             ResetUsers(_databaseUsers);

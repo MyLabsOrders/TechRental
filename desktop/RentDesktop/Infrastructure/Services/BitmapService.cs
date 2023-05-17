@@ -1,11 +1,24 @@
 ﻿using Avalonia.Media.Imaging;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace RentDesktop.Infrastructure.Services
 {
     internal static class BitmapService
     {
+        public static byte[] ConvertStringToBytes(string text)
+        {
+            return text.Split(' ')
+                .Select(t => byte.Parse(t))
+                .ToArray();
+        }
+
+        public static string ConvertBytesToArray(byte[] bytes)
+        {
+            return string.Join(' ', bytes);
+        }
+
         public static byte[] ConvertBitmapToBytes(Bitmap bitmap)
         {
             byte[] bytes;
@@ -17,6 +30,20 @@ namespace RentDesktop.Infrastructure.Services
             }
 
             return bytes;
+        }
+
+        public static bool TryConvertStringToBytes(string text, out byte[] bytes)
+        {
+            try
+            {
+                bytes = ConvertStringToBytes(text);
+                return true;
+            }
+            catch
+            {
+                bytes = Array.Empty<byte>();
+                return false;
+            }
         }
 
         public static Bitmap ConvertBytesToBitmap(byte[] bytes)
