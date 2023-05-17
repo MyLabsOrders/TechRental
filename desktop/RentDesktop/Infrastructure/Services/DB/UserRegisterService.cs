@@ -7,12 +7,15 @@ namespace RentDesktop.Infrastructure.Services.DB
         public static bool RegisterUser(IUserInfo userInfo)
         {
             //throw new NotImplementedException();
-            return true;
+            //return true;
+
+            using var db = new DatabaseConnectionService();
+
         }
 
         public static bool IsLoginFree(string login)
         {
-            //throw new NotImplementedException();
+            // Login verification is now inside the database
             return true;
         }
     }

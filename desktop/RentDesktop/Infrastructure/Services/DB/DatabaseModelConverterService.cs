@@ -36,7 +36,7 @@ namespace RentDesktop.Infrastructure.Services.DB
                 id: t.id,
                 price: t.total,
                 dateOfCreation: DateTime.Parse(t.orderDate),
-                models: Array.Empty<string>() // TODO
+                models: t.name.Split(", ")
             ));
         }
     }
