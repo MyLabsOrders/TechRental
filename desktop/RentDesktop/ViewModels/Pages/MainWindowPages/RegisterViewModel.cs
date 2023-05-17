@@ -282,15 +282,19 @@ namespace RentDesktop.ViewModels.Pages.MainWindowPages
 
             IUserInfo userInfo = GetUserInfo();
 
-            if (UserRegisterService.RegisterUser(userInfo))
+            try
             {
+                UserRegisterService.RegisterUser(userInfo);
                 ResetAllFields();
                 PageClosing?.Invoke();
             }
-            else
+            catch (Exception ex)
             {
                 var window = WindowFinder.FindByType(GetOwnerWindowType());
                 QuickMessage.Error("Не удалось зарегистрировать пользователя.").ShowDialog(window);
+#if DEBUG
+                QuickMessage.Info($"Причина: {ex.Message}").ShowDialog(window);
+#endif
             }
         }
 

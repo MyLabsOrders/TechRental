@@ -178,7 +178,7 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
                 var window = WindowFinder.FindByType(typeof(AdminWindow));
                 QuickMessage.Error("Не удалось обновить список пользователей.").ShowDialog(window);
 #if DEBUG
-                QuickMessage.Info($"Причина ошибки: {ex.Message}.");
+                QuickMessage.Info($"Причина ошибки: {ex.Message}.").ShowDialog(window);
 #endif
                 return;
             }

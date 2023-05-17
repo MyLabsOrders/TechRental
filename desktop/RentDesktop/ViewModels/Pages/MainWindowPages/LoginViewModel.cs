@@ -133,7 +133,7 @@ namespace RentDesktop.ViewModels.Pages.MainWindowPages
                 var window = WindowFinder.FindMainWindow();
                 QuickMessage.Error("Не удалось войти в систему.").ShowDialog(window);
 #if DEBUG
-                QuickMessage.Info($"Причина: {ex.Message}");
+                QuickMessage.Info($"Причина: {ex.Message}").ShowDialog(window);
 #endif
                 return;
             }
