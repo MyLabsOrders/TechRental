@@ -33,10 +33,10 @@ namespace RentDesktop.Infrastructure.Services.DB
 
             return new List<IUserInfo>()
             {
-                new UserInfo() { Name = "Ivan", Surname = "Ivanov", Patronymic = "Ivanovich", Gender = "Мужской", ID = 987, Position = "Admin" },
-                new UserInfo() { Name = "Vasya", Surname = "Vaskin", Patronymic = "Vasilevich", Gender = "Мужской", ID = 1234, Position = "User" },
-                new UserInfo() { Name = "Roman", Surname = "Romanov", Patronymic = "Romanovich" , Gender = "Мужской", ID = 764, Position = "User"},
-                new UserInfo() { Name = "Irina", Surname = "Irova", Patronymic = "Irekovna", Gender = "Женский", ID = 1340, Position = "Admin" },
+                new UserInfo() { Name = "Ivan", Surname = "Ivanov", Patronymic = "Ivanovich", Gender = "Мужской", ID = "abc-123d-dds", Position = "Admin" },
+                new UserInfo() { Name = "Vasya", Surname = "Vaskin", Patronymic = "Vasilevich", Gender = "Мужской", ID = "nhd-976d-dfs", Position = "User" },
+                new UserInfo() { Name = "Roman", Surname = "Romanov", Patronymic = "Romanovich" , Gender = "Мужской", ID = "ihg-343d-dfs", Position = "User"},
+                new UserInfo() { Name = "Irina", Surname = "Irova", Patronymic = "Irekovna", Gender = "Женский", ID = "xge-343d-dfs", Position = "Admin" },
             };
         }
     }

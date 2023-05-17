@@ -4,7 +4,7 @@ namespace RentDesktop.Models.Informing
 {
     public interface IUserInfo
     {
-        int ID { get; set; }
+        string ID { get; set; }
         string Login { get; set; }
         string Password { get; set; }
         string Name { get; set; }

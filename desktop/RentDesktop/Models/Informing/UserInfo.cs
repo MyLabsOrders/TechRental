@@ -4,12 +4,12 @@ namespace RentDesktop.Models.Informing
 {
     public class UserInfo : IUserInfo
     {
-        public const string ADMIN_POSITION = "Admin";
-        public const string USER_POSITION = "User";
-        public const string ACTIVE_STATUS = "Активен";
-        public const string INACTIVE_STATUS = "Неактивен";
+        public const string ADMIN_POSITION = "admin";
+        public const string USER_POSITION = "user";
+        public const string ACTIVE_STATUS = "активен";
+        public const string INACTIVE_STATUS = "неактивен";
 
-        public int ID { get; set; } = 0;
+        public string ID { get; set; } = string.Empty;
         public string Login { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;

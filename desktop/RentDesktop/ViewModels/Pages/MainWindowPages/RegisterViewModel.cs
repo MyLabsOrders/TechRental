@@ -180,7 +180,6 @@ namespace RentDesktop.ViewModels.Pages.MainWindowPages
 
             return new UserInfo()
             {
-                ID = 0, //TODO
                 Login = Login,
                 Password = Password,
                 Name = Name,
@@ -189,7 +188,7 @@ namespace RentDesktop.ViewModels.Pages.MainWindowPages
                 PhoneNumber = PhoneNumber,
                 Gender = Gender,
                 Position = _position,
-                Status = "TODO",
+                Status = UserInfo.ACTIVE_STATUS,
                 Icon = userImageBytes,
                 DateOfBirth = DateOfBirth!.Value
             };

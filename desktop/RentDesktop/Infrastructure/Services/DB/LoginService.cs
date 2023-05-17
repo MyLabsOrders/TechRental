@@ -12,7 +12,7 @@ namespace RentDesktop.Infrastructure.Services.DB
 
             userInfo = new UserInfo()
             {
-                ID = 999, //TODO
+                ID = "test_id",
                 Login = login,
                 Password = password,
                 Name = "Иван",
