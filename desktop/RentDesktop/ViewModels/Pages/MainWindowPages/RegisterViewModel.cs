@@ -256,6 +256,7 @@ namespace RentDesktop.ViewModels.Pages.MainWindowPages
         {
             Login = string.Empty;
             Password = string.Empty;
+            PasswordConfirmation = string.Empty;
             Name = string.Empty;
             Surname = string.Empty;
             Patronymic = string.Empty;
