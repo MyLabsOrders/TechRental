@@ -9,6 +9,8 @@ namespace RentDesktop.Models.Informing
         public const string USER_POSITION = "user";
         public const string ACTIVE_STATUS = "активен";
         public const string INACTIVE_STATUS = "неактивен";
+        public const string MALE_GENDER = "Мужской";
+        public const string FEMALE_GENDER = "Женский";
 
         public string ID { get; set; } = string.Empty;
         public string Login { get; set; } = string.Empty;

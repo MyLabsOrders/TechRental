@@ -20,7 +20,7 @@ namespace RentDesktop.Infrastructure.Services.DB
                 Name = "Иван",
                 Surname = "Иван",
                 Patronymic = "Иванович",
-                Gender = "Мужской",
+                Gender = UserInfo.MALE_GENDER,
                 PhoneNumber = "8 (921) 123-4567",
                 Position = UserInfo.USER_POSITION,
                 Status = UserInfo.ACTIVE_STATUS,

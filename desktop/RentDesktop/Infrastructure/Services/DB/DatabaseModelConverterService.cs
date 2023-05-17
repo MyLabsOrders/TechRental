@@ -21,7 +21,7 @@ namespace RentDesktop.Infrastructure.Services.DB
                 Surname = t.middleName,
                 Patronymic = t.lastName,
                 PhoneNumber = t.number,
-                Gender = "Мужской", // TODO
+                Gender = UserInfo.MALE_GENDER, // TODO
                 Position = UserInfo.USER_POSITION, // TODO
                 Status = UserInfo.ACTIVE_STATUS, // TODO
                 Icon = BitmapService.ConvertStringToBytes(t.image),

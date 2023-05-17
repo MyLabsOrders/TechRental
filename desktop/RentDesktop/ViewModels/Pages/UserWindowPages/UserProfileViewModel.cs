@@ -202,10 +202,10 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
                 ? BitmapService.ConvertBytesToBitmap(userInfo.Icon)
                 : null;
 
-            if (Gender == "Мужской")
+            if (Gender == UserInfo.MALE_GENDER)
                 IsMaleGenderChecked = true;
 
-            else if (Gender == "Женский")
+            else if (Gender == UserInfo.FEMALE_GENDER)
                 IsFemaleGenderChecked = true;
         }
 

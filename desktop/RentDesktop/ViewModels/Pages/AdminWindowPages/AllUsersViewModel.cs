@@ -223,8 +223,8 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
             return new ObservableCollection<string>()
             {
                 NOT_SPECIFIED,
-                "Мужской",
-                "Женский"
+                UserInfo.MALE_GENDER,
+                UserInfo.FEMALE_GENDER
             };
         }
 
