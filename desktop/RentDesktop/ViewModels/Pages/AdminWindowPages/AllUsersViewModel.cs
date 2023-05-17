@@ -165,23 +165,21 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
             ResetUsers(_databaseUsers);
         }
 
-        private async void RefreshUsers()
+        private void RefreshUsers()
         {
             List<IUserInfo> users;
 
             try
             {
-                users = await InfoService.GetAllUsersAsync();
+                users = InfoService.GetAllUsers();
             }
             catch (Exception ex)
             {
                 var window = WindowFinder.FindByType(typeof(AdminWindow));
                 QuickMessage.Error("Не удалось обновить список пользователей.").ShowDialog(window);
-
 #if DEBUG
                 QuickMessage.Info($"Причина ошибки: {ex.Message}.");
 #endif
-
                 return;
             }
 

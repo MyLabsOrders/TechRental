@@ -10,24 +10,31 @@ namespace RentDesktop.Infrastructure.Services.DB
 {
     internal static class DatabaseModelConverterService
     {
-        public static List<IUserInfo> ConvertUsers(DbUsers databaseUsers)
+        public static UserInfo ConvertUser(DbUser user)
         {
-            return databaseUsers.users!.Select(t => (IUserInfo)new UserInfo()
+            return new UserInfo()
             {
-                ID = t.id,
+                ID = user.id,
                 Login = "", // TODO,
                 Password = "", // TODO
-                Name = t.firstName,
-                Surname = t.middleName,
-                Patronymic = t.lastName,
-                PhoneNumber = t.number,
+                Name = user.firstName,
+                Surname = user.middleName,
+                Patronymic = user.lastName,
+                PhoneNumber = user.number,
                 Gender = UserInfo.MALE_GENDER, // TODO
                 Position = UserInfo.USER_POSITION, // TODO
                 Status = UserInfo.ACTIVE_STATUS, // TODO
-                Icon = BitmapService.ConvertStringToBytes(t.image),
-                DateOfBirth = DateTime.Parse(t.birthDate),
-                Orders = new ObservableCollection<Order>(ConvertOrders(t.orders ?? Array.Empty<DbOrder>()))
-            }).ToList();
+                Icon = BitmapService.ConvertStringToBytes(user.image),
+                DateOfBirth = DateTime.Parse(user.birthDate),
+                Orders = new ObservableCollection<Order>(ConvertOrders(user.orders ?? Array.Empty<DbOrder>()))
+            };
+        }
+        
+        public static List<IUserInfo> ConvertUsers(DbUsers databaseUsers)
+        {
+            return databaseUsers.users!
+                .Select(t => ConvertUser(t) as IUserInfo)
+                .ToList();
         }
 
         public static IEnumerable<Order> ConvertOrders(IEnumerable<DbOrder> databaseOrders)

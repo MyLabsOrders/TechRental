@@ -1,11 +1,9 @@
 ﻿using RentDesktop.Models.DB;
 using RentDesktop.Models.Informing;
-using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Threading.Tasks;
 
 namespace RentDesktop.Infrastructure.Services.DB
 {
@@ -33,7 +31,7 @@ namespace RentDesktop.Infrastructure.Services.DB
             };
         }
 
-        public async static Task<List<IUserInfo>> GetAllUsersAsync()
+        public static List<IUserInfo> GetAllUsers()
         {
             //throw new NotImplementedException();
 
@@ -48,22 +46,16 @@ namespace RentDesktop.Infrastructure.Services.DB
             using var db = new DatabaseConnectionService();
 
             const string handle = "/api/User";
-            using HttpResponseMessage response = await db.GetAsync(handle);
+            using HttpResponseMessage response = db.GetAsync(handle).Result;
 
             if (response.StatusCode != HttpStatusCode.OK)
                 throw new ErrorResponseException(response.StatusCode);
 
-            DbUsers? readedUsers = await response.Content.ReadFromJsonAsync<DbUsers>();
+            DbUsers? allUsers = response.Content.ReadFromJsonAsync<DbUsers>().Result;
 
-            if (readedUsers is null || readedUsers.users is null)
-                throw new IncorrectDataInResponseException(nameof(readedUsers));
-
-            var converter = new Func<List<IUserInfo>>(() =>
-            {
-                return DatabaseModelConverterService.ConvertUsers(readedUsers);
-            });
-
-            return await new Task<List<IUserInfo>>(converter);
+            return allUsers is not null && allUsers.users is not null
+                ? DatabaseModelConverterService.ConvertUsers(allUsers)
+                : throw new IncorrectResponseContentException(nameof(allUsers));
         }
     }
 }

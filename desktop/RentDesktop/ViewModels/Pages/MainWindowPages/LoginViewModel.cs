@@ -8,6 +8,7 @@ using RentDesktop.Models.Informing;
 using RentDesktop.Models.Security;
 using RentDesktop.ViewModels.Base;
 using RentDesktop.Views;
+using System;
 using System.Reactive;
 using System.Threading.Tasks;
 
@@ -121,10 +122,19 @@ namespace RentDesktop.ViewModels.Pages.MainWindowPages
             if (!VerifyFieldsCorrectness())
                 return;
 
-            if (!LoginService.Login(Login, Password, out IUserInfo? userInfo) || userInfo is null)
+            IUserInfo userInfo;
+
+            try
+            {
+                userInfo = LoginService.Login(Login, Password);
+            }
+            catch (Exception ex)
             {
                 var window = WindowFinder.FindMainWindow();
                 QuickMessage.Error("Не удалось войти в систему.").ShowDialog(window);
+#if DEBUG
+                QuickMessage.Info($"Причина: {ex.Message}");
+#endif
                 return;
             }
 
