@@ -45,13 +45,13 @@ namespace RentDesktop.Infrastructure.Services.DB
 
             using var db = new DatabaseConnectionService();
 
-            const string handle = "/api/User";
-            using HttpResponseMessage response = db.GetAsync(handle).Result;
+            const string allUsersHandle = "/api/User";
+            using HttpResponseMessage allUsersResponse = db.GetAsync(allUsersHandle).Result;
 
-            if (response.StatusCode != HttpStatusCode.OK)
-                throw new ErrorResponseException(response.StatusCode);
+            if (allUsersResponse.StatusCode != HttpStatusCode.OK)
+                throw new ErrorResponseException(allUsersResponse.StatusCode);
 
-            DbUsers? allUsers = response.Content.ReadFromJsonAsync<DbUsers>().Result;
+            DbUsers? allUsers = allUsersResponse.Content.ReadFromJsonAsync<DbUsers>().Result;
 
             return allUsers is not null && allUsers.users is not null
                 ? DatabaseModelConverterService.ConvertUsers(allUsers)

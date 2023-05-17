@@ -175,7 +175,7 @@ namespace RentDesktop.ViewModels.Pages.MainWindowPages
         protected virtual IUserInfo GetUserInfo()
         {
             byte[] userImageBytes = UserImage is not null
-                ? BitmapService.ConvertBitmapToBytes(UserImage)
+                ? BitmapService.BitmapToBytes(UserImage)
                 : Array.Empty<byte>();
 
             return new UserInfo()

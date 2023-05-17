@@ -164,7 +164,7 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
         protected virtual IUserInfo GetUserInfo()
         {
             byte[] userImageBytes = UserImage is not null
-               ? BitmapService.ConvertBitmapToBytes(UserImage)
+               ? BitmapService.BitmapToBytes(UserImage)
                : Array.Empty<byte>();
 
             var userInfo = new UserInfo();
@@ -199,7 +199,7 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
             UserImage?.Dispose();
 
             UserImage = userInfo.Icon.Length > 0
-                ? BitmapService.ConvertBytesToBitmap(userInfo.Icon)
+                ? BitmapService.BytesToBitmap(userInfo.Icon)
                 : null;
 
             if (Gender == UserInfo.MALE_GENDER)

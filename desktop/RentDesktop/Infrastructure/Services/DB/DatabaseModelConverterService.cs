@@ -24,8 +24,8 @@ namespace RentDesktop.Infrastructure.Services.DB
                 Gender = UserInfo.MALE_GENDER, // TODO
                 Position = UserInfo.USER_POSITION, // TODO
                 Status = UserInfo.ACTIVE_STATUS, // TODO
-                Icon = BitmapService.ConvertStringToBytes(user.image),
-                DateOfBirth = DateTime.Parse(user.birthDate),
+                Icon = BitmapService.StringToBytes(user.image),
+                DateOfBirth = DateTimeService.StringToDateTime(user.birthDate),
                 Orders = new ObservableCollection<Order>(ConvertOrders(user.orders ?? Array.Empty<DbOrder>()))
             };
         }
@@ -42,7 +42,7 @@ namespace RentDesktop.Infrastructure.Services.DB
             return databaseOrders.Select(t => new Order(
                 id: t.id,
                 price: t.total,
-                dateOfCreation: DateTime.Parse(t.orderDate),
+                dateOfCreation: DateTimeService.StringToDateTime(t.orderDate),
                 models: t.name.Split(", ")
             ));
         }

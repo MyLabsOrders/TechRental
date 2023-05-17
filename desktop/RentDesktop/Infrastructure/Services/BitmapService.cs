@@ -7,19 +7,19 @@ namespace RentDesktop.Infrastructure.Services
 {
     internal static class BitmapService
     {
-        public static byte[] ConvertStringToBytes(string text)
+        public static byte[] StringToBytes(string text)
         {
             return text.Split(' ')
                 .Select(t => byte.Parse(t))
                 .ToArray();
         }
 
-        public static string ConvertBytesToArray(byte[] bytes)
+        public static string BytesToString(byte[] bytes)
         {
             return string.Join(' ', bytes);
         }
 
-        public static byte[] ConvertBitmapToBytes(Bitmap bitmap)
+        public static byte[] BitmapToBytes(Bitmap bitmap)
         {
             byte[] bytes;
 
@@ -32,21 +32,7 @@ namespace RentDesktop.Infrastructure.Services
             return bytes;
         }
 
-        public static bool TryConvertStringToBytes(string text, out byte[] bytes)
-        {
-            try
-            {
-                bytes = ConvertStringToBytes(text);
-                return true;
-            }
-            catch
-            {
-                bytes = Array.Empty<byte>();
-                return false;
-            }
-        }
-
-        public static Bitmap ConvertBytesToBitmap(byte[] bytes)
+        public static Bitmap BytesToBitmap(byte[] bytes)
         {
             Bitmap bitmap;
 
@@ -58,11 +44,12 @@ namespace RentDesktop.Infrastructure.Services
             return bitmap;
         }
 
-        public static bool TryConvertBitmapToBytes(Bitmap bitmap, out byte[] bytes)
+
+        public static bool TryStringToBytes(string text, out byte[] bytes)
         {
             try
             {
-                bytes = ConvertBitmapToBytes(bitmap);
+                bytes = StringToBytes(text);
                 return true;
             }
             catch
@@ -72,11 +59,25 @@ namespace RentDesktop.Infrastructure.Services
             }
         }
 
-        public static bool TryConvertBytesToBitmap(byte[] bytes, out Bitmap? bitmap)
+        public static bool TryBitmapToBytes(Bitmap bitmap, out byte[] bytes)
         {
             try
             {
-                bitmap = ConvertBytesToBitmap(bytes);
+                bytes = BitmapToBytes(bitmap);
+                return true;
+            }
+            catch
+            {
+                bytes = Array.Empty<byte>();
+                return false;
+            }
+        }
+
+        public static bool TryBytesToBitmap(byte[] bytes, out Bitmap? bitmap)
+        {
+            try
+            {
+                bitmap = BytesToBitmap(bytes);
                 return true;
             }
             catch
