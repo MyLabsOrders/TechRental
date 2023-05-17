@@ -18,7 +18,7 @@ namespace RentDesktop.Infrastructure.Services.DB
         {
             //throw new NotImplementedException();
 
-            int id = new Random().Next(0, 1000000);
+            string id = new Random().Next(0, 1000000).ToString();
             var date = DateTime.Now;
 
             var models = cart.Select(t => t.Transport.Name);

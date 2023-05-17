@@ -19,7 +19,7 @@ namespace RentDesktop.ViewModels
         public UserWindowViewModel(IUserInfo userInfo)
         {
             UserProfileVM = new UserProfileViewModel(userInfo);
-            OrdersVM = new OrdersViewModel();
+            OrdersVM = new OrdersViewModel(userInfo.Orders);
             CartVM = new CartViewModel(userInfo, OrdersVM.Orders);
             TransportVM = new TransportViewModel(CartVM.Cart);
 

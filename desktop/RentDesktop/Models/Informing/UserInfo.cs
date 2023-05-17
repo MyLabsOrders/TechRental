@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 
 namespace RentDesktop.Models.Informing
 {
@@ -21,6 +22,7 @@ namespace RentDesktop.Models.Informing
         public string Status { get; set; } = string.Empty;
         public byte[] Icon { get; set; } = Array.Empty<byte>();
         public DateTime DateOfBirth { get; set; }
+        public ObservableCollection<Order> Orders { get; set; } = new ObservableCollection<Order>();
 
         public void CopyTo(IUserInfo other)
         {

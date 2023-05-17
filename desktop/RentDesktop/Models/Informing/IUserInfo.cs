@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 
 namespace RentDesktop.Models.Informing
 {
@@ -16,6 +17,7 @@ namespace RentDesktop.Models.Informing
         string Status { get; set; }
         byte[] Icon { get; set; }
         DateTime DateOfBirth { get; set; }
+        ObservableCollection<Order> Orders { get; set; }
 
         void CopyTo(IUserInfo other);
         bool IsAdmin();

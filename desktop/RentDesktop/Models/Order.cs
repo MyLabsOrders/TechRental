@@ -6,7 +6,7 @@ namespace RentDesktop.Models
 {
     public class Order : ReactiveModel, IOrder
     {
-        public Order(int id, double price, DateTime dateOfCreation, IEnumerable<string> models)
+        public Order(string id, double price, DateTime dateOfCreation, IEnumerable<string> models)
         {
             ID = id;
             Price = price;
@@ -14,7 +14,7 @@ namespace RentDesktop.Models
             Models = new List<string>(models);
         }
 
-        public int ID { get; }
+        public string ID { get; }
         public double Price { get; }
         public DateTime DateOfCreation { get; }
         public IReadOnlyList<string> Models { get; }

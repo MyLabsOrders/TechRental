@@ -5,7 +5,7 @@ namespace RentDesktop.Models
 {
     public interface IOrder
     {
-        int ID { get; }
+        string ID { get; }
         double Price { get; }
         DateTime DateOfCreation { get; }
         IReadOnlyList<string> Models { get; }

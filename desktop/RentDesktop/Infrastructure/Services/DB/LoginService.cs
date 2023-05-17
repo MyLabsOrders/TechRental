@@ -1,5 +1,7 @@
-﻿using RentDesktop.Models.Informing;
+﻿using RentDesktop.Models;
+using RentDesktop.Models.Informing;
 using System;
+using System.Collections.ObjectModel;
 using System.IO;
 
 namespace RentDesktop.Infrastructure.Services.DB
@@ -20,10 +22,11 @@ namespace RentDesktop.Infrastructure.Services.DB
                 Patronymic = "Иванович",
                 Gender = "Мужской",
                 PhoneNumber = "8 (921) 123-4567",
-                Position = UserInfo.ADMIN_POSITION,
+                Position = UserInfo.USER_POSITION,
                 Status = UserInfo.ACTIVE_STATUS,
                 DateOfBirth = new DateTime(2000, 1, 21),
-                Icon = File.ReadAllBytes(@"D:\Testing\TechRental\human1.jpg")
+                Icon = File.ReadAllBytes(@"D:\Testing\TechRental\human1.jpg"),
+                Orders = new ObservableCollection<Order>() { new Order("123", 5000, DateTime.Now, new string[] { "Lada 7, Lada 15" } ) }
             };
 
             return true;

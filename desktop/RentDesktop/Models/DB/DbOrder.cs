@@ -10,7 +10,7 @@ namespace RentDesktop.Models.DB
         public string status { get; set; } = string.Empty;
         public string name { get; set; } = string.Empty;
         public string image { get; set; } = string.Empty;
-        public decimal total { get; set; } = 0;
+        public double total { get; set; } = 0;
         public string orderDate { get; set; } = string.Empty;
     }
 
