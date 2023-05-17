@@ -8,7 +8,7 @@ namespace RentDesktop.Infrastructure.Services.DB
 {
     internal static class LoginService
     {
-        public static IUserInfo Login(string login, string password, DatabaseConnectionService? db = null)
+        public static IUserInfo Login(string login, string password)
         {
             //throw new NotImplementedException();
 
@@ -29,16 +29,18 @@ namespace RentDesktop.Infrastructure.Services.DB
             //    Orders = new ObservableCollection<Order>() { new Order("123", 5000, DateTime.Now, new string[] { "Lada 7, Lada 15" } ) }
             //};
 
-            db ??= new DatabaseConnectionService();
+            var db = new DatabaseConnectionService();
 
-            string userId = EnterSystem(db, login, password);
-            return GetUserInfo(db, userId, login, password);
+            DbLoginResponseContent loginContent = EnterSystem(db, login, password);
+            db.AddAuthorizationToken(loginContent.token);
+
+            return GetUserInfo(db, loginContent.userId, login, password);
         }
 
-        private static string EnterSystem(DatabaseConnectionService db, string login, string password)
+        public static DbLoginResponseContent EnterSystem(DatabaseConnectionService db, string login, string password)
         {
             const string loginHandle = "/api/identity/login";
-            var content = JsonContent.Create(new DbLogin(login, password));
+            var content = new DbLogin(login, password);
 
             using HttpResponseMessage loginResponse = db.PostAsync(loginHandle, content).Result;
 
@@ -47,13 +49,12 @@ namespace RentDesktop.Infrastructure.Services.DB
 
             var loginContent = loginResponse.Content.ReadFromJsonAsync<DbLoginResponseContent>().Result;
 
-            return loginContent?.userId
-                ?? throw new IncorrectResponseContentException(nameof(loginContent));
+            return loginContent ?? throw new IncorrectResponseContentException(nameof(loginContent));
         }
 
-        private static IUserInfo GetUserInfo(DatabaseConnectionService db, string id, string login, string password)
+        private static IUserInfo GetUserInfo(DatabaseConnectionService db, string userId, string login, string password)
         {
-            string profileHandle = $"/api/User/{id}";
+            string profileHandle = $"/api/User/{userId}";
             using HttpResponseMessage profileResponse = db.GetAsync(profileHandle).Result;
 
             if (profileResponse.StatusCode != HttpStatusCode.OK)

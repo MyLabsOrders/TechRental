@@ -1,5 +1,9 @@
-﻿using RentDesktop.Models.DB;
+﻿using Newtonsoft.Json;
+using RentDesktop.Infrastructure.App;
+using RentDesktop.Models.Communication;
+using RentDesktop.Models.DB;
 using RentDesktop.Models.Informing;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -20,16 +24,19 @@ namespace RentDesktop.Infrastructure.Services.DB
 
             using var db = new DatabaseConnectionService();
 
-            const string handle = "/api/identity/register";
-            var content = JsonContent.Create(new DbRegister(userInfo.Login, userInfo.Password, userInfo.Position));
+            const string handle = "/api/identity/user/register";
+            var content = new DbRegister(userInfo.Login, userInfo.Password, userInfo.Position);
 
             using HttpResponseMessage registerResponse = db.PostAsync(handle, content).Result;
 
             if (registerResponse.StatusCode != HttpStatusCode.OK)
                 throw new ErrorResponseException(registerResponse.StatusCode);
 
-            _ = LoginService.Login(userInfo.Login, userInfo.Password, db);
+            DbLoginResponseContent loginContent = LoginService.EnterSystem(db, userInfo.Login, userInfo.Password);
             
+            db.AddAuthorizationToken(loginContent.token);
+            userInfo.ID = loginContent.userId;
+
             SetUserInfo(userInfo, db);
         }
 
@@ -37,7 +44,7 @@ namespace RentDesktop.Infrastructure.Services.DB
         {
             string profileHandle = $"/api/User/{userInfo.ID}/profile";
 
-            var content = JsonContent.Create(new DbUserProfile()
+            var content = new DbUserProfile()
             {
                 firstName = userInfo.Name,
                 middleName = userInfo.Surname,
@@ -45,9 +52,14 @@ namespace RentDesktop.Infrastructure.Services.DB
                 phoneNumber = userInfo.PhoneNumber,
                 userImage = BitmapService.BytesToString(userInfo.Icon),
                 birthDate = DateTimeService.DateTimeToString(userInfo.DateOfBirth)
-            });
+            };
 
             using HttpResponseMessage profileResponse = db.PostAsync(profileHandle, content).Result;
+
+            //var content1 = profileResponse.Content.ReadAsStringAsync().Result;
+            //var jobject = JsonConvert.DeserializeObject(content1);
+            //var window = WindowFinder.FindMainWindow();
+            //QuickMessage.Info(JsonConvert.SerializeObject(jobject, Formatting.Indented)).ShowDialog(window);
 
             if (profileResponse.StatusCode != HttpStatusCode.OK)
                 throw new ErrorResponseException(profileResponse.StatusCode);

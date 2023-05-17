@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
@@ -18,9 +19,18 @@ namespace RentDesktop.Infrastructure.Services.DB
 
         private readonly HttpClient _httpClient;
 
-        public DatabaseConnectionService()
+        public DatabaseConnectionService(string? authorizationToken = null)
         {
             _httpClient = new HttpClient();
+
+            if (authorizationToken is not null)
+                AddAuthorizationToken(authorizationToken);
+        }
+
+        public void AddAuthorizationToken(string authorizationToken)
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = 
+                new AuthenticationHeaderValue("Bearer", authorizationToken);
         }
 
         public Task<HttpResponseMessage> GetAsync(string handle)

@@ -1,22 +1,19 @@
 ﻿using Avalonia.Media.Imaging;
 using System;
 using System.IO;
-using System.Linq;
 
 namespace RentDesktop.Infrastructure.Services
 {
     internal static class BitmapService
     {
-        public static byte[] StringToBytes(string text)
+        public static byte[] StringToBytes(string base64string)
         {
-            return text.Split(' ')
-                .Select(t => byte.Parse(t))
-                .ToArray();
+            return Convert.FromBase64String(base64string);
         }
 
         public static string BytesToString(byte[] bytes)
         {
-            return string.Join(' ', bytes);
+            return Convert.ToBase64String(bytes);
         }
 
         public static byte[] BitmapToBytes(Bitmap bitmap)
