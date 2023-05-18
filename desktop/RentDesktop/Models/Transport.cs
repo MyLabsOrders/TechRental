@@ -4,14 +4,16 @@ namespace RentDesktop.Models
 {
     public class Transport : ITransport
     {
-        public Transport(string name, string company, int price, Bitmap? icon = null)
+        public Transport(string id, string name, string company, int price, Bitmap? icon = null)
         {
+            ID = id;
             Name = name;
             Company = company;
             Price = price;
             Icon = icon;
         }
 
+        public string ID { get; }
         public string Name { get; }
         public string Company { get; }
         public int Price { get; }
@@ -22,7 +24,7 @@ namespace RentDesktop.Models
 
         public Transport Copy()
         {
-            return new Transport(Name, Company, Price, Icon);
+            return new Transport(ID, Name, Company, Price, Icon);
         }
     }
 }
