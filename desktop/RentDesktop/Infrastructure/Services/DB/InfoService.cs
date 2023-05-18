@@ -61,12 +61,12 @@ namespace RentDesktop.Infrastructure.Services.DB
             using HttpResponseMessage allUsersResponse = db.GetAsync(allUsersHandle).Result;
 
             if (allUsersResponse.IsSuccessStatusCode)
-                throw new ErrorResponseException(allUsersResponse.StatusCode);
+                throw new ErrorResponseException(allUsersResponse);
 
             DbUsers? allUsers = allUsersResponse.Content.ReadFromJsonAsync<DbUsers>().Result;
 
             if (allUsers is null || allUsers.users is null)
-                throw new IncorrectResponseContentException(nameof(allUsers));
+                throw new IncorrectContentException(allUsersResponse.Content);
 
             //IEnumerable<string> positions = allUsers.users.Select(t =>
             //{
@@ -76,7 +76,7 @@ namespace RentDesktop.Infrastructure.Services.DB
 
             return allUsers is not null && allUsers.users is not null
                 ? DatabaseModelConverterService.ConvertUsers(allUsers)
-                : throw new IncorrectResponseContentException(nameof(allUsers));
+                : throw new IncorrectContentException(allUsersResponse.Content);
         }
 
         public static string GetUserPosition(string login, DatabaseConnectionService? db = null)

@@ -1,16 +1,24 @@
 ﻿using System;
 using System.Net;
+using System.Net.Http;
 
 namespace RentDesktop.Infrastructure.Services.DB
 {
     internal class ErrorResponseException : ApplicationException
     {
-        public ErrorResponseException(HttpStatusCode statusCode, string? message = null, Exception? innerException = null)
-            : base(message ?? $"Error with status code {statusCode}", innerException)
+        public ErrorResponseException(HttpResponseMessage response, string? message = null, Exception? innerException = null)
+            : this(response.StatusCode, ResponseAnalyzeService.GetErrorReason(response), message, innerException)
         {
-            StatusCode = statusCode;
         }
 
-        public HttpStatusCode StatusCode { get; set; }
+        public ErrorResponseException(HttpStatusCode statusCode, string reason, string? message = null, Exception? innerException = null)
+            : base(message ?? $"Status: {statusCode}\n{reason}", innerException)
+        {
+            StatusCode = statusCode;
+            Reason = reason;
+        }
+
+        public HttpStatusCode StatusCode { get; }
+        public string Reason { get; }
     }
 }

@@ -14,6 +14,7 @@ namespace RentDesktop.Infrastructure.Services.DB
         public const string HOST = "localhost";
         public const string PORT = "8080";
         public const string SERVER_URL = $"{PROTOCOL}://{HOST}:{PORT}";
+        public const string SCHEME = "Bearer";
 
         #endregion
 
@@ -24,13 +25,13 @@ namespace RentDesktop.Infrastructure.Services.DB
             _httpClient = new HttpClient();
 
             if (authorizationToken is not null)
-                AddAuthorizationToken(authorizationToken);
+                SetAuthorizationToken(authorizationToken);
         }
 
-        public void AddAuthorizationToken(string authorizationToken)
+        public void SetAuthorizationToken(string authorizationToken)
         {
             _httpClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", authorizationToken);
+                new AuthenticationHeaderValue(SCHEME, authorizationToken);
         }
 
         public Task<HttpResponseMessage> GetAsync(string handle)

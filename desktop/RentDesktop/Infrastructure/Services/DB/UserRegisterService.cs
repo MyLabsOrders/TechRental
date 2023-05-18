@@ -24,11 +24,11 @@ namespace RentDesktop.Infrastructure.Services.DB
             using HttpResponseMessage registerResponse = db.PostAsync(handle, content).Result;
 
             if (registerResponse.IsSuccessStatusCode)
-                throw new ErrorResponseException(registerResponse.StatusCode);
+                throw new ErrorResponseException(registerResponse);
 
             DbLoginResponseContent loginContent = LoginService.EnterSystem(db, userInfo.Login, userInfo.Password);
 
-            db.AddAuthorizationToken(loginContent.token);
+            db.SetAuthorizationToken(loginContent.token);
             userInfo.ID = loginContent.userId;
 
             SetUserInfo(userInfo, db);
@@ -58,7 +58,7 @@ namespace RentDesktop.Infrastructure.Services.DB
             //QuickMessage.Info(JsonConvert.SerializeObject(jobject, Formatting.Indented)).ShowDialog(window);
 
             if (profileResponse.IsSuccessStatusCode)
-                throw new ErrorResponseException(profileResponse.StatusCode);
+                throw new ErrorResponseException(profileResponse);
         }
     }
 }

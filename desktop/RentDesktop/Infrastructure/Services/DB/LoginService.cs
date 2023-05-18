@@ -1,6 +1,5 @@
 ﻿using RentDesktop.Models.DB;
 using RentDesktop.Models.Informing;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 
@@ -32,7 +31,7 @@ namespace RentDesktop.Infrastructure.Services.DB
             var db = new DatabaseConnectionService();
 
             DbLoginResponseContent loginContent = EnterSystem(db, login, password);
-            db.AddAuthorizationToken(loginContent.token);
+            db.SetAuthorizationToken(loginContent.token);
 
             return GetUserInfo(db, loginContent.userId, login, password);
         }
@@ -45,11 +44,11 @@ namespace RentDesktop.Infrastructure.Services.DB
             using HttpResponseMessage loginResponse = db.PostAsync(loginHandle, content).Result;
 
             if (loginResponse.IsSuccessStatusCode)
-                throw new ErrorResponseException(loginResponse.StatusCode);
+                throw new ErrorResponseException(loginResponse);
 
             var loginContent = loginResponse.Content.ReadFromJsonAsync<DbLoginResponseContent>().Result;
 
-            return loginContent ?? throw new IncorrectResponseContentException(nameof(loginContent));
+            return loginContent ?? throw new IncorrectContentException(loginResponse.Content);
         }
 
         private static IUserInfo GetUserInfo(DatabaseConnectionService db, string userId, string login, string password)
@@ -58,12 +57,12 @@ namespace RentDesktop.Infrastructure.Services.DB
             using HttpResponseMessage profileResponse = db.GetAsync(profileHandle).Result;
 
             if (profileResponse.IsSuccessStatusCode)
-                throw new ErrorResponseException(profileResponse.StatusCode);
+                throw new ErrorResponseException(profileResponse);
 
             DbUser? profileContent = profileResponse.Content.ReadFromJsonAsync<DbUser>().Result;
 
             if (profileContent is null)
-                throw new IncorrectResponseContentException(nameof(profileContent));
+                throw new IncorrectContentException(profileResponse.Content);
 
             string position = InfoService.GetUserPosition(login, db);
 
