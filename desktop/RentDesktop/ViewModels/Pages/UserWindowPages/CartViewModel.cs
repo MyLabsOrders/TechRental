@@ -286,7 +286,7 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
         {
             var window = WindowFinder.FindByType(typeof(UserWindow));
 
-            if (!OrdersService.CanPayOrder(Cart, _userInfo))
+            if (!UserCashService.CanPayOrder(Cart, _userInfo))
             {
                 QuickMessage.Error("У вас не хватает средств для оплаты.").ShowDialog(window);
                 return;

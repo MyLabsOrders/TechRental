@@ -22,7 +22,7 @@ namespace RentDesktop.Models
 
         public string ID { get; }
         public double Price { get; }
-        public string Status { get; }
+        public string Status { get; set; }
         public DateTime DateOfCreation { get; }
         public IReadOnlyList<string> Models { get; }
 
