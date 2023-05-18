@@ -7,6 +7,7 @@ namespace RentDesktop.Models
     public class Order : ReactiveModel, IOrder
     {
         public const string ACTIVE_STATUS = "Активен";
+        public const string COMPLETED_STATUS = "Выполнен";
         public const string EXPIRED_STATUS = "Истек";
         public const string CANCELLED_STATUS = "Отменен";
         public const string ORDERS_MODELS_DELIMITER = ", ";

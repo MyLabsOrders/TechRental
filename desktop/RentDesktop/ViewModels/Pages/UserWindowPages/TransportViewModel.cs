@@ -16,9 +16,7 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
 
         public TransportViewModel(ObservableCollection<TransportRent> cart)
         {
-            ShopService.GetTransports(out IEnumerable<Transport> transport);
-            Transports = new ObservableCollection<Transport>(transport);
-
+            Transports = GetTransports();
             _cart = cart;
 
             SelectTransportCommand = ReactiveCommand.Create<Transport>(SelectTransport);
@@ -116,6 +114,12 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
         private void OpenCartTab()
         {
             CartTabOpening?.Invoke();
+        }
+
+        private static ObservableCollection<Transport> GetTransports()
+        {
+            ShopService.GetTransports(out IEnumerable<Transport> transport);
+            return new ObservableCollection<Transport>(transport);
         }
 
         #endregion

@@ -32,6 +32,17 @@ namespace RentDesktop.Infrastructure.Services.DB
             };
         }
 
+        public static List<string> GetAllGenders()
+        {
+            //throw new NotImplementedException();
+
+            return new List<string>()
+            {
+                UserInfo.MALE_GENDER,
+                UserInfo.FEMALE_GENDER
+            };
+        }
+
         public static List<IUserInfo> GetAllUsers()
         {
             //throw new NotImplementedException();

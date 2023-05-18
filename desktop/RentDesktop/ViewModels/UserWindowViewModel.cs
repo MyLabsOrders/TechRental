@@ -2,10 +2,14 @@
 using ReactiveUI;
 using RentDesktop.Infrastructure.App;
 using RentDesktop.Infrastructure.Services.DB;
+using RentDesktop.Models;
+using RentDesktop.Models.Communication;
 using RentDesktop.Models.Informing;
 using RentDesktop.ViewModels.Base;
 using RentDesktop.ViewModels.Pages.UserWindowPages;
+using RentDesktop.Views;
 using System;
+using System.Linq;
 using System.Reactive;
 
 namespace RentDesktop.ViewModels
@@ -37,7 +41,7 @@ namespace RentDesktop.ViewModels
 
             ResetInactivitySecondsCommand = ReactiveCommand.Create(ResetInactivitySeconds);
             ShowMainWindowCommand = ReactiveCommand.Create(ShowMainWindow);
-            SaveOrdersStatusCommand = ReactiveCommand.Create(SaveOrdersStatus);
+            MarkActiveOrdersAsCompletedCommand = ReactiveCommand.Create(MarkActiveOrdersAsCompleted);
             DisposeUserImageCommand = ReactiveCommand.Create(DisposeUserImage);
         }
 
@@ -91,7 +95,7 @@ namespace RentDesktop.ViewModels
 
         public ReactiveCommand<Unit, Unit> ResetInactivitySecondsCommand { get; }
         public ReactiveCommand<Unit, Unit> ShowMainWindowCommand { get; }
-        public ReactiveCommand<Unit, Unit> SaveOrdersStatusCommand { get; }
+        public ReactiveCommand<Unit, Unit> MarkActiveOrdersAsCompletedCommand { get; }
         public ReactiveCommand<Unit, Unit> DisposeUserImageCommand { get; }
 
         #endregion
@@ -157,9 +161,25 @@ namespace RentDesktop.ViewModels
             AppInteraction.ShowMainWindow();
         }
 
-        private void SaveOrdersStatus()
+        private void MarkActiveOrdersAsCompleted()
         {
-            OrdersService.SaveOrdersStatus(OrdersVM.Orders, UserInfo);
+            try
+            {
+                var activeOrders = OrdersVM.Orders.Where(t => t.Status == Order.ACTIVE_STATUS);
+                OrdersService.MarkOrdersAsCompleted(activeOrders, UserInfo);
+
+                foreach (Order activeOrder in activeOrders)
+                {
+                    activeOrder.Status = Order.COMPLETED_STATUS;
+                }
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                string message = $"Не удалось пометить активные заказы как выполненные. Причина: {ex.Message}";
+                QuickMessage.Error(message).ShowDialog(typeof(UserWindow));
+#endif
+            }
         }
 
         private void DisposeUserImage()

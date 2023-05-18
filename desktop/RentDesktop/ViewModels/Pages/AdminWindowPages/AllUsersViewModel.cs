@@ -175,11 +175,11 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
             }
             catch (Exception ex)
             {
-                var window = WindowFinder.FindByType(typeof(AdminWindow));
-                QuickMessage.Error("Не удалось обновить список пользователей.").ShowDialog(window);
+                string message = "Не удалось обновить список пользователей.";
 #if DEBUG
-                QuickMessage.Info($"Причина ошибки: {ex.Message}.").ShowDialog(window);
+                message += $" Причина: {ex.Message}.";
 #endif
+                QuickMessage.Error(message).ShowDialog(typeof(AdminWindow));
                 return;
             }
 
@@ -218,12 +218,10 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
 
         private static ObservableCollection<string> GetGenders()
         {
-            return new ObservableCollection<string>()
-            {
-                NOT_SPECIFIED,
-                UserInfo.MALE_GENDER,
-                UserInfo.FEMALE_GENDER
-            };
+            var genders = InfoService.GetAllGenders();
+            genders.Insert(0, NOT_SPECIFIED);
+
+            return new ObservableCollection<string>(genders);
         }
 
         #endregion

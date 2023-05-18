@@ -10,7 +10,7 @@ namespace RentDesktop.Infrastructure.Services.DB
 {
     internal static class OrdersService
     {
-        public static bool SaveOrdersStatus(IEnumerable<Order> orders, IUserInfo userInfo)
+        public static bool MarkOrdersAsCompleted(IEnumerable<Order> orders, IUserInfo userInfo)
         {
             //throw new NotImplementedException();
             return true;

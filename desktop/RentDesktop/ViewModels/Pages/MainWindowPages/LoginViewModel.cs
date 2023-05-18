@@ -1,4 +1,5 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
 using ReactiveUI;
 using RentDesktop.Infrastructure.App;
 using RentDesktop.Infrastructure.Services;
@@ -130,11 +131,11 @@ namespace RentDesktop.ViewModels.Pages.MainWindowPages
             }
             catch (Exception ex)
             {
-                var window = WindowFinder.FindMainWindow();
-                QuickMessage.Error("Не удалось войти в систему.").ShowDialog(window);
+                string message = "Не удалось войти в систему.";
 #if DEBUG
-                QuickMessage.Info($"Причина: {ex.Message}").ShowDialog(window);
+                message += $" Причина: {ex.Message}";
 #endif
+                QuickMessage.Error(message).ShowDialog(typeof(MainWindow));
                 return;
             }
 
@@ -185,7 +186,7 @@ namespace RentDesktop.ViewModels.Pages.MainWindowPages
             _ = UserInfoSaveService.TrySaveInfo(Login, Password);
         }
 
-        private void ClearLoginInfo()
+        private static void ClearLoginInfo()
         {
             _ = UserInfoSaveService.TryClearInfo();
         }

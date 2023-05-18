@@ -292,11 +292,12 @@ namespace RentDesktop.ViewModels.Pages.MainWindowPages
             }
             catch (Exception ex)
             {
-                var window = WindowFinder.FindByType(GetOwnerWindowType());
-                QuickMessage.Error("Не удалось зарегистрировать пользователя.").ShowDialog(window);
+                string message = "Не удалось зарегистрировать пользователя.";
 #if DEBUG
-                QuickMessage.Info($"Причина: {ex.Message}").ShowDialog(window);
+                message += $" Причина: {ex.Message}";
 #endif
+                var window = WindowFinder.FindByType(GetOwnerWindowType());
+                QuickMessage.Error(message).ShowDialog(window);
             }
         }
 

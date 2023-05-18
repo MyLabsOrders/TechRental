@@ -5,10 +5,10 @@ namespace RentDesktop.Models.Informing
 {
     public class UserInfo : IUserInfo
     {
-        public const string ADMIN_POSITION = "admin";
-        public const string USER_POSITION = "user";
-        public const string ACTIVE_STATUS = "активен";
-        public const string INACTIVE_STATUS = "неактивен";
+        public const string ADMIN_POSITION = "Admin";
+        public const string USER_POSITION = "User";
+        public const string ACTIVE_STATUS = "Активен";
+        public const string INACTIVE_STATUS = "Неактивен";
         public const string MALE_GENDER = "Мужской";
         public const string FEMALE_GENDER = "Женский";
 
@@ -24,7 +24,7 @@ namespace RentDesktop.Models.Informing
         public string Status { get; set; } = string.Empty;
         public double Money { get; set; } = 0;
         public byte[] Icon { get; set; } = Array.Empty<byte>();
-        public DateTime DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; } = default;
         public ObservableCollection<Order> Orders { get; set; } = new ObservableCollection<Order>();
 
         public void CopyTo(IUserInfo other)
