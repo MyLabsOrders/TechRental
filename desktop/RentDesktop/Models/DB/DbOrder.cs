@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace RentDesktop.Models.DB
+﻿namespace RentDesktop.Models.DB
 {
 #pragma warning disable IDE1006
 

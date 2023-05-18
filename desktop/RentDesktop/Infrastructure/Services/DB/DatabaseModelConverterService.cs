@@ -15,21 +15,21 @@ namespace RentDesktop.Infrastructure.Services.DB
             return new UserInfo()
             {
                 ID = user.id,
-                Login = "", // TODO,
-                Password = "", // TODO
+                Login = string.Empty,
+                Password = string.Empty,
                 Name = user.firstName,
                 Surname = user.middleName,
                 Patronymic = user.lastName,
                 PhoneNumber = user.number,
-                Gender = UserInfo.MALE_GENDER, // TODO
-                Position = UserInfo.USER_POSITION, // TODO
-                Status = UserInfo.ACTIVE_STATUS, // TODO
+                Gender = UserInfo.MALE_GENDER, // not in backend -> TODO
+                Position = UserInfo.USER_POSITION, // backend issue -> TODO
+                Status = UserInfo.ACTIVE_STATUS, // not in backend -> TODO
                 Icon = BitmapService.StringToBytes(user.image),
                 DateOfBirth = DateTimeService.StringToDateTime(user.birthDate),
                 Orders = new ObservableCollection<Order>(ConvertOrders(user.orders ?? Array.Empty<DbOrder>()))
             };
         }
-        
+
         public static List<IUserInfo> ConvertUsers(DbUsers databaseUsers)
         {
             return databaseUsers.users!
@@ -43,7 +43,7 @@ namespace RentDesktop.Infrastructure.Services.DB
                 id: t.id,
                 price: t.total,
                 dateOfCreation: DateTimeService.StringToDateTime(t.orderDate),
-                models: t.name.Split(", ")
+                models: t.name.Split(Order.ORDERS_MODELS_DELIMITER)
             ));
         }
     }

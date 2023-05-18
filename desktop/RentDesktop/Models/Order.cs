@@ -6,6 +6,8 @@ namespace RentDesktop.Models
 {
     public class Order : ReactiveModel, IOrder
     {
+        public const string ORDERS_MODELS_DELIMITER = ", ";
+
         public Order(string id, double price, DateTime dateOfCreation, IEnumerable<string> models)
         {
             ID = id;
@@ -19,7 +21,7 @@ namespace RentDesktop.Models
         public DateTime DateOfCreation { get; }
         public IReadOnlyList<string> Models { get; }
 
-        public string ModelsPresenter => string.Join(", ", Models);
+        public string ModelsPresenter => string.Join(ORDERS_MODELS_DELIMITER, Models);
         public string DateOfCreationPresenter => DateOfCreation.ToShortDateString();
     }
 }

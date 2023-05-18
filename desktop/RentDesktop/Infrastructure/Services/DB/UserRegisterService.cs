@@ -1,12 +1,6 @@
-﻿using Newtonsoft.Json;
-using RentDesktop.Infrastructure.App;
-using RentDesktop.Models.Communication;
-using RentDesktop.Models.DB;
+﻿using RentDesktop.Models.DB;
 using RentDesktop.Models.Informing;
-using System;
-using System.Net;
 using System.Net.Http;
-using System.Net.Http.Json;
 
 namespace RentDesktop.Infrastructure.Services.DB
 {
@@ -29,11 +23,11 @@ namespace RentDesktop.Infrastructure.Services.DB
 
             using HttpResponseMessage registerResponse = db.PostAsync(handle, content).Result;
 
-            if (registerResponse.StatusCode != HttpStatusCode.OK)
+            if (registerResponse.IsSuccessStatusCode)
                 throw new ErrorResponseException(registerResponse.StatusCode);
 
             DbLoginResponseContent loginContent = LoginService.EnterSystem(db, userInfo.Login, userInfo.Password);
-            
+
             db.AddAuthorizationToken(loginContent.token);
             userInfo.ID = loginContent.userId;
 
@@ -52,6 +46,8 @@ namespace RentDesktop.Infrastructure.Services.DB
                 phoneNumber = userInfo.PhoneNumber,
                 userImage = BitmapService.BytesToString(userInfo.Icon),
                 birthDate = DateTimeService.DateTimeToString(userInfo.DateOfBirth)
+                // status = TODO
+                // gender = TODO
             };
 
             using HttpResponseMessage profileResponse = db.PostAsync(profileHandle, content).Result;
@@ -61,7 +57,7 @@ namespace RentDesktop.Infrastructure.Services.DB
             //var window = WindowFinder.FindMainWindow();
             //QuickMessage.Info(JsonConvert.SerializeObject(jobject, Formatting.Indented)).ShowDialog(window);
 
-            if (profileResponse.StatusCode != HttpStatusCode.OK)
+            if (profileResponse.IsSuccessStatusCode)
                 throw new ErrorResponseException(profileResponse.StatusCode);
         }
     }

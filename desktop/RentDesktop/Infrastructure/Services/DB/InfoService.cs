@@ -1,7 +1,6 @@
 ﻿using RentDesktop.Models.DB;
 using RentDesktop.Models.Informing;
 using System.Collections.Generic;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 
@@ -48,7 +47,7 @@ namespace RentDesktop.Infrastructure.Services.DB
             const string allUsersHandle = "/api/User";
             using HttpResponseMessage allUsersResponse = db.GetAsync(allUsersHandle).Result;
 
-            if (allUsersResponse.StatusCode != HttpStatusCode.OK)
+            if (allUsersResponse.IsSuccessStatusCode)
                 throw new ErrorResponseException(allUsersResponse.StatusCode);
 
             DbUsers? allUsers = allUsersResponse.Content.ReadFromJsonAsync<DbUsers>().Result;

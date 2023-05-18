@@ -1,6 +1,5 @@
 ﻿using RentDesktop.Models.DB;
 using RentDesktop.Models.Informing;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 
@@ -44,7 +43,7 @@ namespace RentDesktop.Infrastructure.Services.DB
 
             using HttpResponseMessage loginResponse = db.PostAsync(loginHandle, content).Result;
 
-            if (loginResponse.StatusCode != HttpStatusCode.OK)
+            if (loginResponse.IsSuccessStatusCode)
                 throw new ErrorResponseException(loginResponse.StatusCode);
 
             var loginContent = loginResponse.Content.ReadFromJsonAsync<DbLoginResponseContent>().Result;
@@ -57,7 +56,7 @@ namespace RentDesktop.Infrastructure.Services.DB
             string profileHandle = $"/api/User/{userId}";
             using HttpResponseMessage profileResponse = db.GetAsync(profileHandle).Result;
 
-            if (profileResponse.StatusCode != HttpStatusCode.OK)
+            if (profileResponse.IsSuccessStatusCode)
                 throw new ErrorResponseException(profileResponse.StatusCode);
 
             DbUser? profileContent = profileResponse.Content.ReadFromJsonAsync<DbUser>().Result;
@@ -68,6 +67,7 @@ namespace RentDesktop.Infrastructure.Services.DB
             UserInfo userInfo = DatabaseModelConverterService.ConvertUser(profileContent);
             userInfo.Login = login;
             userInfo.Password = password;
+            //userInfo.Position = backend issue -> TODO
 
             return userInfo;
         }

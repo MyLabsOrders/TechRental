@@ -29,7 +29,7 @@ namespace RentDesktop.Infrastructure.Services.DB
 
         public void AddAuthorizationToken(string authorizationToken)
         {
-            _httpClient.DefaultRequestHeaders.Authorization = 
+            _httpClient.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", authorizationToken);
         }
 
