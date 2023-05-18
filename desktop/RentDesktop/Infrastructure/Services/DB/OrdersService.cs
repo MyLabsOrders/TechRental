@@ -33,7 +33,7 @@ namespace RentDesktop.Infrastructure.Services.DB
             order.Status = newStatus; // move to ViewModel -> TODO
         }
 
-        public static bool CreateOrder(IEnumerable<TransportRent> cart, IUserInfo userInfo, out Order order)
+        public static List<Order> CreateOrders(IEnumerable<TransportRent> cart, IUserInfo userInfo)
         {
             //throw new NotImplementedException();
 
@@ -65,8 +65,8 @@ namespace RentDesktop.Infrastructure.Services.DB
 
             const string changeOrderStatusHandle = "/api/Order/status";
 
-            order = null;
-            return true;
+            //order = null;
+            return new List<Order>();
         }
 
         private static void GetOrderInfo()

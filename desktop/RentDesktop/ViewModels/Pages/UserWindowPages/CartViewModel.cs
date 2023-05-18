@@ -1,12 +1,15 @@
 ﻿using Avalonia.Controls;
 using ReactiveUI;
 using RentDesktop.Infrastructure.App;
+using RentDesktop.Infrastructure.Extensions;
 using RentDesktop.Infrastructure.Services.DB;
 using RentDesktop.Models;
 using RentDesktop.Models.Communication;
 using RentDesktop.Models.Informing;
 using RentDesktop.ViewModels.Base;
 using RentDesktop.Views;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
@@ -284,20 +287,23 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
 
         private void PayOrder()
         {
-            var window = WindowFinder.FindByType(typeof(UserWindow));
+            List<Order> orders;
 
-            if (!UserCashService.CanPayOrder(Cart, _userInfo))
+            try
             {
-                QuickMessage.Error("У вас не хватает средств для оплаты.").ShowDialog(window);
+                orders = OrdersService.CreateOrders(Cart, _userInfo);
+            }
+            catch (Exception ex)
+            {
+                string message = "Не удалось оплатить заказ.";
+#if DEBUG
+                message += $" Причина: {ex.Message}";
+#endif
+                QuickMessage.Error(message).ShowDialog(typeof(UserWindow));
                 return;
             }
-            if (!OrdersService.CreateOrder(Cart, _userInfo, out Order order))
-            {
-                QuickMessage.Error("Не удалось оплатить заказ.").ShowDialog(window);
-                return;
-            }
 
-            _orders.Add(order);
+            _orders.AddRange(orders);
             IsOrderPaidFor = true;
 
             ClearCart();
