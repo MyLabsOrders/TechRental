@@ -9,6 +9,6 @@ namespace RentDesktop.Models
         double Price { get; }
         string Status { get; set; }
         DateTime DateOfCreation { get; }
-        IReadOnlyList<string> Models { get; }
+        IReadOnlyList<Transport> Models { get; }
     }
 }

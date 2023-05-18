@@ -202,25 +202,64 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
 
         private static ObservableCollection<string> GetPositions()
         {
-            var positions = InfoService.GetAllPositions();
-            positions.Insert(0, NOT_SPECIFIED);
+            List<string> positions;
 
+            try
+            {
+                positions = InfoService.GetAllPositions();
+            }
+            catch (Exception ex)
+            {
+                positions = new List<string>();
+#if DEBUG
+                string message = $"Не удалось получить роли. Причина: {ex.Message}";
+                QuickMessage.Error(message).ShowDialog(typeof(AdminWindow));
+#endif
+            }
+
+            positions.Insert(0, NOT_SPECIFIED);
             return new ObservableCollection<string>(positions);
         }
 
         private static ObservableCollection<string> GetStatuses()
         {
-            var statuses = InfoService.GetAllStatuses();
-            statuses.Insert(0, NOT_SPECIFIED);
+            List<string> statuses;
 
+            try
+            {
+                statuses = InfoService.GetAllStatuses();
+            }
+            catch (Exception ex)
+            {
+                statuses = new List<string>();
+#if DEBUG
+                string message = $"Не удалось загрузить статусы. Причина: {ex.Message}";
+                QuickMessage.Error(message).ShowDialog(typeof(AdminWindow));
+#endif
+            }
+
+            statuses.Insert(0, NOT_SPECIFIED);
             return new ObservableCollection<string>(statuses);
         }
 
         private static ObservableCollection<string> GetGenders()
         {
-            var genders = InfoService.GetAllGenders();
-            genders.Insert(0, NOT_SPECIFIED);
+            List<string> genders;
 
+            try
+            {
+                genders = InfoService.GetAllGenders();
+            }
+            catch (Exception ex)
+            {
+                genders = new List<string>();
+#if DEBUG
+                string message = $"Не удалось загрузить полы. Причина: {ex.Message}";
+                QuickMessage.Error(message).ShowDialog(typeof(AdminWindow));
+#endif
+            }
+
+            genders.Insert(0, NOT_SPECIFIED);
             return new ObservableCollection<string>(genders);
         }
 

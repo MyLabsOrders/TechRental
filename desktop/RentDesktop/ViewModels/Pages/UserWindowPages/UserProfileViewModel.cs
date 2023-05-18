@@ -218,11 +218,6 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
                 QuickMessage.Info("Введите логин.").ShowDialog(window);
                 return false;
             }
-            if (!UserRegisterService.IsLoginFree(Login))
-            {
-                QuickMessage.Info("Логин уже занят.").ShowDialog(window);
-                return false;
-            }
             if (string.IsNullOrEmpty(Password))
             {
                 QuickMessage.Info("Введите пароль.").ShowDialog(window);

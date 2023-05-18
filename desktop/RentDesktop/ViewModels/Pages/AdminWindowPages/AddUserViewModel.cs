@@ -80,8 +80,19 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
 
         private static ObservableCollection<string> GetPositions()
         {
-            var positions = InfoService.GetAllPositions();
-            return new ObservableCollection<string>(positions);
+            try
+            {
+                var positions = InfoService.GetAllPositions();
+                return new ObservableCollection<string>(positions);
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                string message = $"Не удалось получить роли. Причина: {ex.Message}";
+                QuickMessage.Error(message).ShowDialog(typeof(AdminWindow));
+#endif
+                return new ObservableCollection<string>();
+            }
         }
 
         #endregion

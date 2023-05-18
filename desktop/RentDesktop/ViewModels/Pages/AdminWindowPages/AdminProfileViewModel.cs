@@ -75,8 +75,19 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
 
         private static ObservableCollection<string> GetStatuses()
         {
-            var statuses = InfoService.GetAllStatuses();
-            return new ObservableCollection<string>(statuses);
+            try
+            {
+                var statuses = InfoService.GetAllStatuses();
+                return new ObservableCollection<string>(statuses);
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                string message = $"Не удалось загрузить статусы. Причина: {ex.Message}";
+                QuickMessage.Error(message).ShowDialog(typeof(AdminWindow));
+#endif
+                return new ObservableCollection<string>();
+            }
         }
 
         #endregion

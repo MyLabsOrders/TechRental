@@ -1,7 +1,10 @@
 ﻿using ReactiveUI;
 using RentDesktop.Infrastructure.Services.DB;
 using RentDesktop.Models;
+using RentDesktop.Models.Communication;
 using RentDesktop.ViewModels.Base;
+using RentDesktop.Views;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -123,8 +126,20 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
 
         private static ObservableCollection<Transport> GetTransports()
         {
-            ShopService.GetTransports(out IEnumerable<Transport> transport);
-            return new ObservableCollection<Transport>(transport);
+            try
+            {
+                var transport = ShopService.GetTransports();
+                return new ObservableCollection<Transport>(transport);
+            }
+            catch (Exception ex)
+            {
+                string message = "Не удалось получить коллекцию доступных товаров.";
+#if DEBUG
+                message += $" Причина: {ex.Message}";
+#endif
+                QuickMessage.Error(message).ShowDialog(typeof(UserWindow));
+                return new ObservableCollection<Transport>();
+            }
         }
 
         #endregion

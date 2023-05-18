@@ -1,4 +1,5 @@
 ﻿using Avalonia.Media.Imaging;
+using System;
 
 namespace RentDesktop.Models
 {
@@ -7,7 +8,8 @@ namespace RentDesktop.Models
         string ID { get; }
         string Name { get; }
         string Company { get; }
-        int Price { get; }
+        double Price { get; }
+        DateTime CreationDate { get; }
         Bitmap? Icon { get; }
     }
 }

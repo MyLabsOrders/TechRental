@@ -45,8 +45,22 @@ namespace RentDesktop.Infrastructure.Services.DB
                 price: t.total,
                 status: t.status,
                 dateOfCreation: DateTimeService.StringToDateTime(t.orderDate),
-                models: t.name.Split(Order.ORDERS_MODELS_DELIMITER)
+                models: new[] { ConvertDbOrderToTransport(t) }
             ));
+        }
+
+        public static Transport ConvertDbOrderToTransport(DbOrder order)
+        {
+            byte[] imageBytes = BitmapService.StringToBytes(order.image);
+
+            return new Transport(
+                order.id,
+                order.name,
+                "MyCompany", // Future work: add company to order model
+                order.total,
+                DateTimeService.StringToDateTime(order.orderDate),
+                BitmapService.BytesToBitmap(imageBytes)
+            );
         }
     }
 }

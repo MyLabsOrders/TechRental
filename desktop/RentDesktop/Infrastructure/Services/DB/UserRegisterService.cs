@@ -6,22 +6,14 @@ namespace RentDesktop.Infrastructure.Services.DB
 {
     internal static class UserRegisterService
     {
-        public static bool IsLoginFree(string login)
-        {
-            // Login verification is now inside the database
-            return true;
-        }
-
         public static void RegisterUser(IUserInfo userInfo)
         {
-            //throw new NotImplementedException();
-
             using var db = new DatabaseConnectionService();
 
-            const string handle = "/api/identity/user/register";
+            const string registerHandle = "/api/identity/user/register";
             var content = new DbRegister(userInfo.Login, userInfo.Password, userInfo.Position);
 
-            using HttpResponseMessage registerResponse = db.PostAsync(handle, content).Result;
+            using HttpResponseMessage registerResponse = db.PostAsync(registerHandle, content).Result;
 
             if (registerResponse.IsSuccessStatusCode)
                 throw new ErrorResponseException(registerResponse);
@@ -46,8 +38,8 @@ namespace RentDesktop.Infrastructure.Services.DB
                 phoneNumber = userInfo.PhoneNumber,
                 userImage = BitmapService.BytesToString(userInfo.Icon),
                 birthDate = DateTimeService.DateTimeToString(userInfo.DateOfBirth)
-                // status = TODO
-                // gender = TODO
+                // status = Future work: add status to user model
+                // gender = Future work: add gender to user model
             };
 
             using HttpResponseMessage profileResponse = db.PostAsync(profileHandle, content).Result;

@@ -9,8 +9,6 @@ namespace RentDesktop.Infrastructure.Services.DB
     {
         public static IUserInfo Login(string login, string password)
         {
-            //throw new NotImplementedException();
-
             //var userInfo = new UserInfo()
             //{
             //    ID = "test_id",
@@ -25,6 +23,7 @@ namespace RentDesktop.Infrastructure.Services.DB
             //    Status = UserInfo.ACTIVE_STATUS,
             //    DateOfBirth = new DateTime(2000, 1, 21),
             //    Icon = File.ReadAllBytes(@"D:\Testing\TechRental\human1.jpg"),
+            //    Money = 100000,
             //    Orders = new ObservableCollection<Order>() { new Order("123", 5000, DateTime.Now, new string[] { "Lada 7, Lada 15" } ) }
             //};
 
@@ -59,10 +58,8 @@ namespace RentDesktop.Infrastructure.Services.DB
             if (profileResponse.IsSuccessStatusCode)
                 throw new ErrorResponseException(profileResponse);
 
-            DbUser? profileContent = profileResponse.Content.ReadFromJsonAsync<DbUser>().Result;
-
-            if (profileContent is null)
-                throw new IncorrectContentException(profileResponse.Content);
+            DbUser? profileContent = profileResponse.Content.ReadFromJsonAsync<DbUser>().Result
+                ?? throw new IncorrectContentException(profileResponse.Content);
 
             string position = InfoService.GetUserPosition(login, db);
 

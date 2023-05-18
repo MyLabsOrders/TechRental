@@ -287,6 +287,12 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
 
         private void PayOrder()
         {
+            if (!UserCashService.CanPayOrder(Cart, _userInfo))
+            {
+                QuickMessage.Error("У вас не хватает средств для оплаты.").ShowDialog(typeof(UserWindow));
+                return;
+            }
+
             List<Order> orders;
 
             try
@@ -295,7 +301,7 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
             }
             catch (Exception ex)
             {
-                string message = "Не удалось оплатить заказ.";
+                string message = "Не удалось оформить заказ.";
 #if DEBUG
                 message += $" Причина: {ex.Message}";
 #endif
