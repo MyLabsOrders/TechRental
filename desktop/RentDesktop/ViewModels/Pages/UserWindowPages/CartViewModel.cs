@@ -1,6 +1,5 @@
 ﻿using Avalonia.Controls;
 using ReactiveUI;
-using RentDesktop.Infrastructure.App;
 using RentDesktop.Infrastructure.Extensions;
 using RentDesktop.Infrastructure.Services.DB;
 using RentDesktop.Models;

@@ -5,7 +5,7 @@
     internal class DbChangePassword
     {
         public DbChangePassword()
-        { 
+        {
         }
 
         public DbChangePassword(string currentPassword, string newPassword)

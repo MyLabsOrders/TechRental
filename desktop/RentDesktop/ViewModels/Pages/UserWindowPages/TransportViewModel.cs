@@ -5,7 +5,6 @@ using RentDesktop.Models.Communication;
 using RentDesktop.ViewModels.Base;
 using RentDesktop.Views;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
