@@ -22,6 +22,7 @@ namespace RentDesktop.Models.Informing
         public string Gender { get; set; } = string.Empty;
         public string Position { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
+        public double Money { get; set; } = 0;
         public byte[] Icon { get; set; } = Array.Empty<byte>();
         public DateTime DateOfBirth { get; set; }
         public ObservableCollection<Order> Orders { get; set; } = new ObservableCollection<Order>();
@@ -38,6 +39,7 @@ namespace RentDesktop.Models.Informing
             other.Gender = Gender;
             other.Position = Position;
             other.Status = Status;
+            other.Money = Money;
             other.Icon = Icon;
             other.DateOfBirth = DateOfBirth;
         }

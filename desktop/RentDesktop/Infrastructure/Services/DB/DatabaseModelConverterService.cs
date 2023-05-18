@@ -24,6 +24,7 @@ namespace RentDesktop.Infrastructure.Services.DB
                 Gender = UserInfo.MALE_GENDER, // not in backend -> TODO
                 Position = UserInfo.USER_POSITION, // backend issue -> TODO
                 Status = UserInfo.ACTIVE_STATUS, // not in backend -> TODO
+                Money = user.money,
                 Icon = BitmapService.StringToBytes(user.image),
                 DateOfBirth = DateTimeService.StringToDateTime(user.birthDate),
                 Orders = new ObservableCollection<Order>(ConvertOrders(user.orders ?? Array.Empty<DbOrder>()))

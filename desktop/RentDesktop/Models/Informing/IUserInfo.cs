@@ -15,6 +15,7 @@ namespace RentDesktop.Models.Informing
         string Gender { get; set; }
         string Position { get; set; }
         string Status { get; set; }
+        double Money { get; set; }
         byte[] Icon { get; set; }
         DateTime DateOfBirth { get; set; }
         ObservableCollection<Order> Orders { get; set; }

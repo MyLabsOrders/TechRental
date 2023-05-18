@@ -189,6 +189,7 @@ namespace RentDesktop.ViewModels.Pages.MainWindowPages
                 Gender = Gender,
                 Position = _position,
                 Status = UserInfo.ACTIVE_STATUS,
+                Money = 0,
                 Icon = userImageBytes,
                 DateOfBirth = DateOfBirth!.Value
             };
