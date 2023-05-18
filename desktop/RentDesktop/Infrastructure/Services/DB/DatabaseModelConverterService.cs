@@ -21,9 +21,9 @@ namespace RentDesktop.Infrastructure.Services.DB
                 Surname = user.middleName,
                 Patronymic = user.lastName,
                 PhoneNumber = user.number,
-                Gender = UserInfo.MALE_GENDER, // not in backend -> TODO
+                Gender = UserInfo.MALE_GENDER, // Future work: add gender to user model
                 Position = position,
-                Status = UserInfo.ACTIVE_STATUS, // not in backend -> TODO
+                Status = UserInfo.ACTIVE_STATUS, // // Future work: add status to user model
                 Money = user.money,
                 Icon = BitmapService.StringToBytes(user.image),
                 DateOfBirth = DateTimeService.StringToDateTime(user.birthDate),
@@ -34,7 +34,7 @@ namespace RentDesktop.Infrastructure.Services.DB
         public static List<IUserInfo> ConvertUsers(DbUsers databaseUsers)
         {
             return databaseUsers.users!
-                .Select(t => ConvertUser(t, UserInfo.USER_POSITION) as IUserInfo) // position -> TODO
+                .Select(t => ConvertUser(t, UserInfo.USER_POSITION) as IUserInfo) // TODO: position
                 .ToList();
         }
 

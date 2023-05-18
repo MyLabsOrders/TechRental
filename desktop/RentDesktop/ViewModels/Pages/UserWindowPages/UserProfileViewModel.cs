@@ -288,10 +288,18 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
 
             IUserInfo newUserInfo = GetUserInfo();
 
-            if (!UserEditService.EditInfo(newUserInfo))
+            try
             {
+                UserEditService.EditInfo(_userInfo, newUserInfo);
+            }
+            catch (Exception ex)
+            {
+                string message = "Не удалось сохранить изменения.";
+#if DEBUG
+                message += $"Причина: {ex.Message}";
+#endif
                 var window = WindowFinder.FindByType(GetOwnerWindowType());
-                QuickMessage.Error("Не удалось сохранить изменения.").ShowDialog(window);
+                QuickMessage.Error(message).ShowDialog(window);
                 return;
             }
 

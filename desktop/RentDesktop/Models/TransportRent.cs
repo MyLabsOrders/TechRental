@@ -31,8 +31,8 @@ namespace RentDesktop.Models
             }
         }
 
-        private int _totalPrice = 0;
-        public int TotalPrice
+        private double _totalPrice = 0;
+        public double TotalPrice
         {
             get => _totalPrice;
             private set => RaiseAndSetIfChanged(ref _totalPrice, value);
@@ -45,7 +45,7 @@ namespace RentDesktop.Models
             private set => RaiseAndSetIfChanged(ref _presenter, value);
         }
 
-        private int CalcTotalPrice()
+        private double CalcTotalPrice()
         {
             return Transport.Price * _days;
         }

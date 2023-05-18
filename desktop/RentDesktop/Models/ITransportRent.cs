@@ -4,6 +4,6 @@
     {
         Transport Transport { get; }
         int Days { get; set; }
-        int TotalPrice { get; }
+        double TotalPrice { get; }
     }
 }
