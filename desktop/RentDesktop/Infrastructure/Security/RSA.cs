@@ -10,7 +10,7 @@ namespace RentDesktop.Infrastructure.Security
 
         public static string Encrypt(string text)
         {
-            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
+            var rsa = new RSACryptoServiceProvider();
             rsa.FromXmlString(KEY);
 
             byte[] content = rsa.Encrypt(Encoding.UTF8.GetBytes(text), true);
@@ -19,7 +19,7 @@ namespace RentDesktop.Infrastructure.Security
 
         public static string Decrypt(string text)
         {
-            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
+            var rsa = new RSACryptoServiceProvider();
             rsa.FromXmlString(KEY);
 
             byte[] content = rsa.Decrypt(Convert.FromBase64String(text), true);

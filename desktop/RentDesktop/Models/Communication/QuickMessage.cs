@@ -2,10 +2,12 @@
 using MessageBox.Avalonia;
 using MessageBox.Avalonia.BaseWindows.Base;
 using MessageBox.Avalonia.Enums;
+using RentDesktop.Infrastructure.App;
+using System;
 
 namespace RentDesktop.Models.Communication
 {
-    public class QuickMessage
+    public class QuickMessage : IQuickMessage
     {
         public QuickMessage(string message, string title = "", ButtonEnum buttons = ButtonEnum.Ok, Icon icon = Icon.None)
         {
@@ -28,12 +30,24 @@ namespace RentDesktop.Models.Communication
             _ = GetMessageBoxWindow().Show(ownerWindow);
         }
 
+        public void Show(Type ownerWindowType)
+        {
+            Window? window = WindowFinder.FindByType(ownerWindowType);
+            Show(window);
+        }
+
         public void ShowDialog(Window? ownerWindow)
         {
             if (ownerWindow is null)
                 return;
 
             _ = GetMessageBoxWindow().ShowDialog(ownerWindow);
+        }
+
+        public void ShowDialog(Type ownerWindowType)
+        {
+            Window? window = WindowFinder.FindByType(ownerWindowType);
+            ShowDialog(window);
         }
 
         public static QuickMessage Error(string message)
