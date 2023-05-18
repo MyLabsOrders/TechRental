@@ -19,12 +19,13 @@ namespace RentDesktop.Infrastructure.Services.DB
             //throw new NotImplementedException();
 
             string id = new Random().Next(0, 1000000).ToString();
+            string status = Order.ACTIVE_STATUS;
             var date = DateTime.Now;
 
             var models = cart.Select(t => t.Transport.Name);
             double price = cart.Sum(t => t.TotalPrice);
 
-            order = new Order(id, price, date, models);
+            order = new Order(id, price, status, date, models);
 
             return true;
         }

@@ -22,6 +22,7 @@
 				<DataGridTextColumn Header="ID" IsReadOnly="True" Binding="{Binding ID}" />
 				<DataGridTextColumn Header="Дата создания" IsReadOnly="True" Binding="{Binding DateOfCreationPresenter}" />
 				<DataGridTextColumn Header="Стоимость" IsReadOnly="True" Binding="{Binding Price}" />
+				<DataGridTextColumn Header="Статус" IsReadOnly="True" Binding="{Binding Status}" />
 				<DataGridTextColumn Header="Модели" IsReadOnly="True" Binding="{Binding ModelsPresenter}" />
 			</DataGrid.Columns>
 		</DataGrid>

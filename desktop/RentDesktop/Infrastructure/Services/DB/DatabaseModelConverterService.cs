@@ -42,6 +42,7 @@ namespace RentDesktop.Infrastructure.Services.DB
             return databaseOrders.Select(t => new Order(
                 id: t.id,
                 price: t.total,
+                status: t.status,
                 dateOfCreation: DateTimeService.StringToDateTime(t.orderDate),
                 models: t.name.Split(Order.ORDERS_MODELS_DELIMITER)
             ));

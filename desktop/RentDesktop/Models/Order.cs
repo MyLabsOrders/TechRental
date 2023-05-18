@@ -6,18 +6,23 @@ namespace RentDesktop.Models
 {
     public class Order : ReactiveModel, IOrder
     {
+        public const string ACTIVE_STATUS = "Активен";
+        public const string EXPIRED_STATUS = "Истек";
+        public const string CANCELLED_STATUS = "Отменен";
         public const string ORDERS_MODELS_DELIMITER = ", ";
 
-        public Order(string id, double price, DateTime dateOfCreation, IEnumerable<string> models)
+        public Order(string id, double price, string status, DateTime dateOfCreation, IEnumerable<string> models)
         {
             ID = id;
             Price = price;
+            Status = status;
             DateOfCreation = dateOfCreation;
             Models = new List<string>(models);
         }
 
         public string ID { get; }
         public double Price { get; }
+        public string Status { get; }
         public DateTime DateOfCreation { get; }
         public IReadOnlyList<string> Models { get; }
 
