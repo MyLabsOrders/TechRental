@@ -1,5 +1,6 @@
 ﻿using RentDesktop.Models.DB;
 using RentDesktop.Models.Informing;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 
@@ -64,10 +65,11 @@ namespace RentDesktop.Infrastructure.Services.DB
             if (profileContent is null)
                 throw new IncorrectResponseContentException(nameof(profileContent));
 
-            UserInfo userInfo = DatabaseModelConverterService.ConvertUser(profileContent);
+            string position = InfoService.GetUserPosition(login, db);
+
+            UserInfo userInfo = DatabaseModelConverterService.ConvertUser(profileContent, position);
             userInfo.Login = login;
             userInfo.Password = password;
-            //userInfo.Position = backend issue -> TODO
 
             return userInfo;
         }

@@ -10,7 +10,7 @@ namespace RentDesktop.Infrastructure.Services.DB
 {
     internal static class DatabaseModelConverterService
     {
-        public static UserInfo ConvertUser(DbUser user)
+        public static UserInfo ConvertUser(DbUser user, string position)
         {
             return new UserInfo()
             {
@@ -22,7 +22,7 @@ namespace RentDesktop.Infrastructure.Services.DB
                 Patronymic = user.lastName,
                 PhoneNumber = user.number,
                 Gender = UserInfo.MALE_GENDER, // not in backend -> TODO
-                Position = UserInfo.USER_POSITION, // backend issue -> TODO
+                Position = position,
                 Status = UserInfo.ACTIVE_STATUS, // not in backend -> TODO
                 Money = user.money,
                 Icon = BitmapService.StringToBytes(user.image),
@@ -34,7 +34,7 @@ namespace RentDesktop.Infrastructure.Services.DB
         public static List<IUserInfo> ConvertUsers(DbUsers databaseUsers)
         {
             return databaseUsers.users!
-                .Select(t => ConvertUser(t) as IUserInfo)
+                .Select(t => ConvertUser(t, UserInfo.USER_POSITION) as IUserInfo) // position -> TODO
                 .ToList();
         }
 

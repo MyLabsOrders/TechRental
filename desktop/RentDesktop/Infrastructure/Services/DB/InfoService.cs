@@ -1,6 +1,8 @@
 ﻿using RentDesktop.Models.DB;
 using RentDesktop.Models.Informing;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 
@@ -52,9 +54,32 @@ namespace RentDesktop.Infrastructure.Services.DB
 
             DbUsers? allUsers = allUsersResponse.Content.ReadFromJsonAsync<DbUsers>().Result;
 
+            if (allUsers is null || allUsers.users is null)
+                throw new IncorrectResponseContentException(nameof(allUsers));
+
+            //IEnumerable<string> positions = allUsers.users.Select(t =>
+            //{
+            //    return GetUserPosition(t.)
+            //});
+            // TODO
+
             return allUsers is not null && allUsers.users is not null
                 ? DatabaseModelConverterService.ConvertUsers(allUsers)
                 : throw new IncorrectResponseContentException(nameof(allUsers));
+        }
+
+        public static string GetUserPosition(string login, DatabaseConnectionService? db = null)
+        {
+            db ??= new DatabaseConnectionService();
+
+            string adminCheckHandle = $"/api/identity/authorize-admin";
+            var content = new DbUsername(login);
+
+            using HttpResponseMessage adminCheckResponse = db.PostAsync(adminCheckHandle, content).Result;
+
+            return adminCheckResponse.StatusCode == HttpStatusCode.OK
+                ? UserInfo.ADMIN_POSITION
+                : UserInfo.USER_POSITION;
         }
     }
 }
