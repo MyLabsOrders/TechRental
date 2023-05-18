@@ -311,22 +311,36 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
 
         private void DownloadReceipt()
         {
-            var window = WindowFinder.FindByType(typeof(UserWindow));
-
-            if (!FileDownloadService.DownloadReceipt(_userInfo))
-                QuickMessage.Error("Не удалось загрузить чек.").ShowDialog(window);
-            else
-                QuickMessage.Info("Чек успешно загружен.").ShowDialog(window);
+            try
+            {
+                FileDownloadService.DownloadReceipt(_userInfo);
+                QuickMessage.Info("Чек успешно загружен.").ShowDialog(typeof(UserWindow));
+            }
+            catch (Exception ex)
+            {
+                string message = "Не удалось загрузить чек.";
+#if DEBUG
+                message += $" Причина: {ex.Message}";
+#endif
+                QuickMessage.Error(message).ShowDialog(typeof(UserWindow));
+            }
         }
 
         private void DownloadSummaryStatement()
         {
-            var window = WindowFinder.FindByType(typeof(UserWindow));
-
-            if (!FileDownloadService.DownloadSummaryStatement(_userInfo))
-                QuickMessage.Error("Не удалось загрузить ведомость.").ShowDialog(window);
-            else
-                QuickMessage.Info("Ведомость успешно загружена.").ShowDialog(window);
+            try
+            {
+                FileDownloadService.DownloadSummaryStatement(_userInfo);
+                QuickMessage.Info("Ведомость успешно загружена.").ShowDialog(typeof(UserWindow));
+            }
+            catch (Exception ex)
+            {
+                string message = "Не удалось загрузить ведомость.";
+#if DEBUG
+                message += $" Причина: {ex.Message}";
+#endif
+                QuickMessage.Error(message).ShowDialog(typeof(UserWindow));
+            }
         }
 
         private static ObservableCollection<string> GetSupportedPaymentMethods()
