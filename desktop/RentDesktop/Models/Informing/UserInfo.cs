@@ -5,8 +5,8 @@ namespace RentDesktop.Models.Informing
 {
     public class UserInfo : IUserInfo
     {
-        public const string ADMIN_POSITION = "Admin";
-        public const string USER_POSITION = "User";
+        public const string ADMIN_POSITION = "admin";
+        public const string USER_POSITION = "user";
         public const string ACTIVE_STATUS = "Активен";
         public const string INACTIVE_STATUS = "Неактивен";
         public const string MALE_GENDER = "Мужской";
