@@ -1,5 +1,6 @@
 ﻿using RentDesktop.Models;
 using RentDesktop.Models.DB;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -51,6 +52,30 @@ namespace RentDesktop.Infrastructure.Services.DB
             while (currentOrder.Any());
 
             return transports;
+        }
+
+        public static void AddTransport(ITransport transport)
+        {
+            using var db = new DatabaseConnectionService();
+
+            const string addOrderHandle = "/api/Order";
+
+            byte[] transportIconBytes = transport.Icon is null
+                ? Array.Empty<byte>()
+                : BitmapService.BitmapToBytes(transport.Icon);
+
+            var content = new DbCreateOrder()
+            {
+                name = transport.Name,
+                status = Order.AVAILABLE_STATUS,
+                total = transport.Price,
+                // orderImage = BitmapService.BytesToString(transportIconBytes) TODO
+            };
+
+            using HttpResponseMessage addOrderResponse = db.PostAsync(addOrderHandle, content).Result;
+
+            if (!addOrderResponse.IsSuccessStatusCode)
+                throw new ErrorResponseException(addOrderResponse);
         }
     }
 }

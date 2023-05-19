@@ -18,7 +18,7 @@ namespace RentDesktop.Infrastructure.Services.DB
             if (!registerResponse.IsSuccessStatusCode)
                 throw new ErrorResponseException(registerResponse);
 
-            DbLoginResponseContent loginContent = LoginService.EnterSystem(db, userInfo.Login, userInfo.Password);
+            DbLoginResponseContent loginContent = LoginService.EnterSystem(userInfo.Login, userInfo.Password, db);
 
             db.SetAuthorizationToken(loginContent.token);
             userInfo.ID = loginContent.userId;

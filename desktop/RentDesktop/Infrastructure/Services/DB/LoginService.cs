@@ -27,16 +27,17 @@ namespace RentDesktop.Infrastructure.Services.DB
             //    Orders = new ObservableCollection<Order>() { new Order("123", 5000, DateTime.Now, new string[] { "Lada 7, Lada 15" } ) }
             //};
 
-            var db = new DatabaseConnectionService();
-
-            DbLoginResponseContent loginContent = EnterSystem(db, login, password);
-            db.SetAuthorizationToken(loginContent.token);
+            DatabaseConnectionService db = new();
+            DbLoginResponseContent loginContent = EnterSystem(login, password, db, true);
 
             return GetUserInfo(db, loginContent.userId, login, password);
         }
 
-        public static DbLoginResponseContent EnterSystem(DatabaseConnectionService db, string login, string password)
+        public static DbLoginResponseContent EnterSystem(string login, string password, DatabaseConnectionService? db = null,
+            bool registerAuthorizationToken = false)
         {
+            db ??= new DatabaseConnectionService();
+
             const string loginHandle = "/api/identity/login";
             var content = new DbLogin(login, password);
 
@@ -45,9 +46,16 @@ namespace RentDesktop.Infrastructure.Services.DB
             if (!loginResponse.IsSuccessStatusCode)
                 throw new ErrorResponseException(loginResponse);
 
-            var loginContent = loginResponse.Content.ReadFromJsonAsync<DbLoginResponseContent>().Result;
+            var loginContent = loginResponse.Content.ReadFromJsonAsync<DbLoginResponseContent>().Result
+                ?? throw new IncorrectContentException(loginResponse.Content);
 
-            return loginContent ?? throw new IncorrectContentException(loginResponse.Content);
+            if (registerAuthorizationToken)
+            {
+                DatabaseConnectionService.AuthorizationToken = loginContent.token;
+                db.SetAuthorizationToken(loginContent.token);
+            }
+
+            return loginContent;
         }
 
         private static IUserInfo GetUserInfo(DatabaseConnectionService db, string userId, string login, string password)

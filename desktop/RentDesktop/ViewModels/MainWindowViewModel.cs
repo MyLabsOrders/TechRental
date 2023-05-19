@@ -23,6 +23,9 @@ namespace RentDesktop.ViewModels
             _inactivity_timer.Start();
 
             ResetInactivitySecondsCommand = ReactiveCommand.Create(ResetInactivitySeconds);
+
+            //using var generator = new Infrastructure.Services.DB.DatabaseGenerationService();
+            //generator.Generate();
         }
 
         #region ViewModels

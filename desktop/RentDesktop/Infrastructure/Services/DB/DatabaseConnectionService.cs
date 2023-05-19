@@ -18,14 +18,26 @@ namespace RentDesktop.Infrastructure.Services.DB
 
         #endregion
 
+        private bool _isDisposed;
         private readonly HttpClient _httpClient;
 
-        public DatabaseConnectionService(string? authorizationToken = null)
+        public static string? AuthorizationToken { get; set; }
+
+        public DatabaseConnectionService(string? authorizationToken = null, bool restoreRegisteredAuthorizationToken = true)
         {
             _httpClient = new HttpClient();
 
             if (authorizationToken is not null)
                 SetAuthorizationToken(authorizationToken);
+
+            else if (restoreRegisteredAuthorizationToken && AuthorizationToken is not null)
+                SetAuthorizationToken(AuthorizationToken);
+        }
+
+        ~DatabaseConnectionService()
+        {
+            if (!_isDisposed)
+                Dispose();
         }
 
         public void SetAuthorizationToken(string authorizationToken)
@@ -65,11 +77,13 @@ namespace RentDesktop.Infrastructure.Services.DB
         public void CloseConnection()
         {
             _httpClient.Dispose();
+            _isDisposed = true;
         }
 
         public void Dispose()
         {
             CloseConnection();
+            GC.SuppressFinalize(this);
         }
 
         private static string CorrectHandle(string handle)
