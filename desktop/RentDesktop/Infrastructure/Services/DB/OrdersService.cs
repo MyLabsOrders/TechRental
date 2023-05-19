@@ -57,7 +57,7 @@ namespace RentDesktop.Infrastructure.Services.DB
         {
             using var db = new DatabaseConnectionService();
 
-            const string addOrderHandle = "/api/Order/status";
+            string addOrderHandle = $"/api/User/{userInfo.ID}/order";
             var content = new DbOrderId(transportRent.Transport.ID);
 
             using HttpResponseMessage addOrderResponse = db.PutAsync(addOrderHandle, content).Result;
