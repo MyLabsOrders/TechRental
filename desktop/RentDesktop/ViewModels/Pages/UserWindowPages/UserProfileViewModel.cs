@@ -288,7 +288,7 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
         }
 
         private async void ChangeUserBalance()
-        {           
+        {
             var topUpBalanceButton = new ButtonDefinition()
             {
                 IsCancel = false,
@@ -326,7 +326,7 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
                 return;
 
             MessageWindowResultDTO result = await inputWindow.ShowDialog(userWindow);
-            
+
             string pressedButton = result.Button;
             string moneyPresenter = result.Message;
 
