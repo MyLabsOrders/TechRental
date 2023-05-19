@@ -29,5 +29,10 @@ namespace RentDesktop.Models
         {
             return new Transport(ID, Name, Company, Price, CreationDate, Icon);
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }
