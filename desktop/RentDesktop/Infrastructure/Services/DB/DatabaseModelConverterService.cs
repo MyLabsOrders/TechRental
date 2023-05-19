@@ -44,7 +44,7 @@ namespace RentDesktop.Infrastructure.Services.DB
                 id: t.id,
                 price: t.total,
                 status: t.status,
-                dateOfCreation: DateTimeService.StringToDateTime(t.orderDate),
+                dateOfCreation: t.orderDate is null ? default : DateTimeService.StringToDateTime(t.orderDate),
                 models: new[] { ConvertDbOrderToTransport(t) }
             ));
         }
@@ -53,13 +53,21 @@ namespace RentDesktop.Infrastructure.Services.DB
         {
             byte[] imageBytes = BitmapService.StringToBytes(order.image);
 
+            var transportIcon = imageBytes.Length > 0
+                ? BitmapService.BytesToBitmap(imageBytes)
+                : null;
+
+            DateTime creationDate = order.orderDate is null
+                ? default
+                : DateTimeService.StringToDateTime(order.orderDate);
+
             return new Transport(
                 order.id,
                 order.name,
                 "MyCompany", // Future work: add company to order model
                 order.total,
-                DateTimeService.StringToDateTime(order.orderDate),
-                BitmapService.BytesToBitmap(imageBytes)
+                creationDate,
+                transportIcon
             );
         }
     }
