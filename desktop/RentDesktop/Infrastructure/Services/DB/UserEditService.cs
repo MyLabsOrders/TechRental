@@ -29,7 +29,7 @@ namespace RentDesktop.Infrastructure.Services.DB
 
             using HttpResponseMessage changePasswordResponse = db.PutAsync(changePasswordHandle, content).Result;
 
-            if (changePasswordResponse.IsSuccessStatusCode)
+            if (!changePasswordResponse.IsSuccessStatusCode)
                 throw new ErrorResponseException(changePasswordResponse);
         }
 
@@ -42,7 +42,7 @@ namespace RentDesktop.Infrastructure.Services.DB
 
             using HttpResponseMessage changeLoginResponse = db.PutAsync(changeLoginHandle, content).Result;
 
-            if (changeLoginResponse.IsSuccessStatusCode)
+            if (!changeLoginResponse.IsSuccessStatusCode)
                 throw new ErrorResponseException(changeLoginResponse);
         }
 
@@ -55,7 +55,7 @@ namespace RentDesktop.Infrastructure.Services.DB
 
             using HttpResponseMessage changeRoleResponse = db.PutAsync(changeRoleHandle, content).Result;
 
-            if (changeRoleResponse.IsSuccessStatusCode)
+            if (!changeRoleResponse.IsSuccessStatusCode)
                 throw new ErrorResponseException(changeRoleResponse);
         }
     }

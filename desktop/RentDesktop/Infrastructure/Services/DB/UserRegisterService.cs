@@ -15,7 +15,7 @@ namespace RentDesktop.Infrastructure.Services.DB
 
             using HttpResponseMessage registerResponse = db.PostAsync(registerHandle, content).Result;
 
-            if (registerResponse.IsSuccessStatusCode)
+            if (!registerResponse.IsSuccessStatusCode)
                 throw new ErrorResponseException(registerResponse);
 
             DbLoginResponseContent loginContent = LoginService.EnterSystem(db, userInfo.Login, userInfo.Password);
@@ -36,7 +36,7 @@ namespace RentDesktop.Infrastructure.Services.DB
                 middleName = userInfo.Surname,
                 lastName = userInfo.Patronymic,
                 phoneNumber = userInfo.PhoneNumber,
-                userImage = BitmapService.BytesToString(userInfo.Icon),
+                // userImage = BitmapService.BytesToString(userInfo.Icon), // TOODO
                 birthDate = DateTimeService.DateTimeToString(userInfo.DateOfBirth)
                 // status = Future work: add status to user model
                 // gender = Future work: add gender to user model
@@ -49,7 +49,7 @@ namespace RentDesktop.Infrastructure.Services.DB
             //var window = WindowFinder.FindMainWindow();
             //QuickMessage.Info(JsonConvert.SerializeObject(jobject, Formatting.Indented)).ShowDialog(window);
 
-            if (profileResponse.IsSuccessStatusCode)
+            if (!profileResponse.IsSuccessStatusCode)
                 throw new ErrorResponseException(profileResponse);
         }
     }

@@ -32,7 +32,7 @@ namespace RentDesktop.Infrastructure.Services.DB
                 string getOrdersHandle = $"/api/Order?page={currentPage++}";
                 using HttpResponseMessage getOrdersResponse = db.GetAsync(getOrdersHandle).Result;
 
-                if (getOrdersResponse.IsSuccessStatusCode)
+                if (!getOrdersResponse.IsSuccessStatusCode)
                     throw new ErrorResponseException(getOrdersResponse);
 
                 var orderCollection = getOrdersResponse.Content.ReadFromJsonAsync<DbOrderCollection>().Result;

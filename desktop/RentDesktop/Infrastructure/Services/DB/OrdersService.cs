@@ -24,7 +24,7 @@ namespace RentDesktop.Infrastructure.Services.DB
 
             using HttpResponseMessage changeOrderStatusResponse = db.PutAsync(changeOrderStatusHandle, content).Result;
 
-            if (changeOrderStatusResponse.IsSuccessStatusCode)
+            if (!changeOrderStatusResponse.IsSuccessStatusCode)
                 throw new ErrorResponseException(changeOrderStatusResponse);
 
             // TODO: move to ViewModel

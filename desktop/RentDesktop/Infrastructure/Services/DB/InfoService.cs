@@ -43,7 +43,7 @@ namespace RentDesktop.Infrastructure.Services.DB
             const string allUsersHandle = "/api/User";
             using HttpResponseMessage allUsersResponse = db.GetAsync(allUsersHandle).Result;
 
-            if (allUsersResponse.IsSuccessStatusCode)
+            if (!allUsersResponse.IsSuccessStatusCode)
                 throw new ErrorResponseException(allUsersResponse);
 
             DbUsers? allUsers = allUsersResponse.Content.ReadFromJsonAsync<DbUsers>().Result;

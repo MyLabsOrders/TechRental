@@ -42,7 +42,7 @@ namespace RentDesktop.Infrastructure.Services.DB
 
             using HttpResponseMessage loginResponse = db.PostAsync(loginHandle, content).Result;
 
-            if (loginResponse.IsSuccessStatusCode)
+            if (!loginResponse.IsSuccessStatusCode)
                 throw new ErrorResponseException(loginResponse);
 
             var loginContent = loginResponse.Content.ReadFromJsonAsync<DbLoginResponseContent>().Result;
@@ -55,7 +55,7 @@ namespace RentDesktop.Infrastructure.Services.DB
             string profileHandle = $"/api/User/{userId}";
             using HttpResponseMessage profileResponse = db.GetAsync(profileHandle).Result;
 
-            if (profileResponse.IsSuccessStatusCode)
+            if (!profileResponse.IsSuccessStatusCode)
                 throw new ErrorResponseException(profileResponse);
 
             DbUser? profileContent = profileResponse.Content.ReadFromJsonAsync<DbUser>().Result
