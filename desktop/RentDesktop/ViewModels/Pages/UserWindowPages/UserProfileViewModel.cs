@@ -1,5 +1,9 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Media.Imaging;
+using MessageBox.Avalonia;
+using MessageBox.Avalonia.DTO;
+using MessageBox.Avalonia.Enums;
+using MessageBox.Avalonia.Models;
 using ReactiveUI;
 using RentDesktop.Infrastructure.App;
 using RentDesktop.Infrastructure.Services;
@@ -27,6 +31,7 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
 
             SwapEditModeCommand = ReactiveCommand.Create(SwapEditMode);
             ChangeUserImageCommand = ReactiveCommand.Create(ChangeUserImage);
+            ChangeUserBalanceCommand = ReactiveCommand.Create(ChangeUserBalance);
             SaveUserInfoCommand = ReactiveCommand.Create(SaveUserInfo);
             SetGenderCommand = ReactiveCommand.Create<string>(SetGender);
         }
@@ -149,6 +154,7 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
 
         public ReactiveCommand<Unit, Unit> SwapEditModeCommand { get; }
         public ReactiveCommand<Unit, Unit> ChangeUserImageCommand { get; }
+        public ReactiveCommand<Unit, Unit> ChangeUserBalanceCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveUserInfoCommand { get; }
         public ReactiveCommand<string, Unit> SetGenderCommand { get; }
 
@@ -279,6 +285,73 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
 
             if (!TrySetUserImage(paths[0]))
                 QuickMessage.Error("Не удалось открыть фото.").ShowDialog(window);
+        }
+
+        private async void ChangeUserBalance()
+        {           
+            var topUpBalanceButton = new ButtonDefinition()
+            {
+                IsCancel = false,
+                IsDefault = true,
+                Name = "Поплнить"
+            };
+
+            var cancelButton = new ButtonDefinition()
+            {
+                IsCancel = true,
+                IsDefault = false,
+                Name = "Отмена"
+            };
+
+            var inputWindow = MessageBoxManager.GetMessageBoxInputWindow(new MessageBoxInputParams()
+            {
+                MinWidth = 350,
+                Icon = Icon.Plus,
+
+                CanResize = false,
+                ShowInCenter = true,
+                Markdown = true,
+
+                InputDefaultValue = "1000",
+                ContentTitle = "Пополнить баланс",
+                ContentMessage = "Пополнить баланс",
+                ContentHeader = $"Текущий баланс: {_userInfo.Money}",
+
+                ButtonDefinitions = new[] { topUpBalanceButton, cancelButton },
+            });
+
+            Window? userWindow = WindowFinder.FindUserWindow();
+
+            if (userWindow is null)
+                return;
+
+            MessageWindowResultDTO result = await inputWindow.ShowDialog(userWindow);
+            
+            string pressedButton = result.Button;
+            string moneyPresenter = result.Message;
+
+            if (pressedButton != topUpBalanceButton.Name)
+                return;
+
+            if (!double.TryParse(moneyPresenter, out double money))
+            {
+                QuickMessage.Error("Вы ввели некорректное значение.").ShowDialog(userWindow);
+                return;
+            }
+
+            try
+            {
+                UserCashService.AddCash(_userInfo, money);
+                _userInfo.Money = UserCashService.GetUserBalace(_userInfo);
+            }
+            catch (Exception ex)
+            {
+                string message = "Не удалось пополнить баланс.";
+#if DEBUG
+                message += $" Причина: {ex.Message}";
+#endif
+                QuickMessage.Error(message).ShowDialog(userWindow);
+            }
         }
 
         private void SaveUserInfo()

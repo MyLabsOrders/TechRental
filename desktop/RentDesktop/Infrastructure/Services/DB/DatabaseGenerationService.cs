@@ -138,7 +138,7 @@ namespace RentDesktop.Infrastructure.Services.DB
                 UserRegisterService.RegisterUser(user);
 
                 if (user.Position != UserInfo.ADMIN_POSITION)
-                    UserCashService.AddCash(user, user.Money);
+                    UserCashService.AddCash(user, user.Money, true);
             }
         }
 
