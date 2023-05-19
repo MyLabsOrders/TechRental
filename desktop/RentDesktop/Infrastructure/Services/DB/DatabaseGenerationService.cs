@@ -136,6 +136,9 @@ namespace RentDesktop.Infrastructure.Services.DB
             foreach (var user in _defaultUsers)
             {
                 UserRegisterService.RegisterUser(user);
+
+                if (user.Position != UserInfo.ADMIN_POSITION)
+                    UserCashService.AddCash(user, user.Money);
             }
         }
 

@@ -57,7 +57,7 @@ namespace RentDesktop.Infrastructure.Services.DB
         {
             using var db = new DatabaseConnectionService();
 
-            string addOrderHandle = $"/api/User/{userInfo.ID}/order";
+            string addOrderHandle = $"/api/User/{userInfo.ID}/orders";
             var content = new DbOrderId(transportRent.Transport.ID);
 
             using HttpResponseMessage addOrderResponse = db.PutAsync(addOrderHandle, content).Result;
@@ -65,10 +65,10 @@ namespace RentDesktop.Infrastructure.Services.DB
             if (!addOrderResponse.IsSuccessStatusCode)
                 throw new ErrorResponseException(addOrderResponse);
 
-            string status = Order.AVAILABLE_STATUS;
+            string status = Order.RENTED_STATUS;
             double price = transportRent.TotalPrice;
             string id = transportRent.Transport.ID;
-            DateTime creationDate = transportRent.Transport.CreationDate;
+            DateTime creationDate = DateTime.Now;
             var models = new[] { transportRent.Transport };
 
             return new Order(id, price, status, creationDate, models);
