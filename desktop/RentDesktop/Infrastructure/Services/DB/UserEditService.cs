@@ -8,10 +8,10 @@ namespace RentDesktop.Infrastructure.Services.DB
     {
         public static void EditInfo(IUserInfo initialUserInfo, IUserInfo newUserInfo)
         {
-            if (initialUserInfo.Login != newUserInfo.Login)
+            if (initialUserInfo.Login != newUserInfo.Login && initialUserInfo.Login != string.Empty)
                 ChangeLogin(newUserInfo.Login);
 
-            if (initialUserInfo.Password != newUserInfo.Password)
+            if (initialUserInfo.Password != newUserInfo.Password && initialUserInfo.Password != string.Empty)
                 ChangePassword(initialUserInfo.Password, newUserInfo.Password);
 
             if (initialUserInfo.Position != newUserInfo.Position)
@@ -37,7 +37,7 @@ namespace RentDesktop.Infrastructure.Services.DB
         {
             using var db = new DatabaseConnectionService();
 
-            const string changeLoginHandle = "/api/identity/login";
+            const string changeLoginHandle = "/api/identity/username";
             var content = new DbChangeLogin(newLogin);
 
             using HttpResponseMessage changeLoginResponse = db.PutAsync(changeLoginHandle, content).Result;
@@ -50,7 +50,7 @@ namespace RentDesktop.Infrastructure.Services.DB
         {
             using var db = new DatabaseConnectionService();
 
-            string changeRoleHandle = $"/api/identity/{userLogin}/role?roleName={newPosition}";
+            string changeRoleHandle = $"/api/identity/users/{userLogin}/role?roleName={newPosition}";
             var content = new { };
 
             using HttpResponseMessage changeRoleResponse = db.PutAsync(changeRoleHandle, content).Result;

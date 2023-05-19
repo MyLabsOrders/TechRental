@@ -40,7 +40,7 @@
 			<TextBlock Grid.Row="8" Grid.Column="0" Text="Отчество" />
 			<TextBox Grid.Row="8" Grid.Column="2" Text="{Binding Patronymic}" />
 			<TextBlock Grid.Row="10" Grid.Column="0" Text="Должность" />
-			<ComboBox Grid.Row="10" Grid.Column="2" Items="{Binding Positions}" SelectedItem="{Binding Position}" />
+			<ComboBox Grid.Row="10" Grid.Column="2" Items="{Binding Positions}" SelectedIndex="{Binding SelectedPositionIndex}" />
 			<TextBlock Grid.Row="12" Grid.Column="0" Text="Статус" />
 
 			<ComboBox Grid.Row="12"
