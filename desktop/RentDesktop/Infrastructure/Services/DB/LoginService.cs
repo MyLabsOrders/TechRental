@@ -69,7 +69,9 @@ namespace RentDesktop.Infrastructure.Services.DB
             DbUser? profileContent = profileResponse.Content.ReadFromJsonAsync<DbUser>().Result
                 ?? throw new IncorrectContentException(profileResponse.Content);
 
-            string position = InfoService.GetUserPosition(login, db);
+            string position = InfoService.CheckUserIsAdmin(login, db)
+                ? UserInfo.ADMIN_POSITION
+                : UserInfo.USER_POSITION;
 
             UserInfo userInfo = DatabaseModelConverterService.ConvertUser(profileContent, position);
             userInfo.Login = login;

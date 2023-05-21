@@ -1,6 +1,8 @@
 ﻿using RentDesktop.Models.DB;
 using RentDesktop.Models.Informing;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -51,27 +53,36 @@ namespace RentDesktop.Infrastructure.Services.DB
             if (allUsers is null || allUsers.users is null)
                 throw new IncorrectContentException(allUsersResponse.Content);
 
-            // TODO
-            //IEnumerable<string> positions = allUsers.users.Select(t =>
-            //{
-            //    return GetUserPosition(t.)
-            //});
+            string[] positions = allUsers.users
+                .Select(t => GetUserPosition(t.id, db))
+                .ToArray();
 
-            return DatabaseModelConverterService.ConvertUsers(allUsers);
+            return DatabaseModelConverterService.ConvertUsers(allUsers, positions);
         }
 
-        public static string GetUserPosition(string login, DatabaseConnectionService? db = null)
+        public static bool CheckUserIsAdmin(string login, DatabaseConnectionService? db = null)
         {
             db ??= new DatabaseConnectionService();
 
-            string adminCheckHandle = $"/api/identity/authorize-admin";
+            string adminCheckHandle = "/api/identity/authorize-admin";
             var content = new DbUsername(login);
 
             using HttpResponseMessage adminCheckResponse = db.PostAsync(adminCheckHandle, content).Result;
 
-            return adminCheckResponse.StatusCode == HttpStatusCode.OK
-                ? UserInfo.ADMIN_POSITION
-                : UserInfo.USER_POSITION;
+            return adminCheckResponse.StatusCode == HttpStatusCode.OK;
+        }
+
+        public static string GetUserPosition(string userId, DatabaseConnectionService? db = null)
+        {
+            db ??= new DatabaseConnectionService();
+
+            string getPositionHandle = $"/api/identity/{userId}/role";
+            using HttpResponseMessage adminCheckResponse = db.GetAsync(getPositionHandle).Result;
+
+            var dbRole = adminCheckResponse.Content.ReadFromJsonAsync<DbRole>().Result
+                ?? throw new IncorrectContentException(adminCheckResponse.Content);
+
+            return dbRole.role;
         }
     }
 }
