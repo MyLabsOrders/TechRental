@@ -36,7 +36,7 @@ namespace RentDesktop.Infrastructure.Services.DB
                 middleName = userInfo.Surname,
                 lastName = userInfo.Patronymic,
                 phoneNumber = userInfo.PhoneNumber,
-                // userImage = BitmapService.BytesToString(userInfo.Icon), // TOODO
+                // userImage = BitmapService.BytesToString(userInfo.Icon), // TODO
                 birthDate = DateTimeService.DateTimeToString(userInfo.DateOfBirth)
                 // status = Future work: add status to user model
                 // gender = Future work: add gender to user model
