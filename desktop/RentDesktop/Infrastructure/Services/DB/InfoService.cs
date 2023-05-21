@@ -53,10 +53,18 @@ namespace RentDesktop.Infrastructure.Services.DB
                 throw new IncorrectContentException(allUsersResponse.Content);
 
             string[] positions = allUsers.users
-                .Select(t => GetUserPosition(t.id, db))
+                .Select(t => GetUserIdentityInfo(t.id, db).role)
                 .ToArray();
 
-            return DatabaseModelConverterService.ConvertUsers(allUsers, positions);
+            List<IUserInfo> users = DatabaseModelConverterService.ConvertUsers(allUsers, positions);
+
+            foreach (var user in users)
+            {
+                user.Login = GetUserIdentityInfo(user.ID, db).username;
+                user.Password = UserInfo.HIDDEN_PASSWORD;
+            }
+
+            return users;
         }
 
         public static bool CheckUserIsAdmin(string login, DatabaseConnectionService? db = null)
@@ -71,17 +79,15 @@ namespace RentDesktop.Infrastructure.Services.DB
             return adminCheckResponse.StatusCode == HttpStatusCode.OK;
         }
 
-        public static string GetUserPosition(string userId, DatabaseConnectionService? db = null)
+        public static DbIdentityInfo GetUserIdentityInfo(string userId, DatabaseConnectionService? db = null)
         {
             db ??= new DatabaseConnectionService();
 
-            string getPositionHandle = $"/api/identity/{userId}/role";
-            using HttpResponseMessage adminCheckResponse = db.GetAsync(getPositionHandle).Result;
+            string getIdentityInfoHandle = $"/api/identity/{userId}";
+            using HttpResponseMessage getIdentityInfoResponse = db.GetAsync(getIdentityInfoHandle).Result;
 
-            var dbRole = adminCheckResponse.Content.ReadFromJsonAsync<DbRole>().Result
-                ?? throw new IncorrectContentException(adminCheckResponse.Content);
-
-            return dbRole.role;
+            return getIdentityInfoResponse.Content.ReadFromJsonAsync<DbIdentityInfo>().Result
+                ?? throw new IncorrectContentException(getIdentityInfoResponse.Content);
         }
     }
 }

@@ -8,10 +8,10 @@ namespace RentDesktop.Infrastructure.Services.DB
     {
         public static void EditInfo(IUserInfo initialUserInfo, IUserInfo newUserInfo)
         {
-            if (initialUserInfo.Login != newUserInfo.Login && initialUserInfo.Login != string.Empty)
+            if (initialUserInfo.Login != newUserInfo.Login)
                 ChangeLogin(newUserInfo.Login);
 
-            if (initialUserInfo.Password != newUserInfo.Password && initialUserInfo.Password != string.Empty)
+            if (initialUserInfo.Password != newUserInfo.Password && initialUserInfo.Password != UserInfo.HIDDEN_PASSWORD)
                 ChangePassword(initialUserInfo.Password, newUserInfo.Password);
 
             if (initialUserInfo.Position != newUserInfo.Position)
