@@ -39,32 +39,43 @@ namespace RentDesktop.Infrastructure.Services.DB
 
         public static List<IUserInfo> GetAllUsers()
         {
+            var allUsers = new List<IUserInfo>();
             using var db = new DatabaseConnectionService();
 
-            const string allUsersHandle = "/api/User";
-            using HttpResponseMessage allUsersResponse = db.GetAsync(allUsersHandle).Result;
+            int currentPage = 1;
+            IEnumerable<DbUser> currentOrder;
 
-            if (!allUsersResponse.IsSuccessStatusCode)
-                throw new ErrorResponseException(allUsersResponse);
-
-            DbUsers? allUsers = allUsersResponse.Content.ReadFromJsonAsync<DbUsers>().Result;
-
-            if (allUsers is null || allUsers.users is null)
-                throw new IncorrectContentException(allUsersResponse.Content);
-
-            string[] positions = allUsers.users
-                .Select(t => GetUserIdentityInfo(t.id, db).role)
-                .ToArray();
-
-            List<IUserInfo> users = DatabaseModelConverterService.ConvertUsers(allUsers, positions);
-
-            foreach (var user in users)
+            do
             {
-                user.Login = GetUserIdentityInfo(user.ID, db).username;
-                user.Password = UserInfo.HIDDEN_PASSWORD;
-            }
+                string allUsersHandle = $"/api/User?page={currentPage++}";
+                using HttpResponseMessage allUsersResponse = db.GetAsync(allUsersHandle).Result;
 
-            return users;
+                if (!allUsersResponse.IsSuccessStatusCode)
+                    throw new ErrorResponseException(allUsersResponse);
+
+                var usersCollection = allUsersResponse.Content.ReadFromJsonAsync<DbUsers>().Result;
+
+                if (usersCollection is null || usersCollection.users is null)
+                    throw new IncorrectContentException(allUsersResponse.Content);
+
+                string[] positions = usersCollection.users
+                    .Select(t => GetUserIdentityInfo(t.id, db).role)
+                    .ToArray();
+
+                List<IUserInfo> currentUsers = DatabaseModelConverterService.ConvertUsers(usersCollection, positions);
+
+                foreach (var user in currentUsers)
+                {
+                    user.Login = GetUserIdentityInfo(user.ID, db).username;
+                    user.Password = UserInfo.HIDDEN_PASSWORD;
+                }
+
+                allUsers.AddRange(currentUsers);
+                currentOrder = usersCollection.users;
+            }
+            while (currentOrder.Any());
+
+            return allUsers;
         }
 
         public static bool CheckUserIsAdmin(string login, DatabaseConnectionService? db = null)

@@ -12,8 +12,7 @@ namespace RentDesktop.Infrastructure.Services.DB
     {
         public static List<Transport> GetTransports()
         {
-            List<Transport> transports = new List<Transport>();
-
+            var transports = new List<Transport>();
             using var db = new DatabaseConnectionService();
 
             int currentPage = 1;
