@@ -27,21 +27,11 @@ namespace RentDesktop.Infrastructure.Services.DB
             if (!changeOrderStatusResponse.IsSuccessStatusCode)
                 throw new ErrorResponseException(changeOrderStatusResponse);
 
-            // TODO: move to ViewModel
             order.Status = newStatus;
         }
 
         public static List<Order> CreateOrders(IEnumerable<TransportRent> cart, IUserInfo userInfo)
         {
-            //string id = new Random().Next(0, 1000000).ToString();
-            //string status = Order.ACTIVE_STATUS;
-            //var date = DateTime.Now;
-
-            //var models = cart.Select(t => t.Transport.Name);
-            //double price = cart.Sum(t => t.TotalPrice);
-
-            //order = new Order(id, price, status, date, models);
-
             var orders = new List<Order>();
 
             foreach (var cartItem in cart)
@@ -70,6 +60,8 @@ namespace RentDesktop.Infrastructure.Services.DB
             string id = transportRent.Transport.ID;
             DateTime creationDate = DateTime.Now;
             var models = new[] { transportRent.Transport };
+
+            userInfo.Money -= price;
 
             return new Order(id, price, status, creationDate, models);
         }
