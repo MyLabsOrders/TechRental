@@ -36,18 +36,13 @@ namespace RentDesktop.Infrastructure.Services.DB
                 middleName = userInfo.Surname,
                 lastName = userInfo.Patronymic,
                 phoneNumber = userInfo.PhoneNumber,
-                // userImage = BitmapService.BytesToString(userInfo.Icon), // TODO
+                userImage = BitmapService.BytesToString(userInfo.Icon),
                 birthDate = DateTimeService.DateTimeToString(userInfo.DateOfBirth)
                 // status = Future work: add status to user model
                 // gender = Future work: add gender to user model
             };
 
             using HttpResponseMessage profileResponse = db.PostAsync(profileHandle, content).Result;
-
-            //var content1 = profileResponse.Content.ReadAsStringAsync().Result;
-            //var jobject = JsonConvert.DeserializeObject(content1);
-            //var window = WindowFinder.FindMainWindow();
-            //QuickMessage.Info(JsonConvert.SerializeObject(jobject, Formatting.Indented)).ShowDialog(window);
 
             if (!profileResponse.IsSuccessStatusCode)
                 throw new ErrorResponseException(profileResponse);
