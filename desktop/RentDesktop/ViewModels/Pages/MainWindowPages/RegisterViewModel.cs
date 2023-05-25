@@ -2,6 +2,7 @@
 using Avalonia.Media.Imaging;
 using ReactiveUI;
 using RentDesktop.Infrastructure.App;
+using RentDesktop.Infrastructure.Security;
 using RentDesktop.Infrastructure.Services;
 using RentDesktop.Infrastructure.Services.DB;
 using RentDesktop.Models.Communication;
@@ -200,6 +201,7 @@ namespace RentDesktop.ViewModels.Pages.MainWindowPages
 
         protected virtual bool VerifyFieldsCorrectness()
         {
+            var passwordVerifier = new PasswordVerifier(Password);
             var window = WindowFinder.FindByType(GetOwnerWindowType());
 
             if (string.IsNullOrEmpty(Login))
@@ -210,6 +212,11 @@ namespace RentDesktop.ViewModels.Pages.MainWindowPages
             if (string.IsNullOrEmpty(Password))
             {
                 QuickMessage.Info("Введите пароль.").ShowDialog(window);
+                return false;
+            }
+            if (!passwordVerifier.IsStrong())
+            {
+                QuickMessage.Info($"Пароль слишком слабый. {PasswordVerifier.STRONG_PASSWORD_REQUIREMENTS}").ShowDialog(window);
                 return false;
             }
             if (Password != PasswordConfirmation)
