@@ -35,6 +35,9 @@ namespace RentDesktop.ViewModels.Pages.MainWindowPages
         public delegate void PageClosingHandler();
         public event PageClosingHandler? PageClosing;
 
+        public delegate void UserRegisteredHandler(IUserInfo user);
+        public event UserRegisteredHandler? UserRegistered;
+
         #endregion
 
         #region Properties
@@ -283,6 +286,8 @@ namespace RentDesktop.ViewModels.Pages.MainWindowPages
             {
                 UserRegisterService.RegisterUser(userInfo);
                 ResetAllFields();
+
+                UserRegistered?.Invoke(userInfo);
                 PageClosing?.Invoke();
             }
             catch (Exception ex)

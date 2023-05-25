@@ -25,6 +25,7 @@ namespace RentDesktop.ViewModels
             EditUserVM = new EditUserViewModel();
 
             AllUsersVM.SelectedUserChanged += EditUserVM.ChangeUser;
+            AddUserVM.UserRegistered += AllUsersVM.Users.Add;
 
             EditUserVM.UserInfoUpdated += () =>
             {
