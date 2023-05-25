@@ -12,15 +12,6 @@ namespace RentDesktop.Infrastructure.Services.DB
     {
         public static List<Transport> GetTransports()
         {
-            //transports = new[]
-            //{
-            //    new Transport("1", "Lada 7", "Company 1", 10000, DateTime.Now, new Bitmap(@"D:\Testing\TechRental\lada7.jpg")),
-            //    new Transport("2", "Lada 10", "Company 1", 5000, DateTime.Now, new Bitmap(@"D:\Testing\TechRental\lada10.jpg")),
-            //    new Transport("3", "Lada 15", "Company 1", 7000, DateTime.Now, new Bitmap(@"D:\Testing\TechRental\lada15.jpg")),
-            //    new Transport("4", "Niva", "Company 2", 25000, DateTime.Now, new Bitmap(@"D:\Testing\TechRental\niva.jpg")),
-            //    new Transport("5", "UAZ", "Company 3", 30000, DateTime.Now, new Bitmap(@"D:\Testing\TechRental\uaz.jpg")),
-            //};
-
             List<Transport> transports = new List<Transport>();
 
             using var db = new DatabaseConnectionService();
@@ -69,7 +60,7 @@ namespace RentDesktop.Infrastructure.Services.DB
                 name = transport.Name,
                 status = Order.AVAILABLE_STATUS,
                 total = transport.Price,
-                // orderImage = BitmapService.BytesToString(transportIconBytes) TODO
+                orderImage = BitmapService.BytesToString(transportIconBytes)
             };
 
             using HttpResponseMessage addOrderResponse = db.PostAsync(addOrderHandle, content).Result;

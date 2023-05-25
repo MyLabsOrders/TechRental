@@ -1,4 +1,5 @@
-﻿using RentDesktop.Models;
+﻿using Avalonia.Media.Imaging;
+using RentDesktop.Models;
 using RentDesktop.Models.DB;
 using RentDesktop.Models.Informing;
 using System;
@@ -8,6 +9,12 @@ namespace RentDesktop.Infrastructure.Services.DB
     internal class DatabaseGenerationService : IDisposable
     {
         #region Default values
+
+        private const string DEFAULT_ICON_LADA7_PATH = "D://Testing//TechRental//lada7.jpg";
+        private const string DEFAULT_ICON_LADA10_PATH = "D://Testing//TechRental//lada10.jpg";
+        private const string DEFAULT_ICON_LADA15_PATH = "D://Testing//TechRental//lada15.jpg";
+        private const string DEFAULT_ICON_NIVA_PATH = "D://Testing//TechRental//niva.jpg";
+        private const string DEFAULT_ICON_UAZ_PATH = "D://Testing//TechRental//uaz.jpg";
 
         private readonly UserInfo _defaultAdmin = new()
         {
@@ -91,11 +98,11 @@ namespace RentDesktop.Infrastructure.Services.DB
 
         private readonly Transport[] _defaultTransports = new[]
         {
-            new Transport("", "Lada 7", "", 10000, default),
-            new Transport("", "Lada 10", "", 5000, default),
-            new Transport("", "Lada 15", "", 7000, default),
-            new Transport("", "Niva", "", 25000, default),
-            new Transport("", "UAZ", "", 30000, default),
+            new Transport("", "Lada 7", "", 10000, default, new Bitmap(DEFAULT_ICON_LADA7_PATH)),
+            new Transport("", "Lada 10", "", 5000, default, new Bitmap(DEFAULT_ICON_LADA10_PATH)),
+            new Transport("", "Lada 15", "", 7000, default, new Bitmap(DEFAULT_ICON_LADA15_PATH)),
+            new Transport("", "Niva", "", 25000, default, new Bitmap(DEFAULT_ICON_NIVA_PATH)),
+            new Transport("", "UAZ", "", 30000, default, new Bitmap(DEFAULT_ICON_UAZ_PATH)),
         };
 
         #endregion
