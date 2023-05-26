@@ -5,7 +5,7 @@ namespace TechRental.Application.Contracts.Orders.Commands;
 
 internal static class CreateOrder
 {
-    public record Command(string Name, string OrderImage, string Status, decimal Price) : IRequest<Response>;
+    public record Command(string Name, string Company, string OrderImage, string Status, decimal Price) : IRequest<Response>;
 
     public record Response(OrderDto Order);
 }

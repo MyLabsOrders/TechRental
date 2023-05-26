@@ -6,5 +6,5 @@ public record CreateUserRequest(
     string LastName,
     string PhoneNumber,
     string? UserImage,
-    DateTime BirthDate,
+    DateOnly BirthDate,
     string Gender);

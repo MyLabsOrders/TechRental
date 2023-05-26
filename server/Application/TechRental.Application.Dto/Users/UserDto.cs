@@ -8,7 +8,7 @@ public record UserDto(
     string MiddleName,
     string LastName,
     string Image,
-    DateTime BirthDate,
+    DateOnly BirthDate,
     string Number,
     string Gender,
     bool IsActive,

@@ -4,6 +4,7 @@ public record UserOrderDto(
     Guid Id,
     string Status,
     string Name,
+    string Company,
     string Image,
     decimal Total,
     DateTime? OrderDate,

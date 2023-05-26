@@ -47,6 +47,7 @@ public class OrderController : ControllerBase
     {
         var command = new CreateOrder.Command(
             request.Name,
+            request.Company,
             request.OrderImage ?? string.Empty,
             request.Status,
             request.Price);
@@ -61,7 +62,7 @@ public class OrderController : ControllerBase
     /// <param name="orderId">Target order id</param>
     /// <returns>Information about specified order</returns>
     [HttpGet("{orderId:guid}")]
-    [Authorize(Roles = TechRentalIdentityRoleNames.AdminRoleName)]
+    [Authorize]
     public async Task<ActionResult<OrderDto>> GetOrderAsync(Guid orderId)
     {
         var query = new GetOrder.Query(orderId);
@@ -70,6 +71,15 @@ public class OrderController : ControllerBase
         return Ok(response.Order);
     }
 
+    [HttpGet("invoice")]
+    [Authorize]
+    public async Task<ActionResult> GetInvoice()
+    {
+        var query = new GetInvoice.Query();
+        var response = await _mediator.Send(query);
+
+        return new FileStreamResult(response.Stream, "application/pdf");
+    }
     /// <summary>
     /// Lists all orders registered in the system
     /// </summary>

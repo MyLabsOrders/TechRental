@@ -25,7 +25,7 @@ internal class ChangeOrderStatusHandler : IRequestHandler<Command>
         if (_currentUser.CanManageOrders() is false)
             throw new UnauthorizedException("You are not authorized");
 
-        var order = await _context.Orders.FindAsync(request.OrderId, cancellationToken);
+        var order = await _context.Orders.FindAsync(new object?[] { request.OrderId }, cancellationToken: cancellationToken);
 
         if (order is null)
             throw EntityNotFoundException.For<Order>(request.OrderId);

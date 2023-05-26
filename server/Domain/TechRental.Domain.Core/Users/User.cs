@@ -22,7 +22,7 @@ public class User
         string middleName,
         string lastName,
         Image image,
-        DateTime birthDate,
+        DateOnly birthDate,
         PhoneNumber phoneNumber,
         Gender gender)
     {
@@ -51,7 +51,7 @@ public class User
     public string MiddleName { get; set; }
     public string LastName { get; set; }
     public Image Image { get; set; }
-    public DateTime BirthDate { get; set; }
+    public DateOnly BirthDate { get; set; }
     public PhoneNumber PhoneNumber { get; set; }
     public Gender Gender { get; set; }
     public bool IsActive { get; set; }

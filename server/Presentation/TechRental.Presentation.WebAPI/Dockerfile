@@ -30,5 +30,6 @@ RUN dotnet publish "TechRental.Presentation.WebAPI.csproj" -c Release -o /app/pu
 
 FROM base AS final
 WORKDIR /app
+COPY ["Assets/*", "/app/Assets/"]
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "TechRental.Presentation.WebAPI.dll"]

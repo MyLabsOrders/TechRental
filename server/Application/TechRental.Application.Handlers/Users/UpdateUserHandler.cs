@@ -37,7 +37,7 @@ internal class UpdateUserHandler : IRequestHandler<Command, Response>
         if (request.UserImage is not null)
             user.Image = new Image(request.UserImage);
         if (request.BirthDate is not null)
-            user.BirthDate = (DateTime)request.BirthDate;
+            user.BirthDate = (DateOnly)request.BirthDate;
 
         await _context.SaveChangesAsync(cancellationToken);
 

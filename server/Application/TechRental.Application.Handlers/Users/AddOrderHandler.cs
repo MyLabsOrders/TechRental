@@ -30,11 +30,11 @@ internal class AddOrderHandler : IRequestHandler<Command>
         if (absent.Any())
             throw new EntityNotFoundException($"Orders with ids {string.Join(", ", absent.Select(dto => dto.OrderId))} were not found.");
 
-        var orders = await _context.Orders.Join(
+        var orders = (await _context.Orders.ToListAsync(cancellationToken)).Join(
             request.Orders,
             order => order.Id,
             dto => dto.OrderId,
-            (order, dto) => order).ToListAsync(cancellationToken);
+            (order, dto) => order).ToList();
 
 
         var rented = orders.Where(order => order.Status == OrderStatus.Rented);

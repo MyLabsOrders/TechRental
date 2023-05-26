@@ -16,6 +16,7 @@ public class Order
         Guid id,
         User? user,
         string name,
+        string company,
         Image image,
         OrderStatus status,
         decimal price,
@@ -25,6 +26,7 @@ public class Order
         User = user;
         UserId = user?.Id;
         Name = name;
+        Company = company;
         Image = image;
         Status = status;
         Price = price;
@@ -35,6 +37,7 @@ public class Order
     public virtual User? User { get; set; }
     public Guid? UserId { get; set; }
     public string Name { get; }
+    public string Company { get; }
     public Image Image { get; }
     public OrderStatus Status { get; set; }
     public DateTime? OrderDate { get; set; }

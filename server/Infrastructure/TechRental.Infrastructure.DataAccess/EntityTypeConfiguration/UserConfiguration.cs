@@ -18,10 +18,5 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(x => x.Image).HasConversion<ImageValueConverter>();
         builder.Property(x => x.PhoneNumber).HasConversion<PhoneNumberValueConverter>();
-
-        builder.HasMany(x => x.Orders)
-            .WithOne(x => x.User)
-            .HasForeignKey(x => x.UserId)
-            .IsRequired(false);
     }
 }
