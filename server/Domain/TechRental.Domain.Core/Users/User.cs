@@ -14,7 +14,6 @@ public class User
     protected User()
     {
         _orders = new List<Order>();
-
     }
 
     public User(
@@ -24,7 +23,8 @@ public class User
         string lastName,
         Image image,
         DateTime birthDate,
-        PhoneNumber phoneNumber)
+        PhoneNumber phoneNumber,
+        Gender gender)
     {
         ArgumentNullException.ThrowIfNull(firstName);
         ArgumentNullException.ThrowIfNull(middleName);
@@ -39,18 +39,22 @@ public class User
         MiddleName = middleName;
         BirthDate = birthDate;
         PhoneNumber = phoneNumber;
+        Gender = gender;
+        IsActive = true;
 
         _orders = new List<Order>();
         Money = 0;
     }
 
     public Guid Id { get; }
-    public string FirstName { get; }
-    public string MiddleName { get; }
-    public string LastName { get; }
-    public Image Image { get; }
-    public DateTime BirthDate { get; }
-    public PhoneNumber PhoneNumber { get; }
+    public string FirstName { get; set; }
+    public string MiddleName { get; set; }
+    public string LastName { get; set; }
+    public Image Image { get; set; }
+    public DateTime BirthDate { get; set; }
+    public PhoneNumber PhoneNumber { get; set; }
+    public Gender Gender { get; set; }
+    public bool IsActive { get; set; }
     public virtual IEnumerable<Order> Orders => _orders;
     public decimal Money
     {

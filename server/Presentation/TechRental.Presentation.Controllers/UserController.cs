@@ -37,7 +37,33 @@ public class UserController : ControllerBase
             request.LastName,
             request.UserImage ?? string.Empty,
             request.BirthDate,
-            request.PhoneNumber);
+            request.PhoneNumber,
+            request.Gender);
+
+        var response = await _mediator.Send(command);
+
+        return Ok(response);
+    }
+
+    /// <summary>
+    /// Updates user account's properties
+    /// </summary>
+    /// <param name="identityId">identity id that is trying to update profile</param>
+    /// <param name="request"></param>
+    /// <returns>Information about created account</returns>
+    [HttpPatch("{identityId:guid}/profile")]
+    [Authorize]
+    public async Task<ActionResult<UserDto>> UpdateUserAsync(Guid identityId, [FromBody] UpdateUserRequest request)
+    {
+        var command = new UpdateUser.Command(
+            identityId,
+            request.FirstName,
+            request.MiddleName,
+            request.LastName,
+            request.UserImage,
+            request.BirthDate,
+            request.PhoneNumber,
+            request.Gender);
 
         var response = await _mediator.Send(command);
 

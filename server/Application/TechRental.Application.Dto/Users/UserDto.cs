@@ -10,5 +10,7 @@ public record UserDto(
     string Image,
     DateTime BirthDate,
     string Number,
+    string Gender,
+    bool IsActive,
     decimal Money,
     IEnumerable<UserOrderDto> Orders);
