@@ -16,7 +16,7 @@ public class UserInputException : DomainException
     public static UserInputException NegativeOrderAmountException()
         => new UserInputException();
 
-    public static UserInputException NegativeOrderRentDaysException()
+    public static UserInputException NegativeOrderPeriodException()
         => new UserInputException();
 
     public static UserInputException NegativeUserBalanceException(string message)

@@ -49,7 +49,7 @@ public class OrderController : ControllerBase
             request.Name,
             request.OrderImage ?? string.Empty,
             request.Status,
-            request.Total);
+            request.Price);
         var response = await _mediator.Send(command);
 
         return Ok(response.Order);

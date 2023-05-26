@@ -7,7 +7,8 @@ namespace TechRental.Domain.Core.Orders;
 
 public class Order
 {
-    private decimal _totalPrice;
+    private int? _amount;
+    private int? _rentDays;
 
     protected Order() { }
 
@@ -17,7 +18,7 @@ public class Order
         string name,
         Image image,
         OrderStatus status,
-        decimal total,
+        decimal price,
         DateTime? orderDate)
     {
         Id = id;
@@ -26,7 +27,7 @@ public class Order
         Name = name;
         Image = image;
         Status = status;
-        TotalPrice = total;
+        Price = price;
         OrderDate = orderDate;
     }
 
@@ -37,17 +38,30 @@ public class Order
     public Image Image { get; }
     public OrderStatus Status { get; set; }
     public DateTime? OrderDate { get; set; }
-
-    public decimal TotalPrice
+    public decimal Price { get; }
+    public int? Amount
     {
-        get => _totalPrice;
-
+        get => _amount;
         set
         {
             if (value < 0)
-                throw UserInputException.NegativeOrderTotalException();
+                throw UserInputException.NegativeOrderAmountException();
 
-            _totalPrice = value;
+            _amount = value;
         }
     }
+
+    public int? Period
+    {
+        get => _rentDays;
+        set
+        {
+            if (value < 0)
+                throw UserInputException.NegativeOrderPeriodException();
+
+            _rentDays = value;
+        }
+    }
+
+    public decimal TotalPrice => Price * Amount ?? 0 * Period ?? 0;
 }

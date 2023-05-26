@@ -74,13 +74,15 @@ public class UserController : ControllerBase
     /// Adds order to user purchase bucket
     /// </summary>
     /// <param name="userId">Target user id</param>
-    /// <param name="request">Target order id</param>
+    /// <param name="request">Target orders id, rent days and amount</param>
     /// <returns></returns>
     [HttpPut("{userId:guid}/orders")]
     [Authorize(Roles = TechRentalIdentityRoleNames.DefaultUserRoleName)]
-    public async Task<IActionResult> AddOrderAsync(Guid userId, [FromBody] AddOrderRequest request)
+    public async Task<IActionResult> AddOrderAsync(Guid userId, [FromBody] IList<AddOrderRequest> request)
     {
-        var command = new AddOrder.Command(userId, request.OrderId);
+        var command = new AddOrder.Command(
+            userId,
+            request.Select(order => (order.OrderId, order.Count, order.Days)).ToList());
         await _mediator.Send(command);
 
         return Ok();

@@ -32,7 +32,7 @@ internal class CreateOrderHandler : IRequestHandler<Command, Response>
             request.Name,
             new Image(request.OrderImage),
             Enum.Parse<OrderStatus>(request.Status),
-            request.Total,
+            request.Price,
             null);
 
         _context.Orders.Add(order);

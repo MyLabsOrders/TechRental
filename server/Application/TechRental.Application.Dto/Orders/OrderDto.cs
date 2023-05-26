@@ -9,4 +9,6 @@ public record OrderDto(
     string Image,
     string Status,
     decimal Total,
-    DateTime? OrderDate);
+    DateTime? OrderDate,
+    int? Count,
+    int? Days);
