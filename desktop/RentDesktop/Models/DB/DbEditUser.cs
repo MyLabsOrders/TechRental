@@ -16,7 +16,7 @@
         public string userImage { get; set; } = string.Empty;
         public string birthDate { get; set; } = string.Empty;
         public string gender { get; set; } = string.Empty;
-        //public string status { get; set; } = string.Empty; // TODO
+        public bool isActive { get; set; } = true;
     }
 
 #pragma warning restore IDE1006

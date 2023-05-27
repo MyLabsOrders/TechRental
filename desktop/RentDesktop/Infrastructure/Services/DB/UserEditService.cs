@@ -28,9 +28,9 @@ namespace RentDesktop.Infrastructure.Services.DB
                 lastName = newUserInfo.Patronymic,
                 phoneNumber = newUserInfo.PhoneNumber,
                 userImage = BitmapService.BytesToString(newUserInfo.Icon),
-                birthDate = DateTimeService.DateTimeToString(newUserInfo.DateOfBirth),
-                gender = GenderService.ToDatabaseFormat(newUserInfo.Gender)
-                //status = TODO
+                birthDate = DateTimeService.ShortDateTimeToString(newUserInfo.DateOfBirth),
+                gender = GenderService.ToDatabaseFormat(newUserInfo.Gender),
+                isActive = newUserInfo.Status == UserInfo.ACTIVE_STATUS
             };
 
             using HttpResponseMessage editUserResponse = db.PatchAsync(editUserHandle, content).Result;

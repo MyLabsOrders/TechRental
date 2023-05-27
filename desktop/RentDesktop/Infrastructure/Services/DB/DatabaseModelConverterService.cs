@@ -26,7 +26,7 @@ namespace RentDesktop.Infrastructure.Services.DB
                 Status = user.isActive ? UserInfo.ACTIVE_STATUS : UserInfo.INACTIVE_STATUS,
                 Money = user.money,
                 Icon = BitmapService.StringToBytes(user.image),
-                DateOfBirth = DateTimeService.StringToDateTime(user.birthDate),
+                DateOfBirth = DateTimeService.StringToShortDateTime(user.birthDate),
                 Orders = new ObservableCollection<Order>(ConvertOrders(user.orders ?? Array.Empty<DbOrder>()))
             };
         }

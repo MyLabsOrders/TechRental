@@ -37,7 +37,7 @@ namespace RentDesktop.Infrastructure.Services.DB
                 lastName = userInfo.Patronymic,
                 phoneNumber = userInfo.PhoneNumber,
                 userImage = BitmapService.BytesToString(userInfo.Icon),
-                birthDate = DateTimeService.DateTimeToString(userInfo.DateOfBirth),
+                birthDate = DateTimeService.ShortDateTimeToString(userInfo.DateOfBirth),
                 gender = GenderService.ToDatabaseFormat(userInfo.Gender)
             };
 
