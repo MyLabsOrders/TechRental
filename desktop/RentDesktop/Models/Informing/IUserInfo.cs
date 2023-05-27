@@ -20,6 +20,8 @@ namespace RentDesktop.Models.Informing
         DateTime DateOfBirth { get; set; }
         ObservableCollection<Order> Orders { get; set; }
 
+        public string DateOfBirthPresenter { get; }
+
         void CopyTo(IUserInfo other);
         bool IsAdmin();
         bool IsUser();

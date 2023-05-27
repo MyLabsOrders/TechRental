@@ -26,7 +26,12 @@ namespace RentDesktop.ViewModels
             EditUserVM = new EditUserViewModel();
 
             AllUsersVM.SelectedUserChanged += EditUserVM.ChangeUser;
-            AddUserVM.UserRegistered += AllUsersVM.Users.Add;
+            
+            AddUserVM.UserRegistered += registeredUser =>
+            {
+                registeredUser.Password = Models.Informing.UserInfo.HIDDEN_PASSWORD;
+                AllUsersVM.AddUser(registeredUser);
+            };
 
             AdminProfileVM.UserInfoUpdated += () =>
             {

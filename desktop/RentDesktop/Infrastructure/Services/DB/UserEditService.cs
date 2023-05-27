@@ -11,7 +11,7 @@ namespace RentDesktop.Infrastructure.Services.DB
             if (initialUserInfo.Login != newUserInfo.Login)
                 ChangeLogin(newUserInfo.Login);
 
-            if (initialUserInfo.Password != newUserInfo.Password && initialUserInfo.Password != UserInfo.HIDDEN_PASSWORD)
+            if (initialUserInfo.Password != newUserInfo.Password)
                 ChangePassword(initialUserInfo.Password, newUserInfo.Password);
 
             if (initialUserInfo.Position != newUserInfo.Position)

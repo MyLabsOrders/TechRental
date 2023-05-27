@@ -109,7 +109,7 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
 
         #endregion
 
-        private IEnumerable<IUserInfo> _databaseUsers;
+        private ICollection<IUserInfo> _databaseUsers;
 
         #endregion
 
@@ -119,6 +119,16 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
         public ReactiveCommand<Unit, Unit> ResetSearchFieldsCommand { get; }
         public ReactiveCommand<Unit, Unit> RefreshUsersCommand { get; }
         public ReactiveCommand<RoutedEventArgs, Unit> SelectUserCommand { get; }
+
+        #endregion
+
+        #region Public Methods
+
+        public void AddUser(IUserInfo user)
+        {
+            Users.Add(user);
+            _databaseUsers.Add(user);
+        }
 
         #endregion
 

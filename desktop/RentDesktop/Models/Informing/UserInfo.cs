@@ -28,6 +28,8 @@ namespace RentDesktop.Models.Informing
         public DateTime DateOfBirth { get; set; } = default;
         public ObservableCollection<Order> Orders { get; set; } = new ObservableCollection<Order>();
 
+        public string DateOfBirthPresenter => DateOfBirth.ToShortDateString();
+
         public void CopyTo(IUserInfo other)
         {
             other.ID = ID;

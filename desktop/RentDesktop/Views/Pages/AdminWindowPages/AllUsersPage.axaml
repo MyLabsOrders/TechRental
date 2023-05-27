@@ -31,7 +31,7 @@
 				<DataGridTextColumn Header="Фамилия" IsReadOnly="True" Binding="{Binding Surname}" />
 				<DataGridTextColumn Header="Отчество" IsReadOnly="True" Binding="{Binding Patronymic}" />
 				<DataGridTextColumn Header="Телефон" IsReadOnly="True" Binding="{Binding PhoneNumber}" />	
-				<DataGridTextColumn Header="Дата рождения" IsReadOnly="True" Binding="{Binding DateOfBirth}" />
+				<DataGridTextColumn Header="Дата рождения" IsReadOnly="True" Binding="{Binding DateOfBirthPresenter}" />
 				<DataGridTextColumn Header="Пол" IsReadOnly="True" Binding="{Binding Gender}" />
 				<DataGridTextColumn Header="Должность" IsReadOnly="True" Binding="{Binding Position}" />
 				<DataGridTextColumn Header="Статус" IsReadOnly="True" Binding="{Binding Status}" />
