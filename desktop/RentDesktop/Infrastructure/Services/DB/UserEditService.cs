@@ -17,7 +17,26 @@ namespace RentDesktop.Infrastructure.Services.DB
             if (initialUserInfo.Position != newUserInfo.Position)
                 ChangePosition(newUserInfo.Login, newUserInfo.Position);
 
-            // Future work: add the ability to change remaining fields
+            using var db = new DatabaseConnectionService();
+            string editUserHandle = $"/api/User/{initialUserInfo.ID}/profile";
+
+            var content = new DbEditUser()
+            {
+                identityId = newUserInfo.ID,
+                firstName = newUserInfo.Name,
+                middleName = newUserInfo.Surname,
+                lastName = newUserInfo.Patronymic,
+                phoneNumber = newUserInfo.PhoneNumber,
+                userImage = BitmapService.BytesToString(newUserInfo.Icon),
+                birthDate = DateTimeService.DateTimeToString(newUserInfo.DateOfBirth),
+                gender = GenderService.ToDatabaseFormat(newUserInfo.Gender)
+                //status = TODO
+            };
+
+            using HttpResponseMessage editUserResponse = db.PatchAsync(editUserHandle, content).Result;
+
+            if (!editUserResponse.IsSuccessStatusCode)
+                throw new ErrorResponseException(editUserResponse);
         }
 
         public static void ChangePassword(string currentPassword, string newPassword)

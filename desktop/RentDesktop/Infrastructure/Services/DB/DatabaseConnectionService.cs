@@ -74,6 +74,14 @@ namespace RentDesktop.Infrastructure.Services.DB
             return _httpClient.PutAsync(uri, content);
         }
 
+        public Task<HttpResponseMessage> PatchAsync<T>(string handle, T contentObject)
+        {
+            string uri = SERVER_URL + CorrectHandle(handle);
+            HttpContent content = JsonContent.Create(contentObject);
+
+            return _httpClient.PatchAsync(uri, content);
+        }
+
         public void CloseConnection()
         {
             _httpClient.Dispose();
