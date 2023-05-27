@@ -54,11 +54,12 @@ namespace RentDesktop.Infrastructure.Services.DB
                 ? Array.Empty<byte>()
                 : BitmapService.BitmapToBytes(transport.Icon);
 
-            var content = new DbCreateOrder()
+            var content = new DbCreateProduct()
             {
                 name = transport.Name,
+                company = transport.Company,
                 status = Order.AVAILABLE_STATUS,
-                total = transport.Price,
+                price = transport.Price,
                 orderImage = BitmapService.BytesToString(transportIconBytes)
             };
 

@@ -4,10 +4,20 @@
 
     internal class DbCreateOrder
     {
-        public string name { get; set; } = string.Empty;
-        public string orderImage { get; set; } = string.Empty;
-        public string status { get; set; } = string.Empty;
-        public double total { get; set; } = 0;
+        public DbCreateOrder()
+        {
+        }
+
+        public DbCreateOrder(string orderId, int count, int days)
+        {
+            this.orderId = orderId;
+            this.count = count;
+            this.days = days;
+        }
+
+        public string orderId { get; set; } = string.Empty;
+        public int count { get; set; } = 0;
+        public int days { get; set; } = 0;
     }
 
 #pragma warning restore IDE1006

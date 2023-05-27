@@ -3,6 +3,7 @@ using RentDesktop.Models.DB;
 using RentDesktop.Models.Informing;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 
 namespace RentDesktop.Infrastructure.Services.DB
@@ -33,22 +34,26 @@ namespace RentDesktop.Infrastructure.Services.DB
         public static List<Order> CreateOrders(IEnumerable<TransportRent> cart, IUserInfo userInfo)
         {
             var orders = new List<Order>();
+            var grouppedCart = cart.GroupBy(t => t.Transport.ID);
 
-            foreach (var cartItem in cart)
+            foreach (var cartItemGroup in grouppedCart)
             {
-                Order order = CreateOrder(cartItem, userInfo);
+                int transportsCount = cartItemGroup.Count();
+                TransportRent transportRent = cartItemGroup.First();
+
+                Order order = RegisterOrder(transportRent, transportsCount, userInfo);
                 orders.Add(order);
             }
 
             return orders;
         }
 
-        private static Order CreateOrder(TransportRent transportRent, IUserInfo userInfo)
+        private static Order RegisterOrder(TransportRent transportRent, int transportsCount, IUserInfo userInfo)
         {
             using var db = new DatabaseConnectionService();
 
             string addOrderHandle = $"/api/User/{userInfo.ID}/orders";
-            var content = new DbOrderId(transportRent.Transport.ID);
+            var content = new DbCreateOrder(transportRent.Transport.ID, transportsCount, transportRent.Days);
 
             using HttpResponseMessage addOrderResponse = db.PutAsync(addOrderHandle, content).Result;
 

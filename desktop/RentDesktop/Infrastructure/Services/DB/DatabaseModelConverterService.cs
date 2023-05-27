@@ -73,7 +73,7 @@ namespace RentDesktop.Infrastructure.Services.DB
             return new Transport(
                 order.id,
                 order.name,
-                "MyCompany", // Future work: add company to order model
+                order.company,
                 order.total,
                 creationDate,
                 transportIcon
