@@ -39,6 +39,8 @@ internal class RemoveOrderHandler : IRequestHandler<Command>
     private static void ProcessOperation(Order order)
     {
         order.OrderDate = null;
+        order.Period = null;
+        order.Amount = null;
         order.Status = OrderStatus.Available;
     }
 }
