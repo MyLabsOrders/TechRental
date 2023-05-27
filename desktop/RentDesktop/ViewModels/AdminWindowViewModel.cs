@@ -7,6 +7,7 @@ using RentDesktop.ViewModels.Base;
 using RentDesktop.ViewModels.Pages.AdminWindowPages;
 using RentDesktop.Views;
 using System;
+using System.Linq;
 using System.Reactive;
 
 namespace RentDesktop.ViewModels
@@ -26,6 +27,17 @@ namespace RentDesktop.ViewModels
 
             AllUsersVM.SelectedUserChanged += EditUserVM.ChangeUser;
             AddUserVM.UserRegistered += AllUsersVM.Users.Add;
+
+            AdminProfileVM.UserInfoUpdated += () =>
+            {
+                IUserInfo? userInTable = AllUsersVM.Users.FirstOrDefault(t => t.ID == userInfo.ID);
+
+                if (userInTable is not null)
+                {
+                    userInfo.CopyTo(userInTable);
+                    userInTable.Password = Models.Informing.UserInfo.HIDDEN_PASSWORD;
+                }
+            };
 
             EditUserVM.UserInfoUpdated += () =>
             {
