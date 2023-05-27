@@ -21,11 +21,17 @@ namespace RentDesktop.ViewModels
         public AdminWindowViewModel(IUserInfo userInfo)
         {
             AdminProfileVM = new AdminProfileViewModel(userInfo);
-            AllUsersVM = new AllUsersViewModel();
+            AllUsersVM = new AllUsersViewModel(userInfo);
             AddUserVM = new AddUserViewModel();
             EditUserVM = new EditUserViewModel();
 
             AllUsersVM.SelectedUserChanged += EditUserVM.ChangeUser;
+
+            AllUsersVM.SelectedUserChanging += selectedUser =>
+            {
+                if (selectedUser is not null && selectedUser.ID == userInfo.ID)
+                    OpenAdminProfileTab();
+            };
             
             AddUserVM.UserRegistered += registeredUser =>
             {
@@ -86,6 +92,8 @@ namespace RentDesktop.ViewModels
 
         #region Constants
 
+        private const int ADMIN_PROFILE_TAB_INDEX = 0;
+
         private const int MAX_INACTIVITY_SECONDS = 60 * 2;
         private const int INACTIVITY_TIMER_INTERVAL_SECONDS = 1;
 
@@ -140,6 +148,11 @@ namespace RentDesktop.ViewModels
         private void DisposeUserImage()
         {
             AdminProfileVM.UserImage?.Dispose();
+        }
+
+        private void OpenAdminProfileTab()
+        {
+            SelectedTabIndex = ADMIN_PROFILE_TAB_INDEX;
         }
 
         #endregion

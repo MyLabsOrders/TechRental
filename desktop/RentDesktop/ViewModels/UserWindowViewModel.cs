@@ -71,7 +71,7 @@ namespace RentDesktop.ViewModels
 
         #region Constants
 
-        private const int USER_TAB_INDEX = 0;
+        private const int USER_PROFILE_TAB_INDEX = 0;
         private const int TRANSPORT_TAB_INDEX = 1;
         private const int CART_TAB_INDEX = 2;
         private const int ORDERS_TAB_INDEX = 3;
@@ -136,9 +136,9 @@ namespace RentDesktop.ViewModels
             _inactivity_seconds = 0;
         }
 
-        private void OpenUserTab()
+        private void OpenUserProfileTab()
         {
-            SelectedTabIndex = USER_TAB_INDEX;
+            SelectedTabIndex = USER_PROFILE_TAB_INDEX;
         }
 
         private void OpenTransportTab()
@@ -204,7 +204,7 @@ namespace RentDesktop.ViewModels
                     break;
 
                 default:
-                    OpenUserTab();
+                    OpenUserProfileTab();
                     _preloadTabsTimer.Stop();
                     break;
             }

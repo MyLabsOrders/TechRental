@@ -17,10 +17,16 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
 {
     public class AllUsersViewModel : ViewModelBase
     {
-        public AllUsersViewModel()
+        public AllUsersViewModel() : this(new UserInfo())
         {
-            _databaseUsers = Array.Empty<IUserInfo>();
+        }
+
+        public AllUsersViewModel(IUserInfo userInfo)
+        {
             Users = new ObservableCollection<IUserInfo>();
+
+            _currentUserInfo = userInfo;
+            _databaseUsers = Array.Empty<IUserInfo>();
 
             RefreshUsers();
 
@@ -38,6 +44,9 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
 
         public delegate void SelectedUserChangedHandler(IUserInfo? userInfo);
         public event SelectedUserChangedHandler? SelectedUserChanged;
+
+        public delegate void SelectedUserChangingHandler(IUserInfo? userInfo);
+        public event SelectedUserChangingHandler? SelectedUserChanging;
 
         #endregion
 
@@ -109,6 +118,7 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
 
         #endregion
 
+        private IUserInfo _currentUserInfo;
         private ICollection<IUserInfo> _databaseUsers;
 
         #endregion
@@ -205,7 +215,12 @@ namespace RentDesktop.ViewModels.Pages.AdminWindowPages
 
         private void SelectClickedUser(RoutedEventArgs e)
         {
-            if (e.Source is IDataContextProvider p && p.DataContext is IUserInfo userInfo)
+            if (e.Source is not IDataContextProvider p || p.DataContext is not IUserInfo userInfo)
+                return;
+
+            SelectedUserChanging?.Invoke(userInfo);
+
+            if (userInfo.ID != _currentUserInfo.ID)
                 SelectedUser = userInfo;
         }
 
