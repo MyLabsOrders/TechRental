@@ -7,6 +7,6 @@ public class OrderStatusValueConverter : ValueConverter<OrderStatus, string>
 {
     public OrderStatusValueConverter()
         : base(x => x.ToString(),
-        x => Enum.Parse<OrderStatus>(x))
+        x => Enum.Parse<OrderStatus>(x, true))
     { }
 }

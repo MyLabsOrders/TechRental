@@ -30,7 +30,7 @@ internal class ChangeOrderStatusHandler : IRequestHandler<Command>
         if (order is null)
             throw EntityNotFoundException.For<Order>(request.OrderId);
 
-        order.Status = Enum.Parse<OrderStatus>(request.Status);
+        order.Status = Enum.Parse<OrderStatus>(request.Status, true);
 
         await _context.SaveChangesAsync(cancellationToken);
     }
