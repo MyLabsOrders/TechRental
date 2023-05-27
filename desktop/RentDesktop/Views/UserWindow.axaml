@@ -21,7 +21,6 @@
 	<i:Interaction.Behaviors>
 		<ia:EventTriggerBehavior EventName="Closing">
 			<ia:InvokeCommandAction Command="{Binding ShowMainWindowCommand}" />
-			<ia:InvokeCommandAction Command="{Binding MarkActiveOrdersAsCompletedCommand}" />
 			<ia:InvokeCommandAction Command="{Binding DisposeUserImageCommand}" />
 		</ia:EventTriggerBehavior>
 

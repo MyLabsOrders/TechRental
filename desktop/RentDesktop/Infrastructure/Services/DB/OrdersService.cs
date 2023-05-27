@@ -10,12 +10,6 @@ namespace RentDesktop.Infrastructure.Services.DB
 {
     internal static class OrdersService
     {
-        public static void MarkOrdersAsCompleted(IEnumerable<Order> orders, IUserInfo userInfo)
-        {
-            // Future work: add the ability to mark orders as completed
-            // throw new NotImplementedException();
-        }
-
         public static void ChangeOrderStatus(IOrder order, string newStatus)
         {
             using var db = new DatabaseConnectionService();
