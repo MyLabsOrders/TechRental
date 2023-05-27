@@ -30,6 +30,7 @@ internal class GetAllUsersHandler : IRequestHandler<Query, Response>
             return new Response(Array.Empty<UserDto>(), request.Page, pageTotalCount);
 
         var users = await query
+            .Include(x => x.Orders)
             .OrderBy(x => x.LastName)
             .Skip((request.Page - 1) * _pageCount)
             .Take(_pageCount)
