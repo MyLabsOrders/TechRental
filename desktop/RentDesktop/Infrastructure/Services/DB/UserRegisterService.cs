@@ -38,8 +38,7 @@ namespace RentDesktop.Infrastructure.Services.DB
                 phoneNumber = userInfo.PhoneNumber,
                 userImage = BitmapService.BytesToString(userInfo.Icon),
                 birthDate = DateTimeService.DateTimeToString(userInfo.DateOfBirth),
-                // status = Future work: add status to user model
-                // gender = Future work: add gender to user model
+                gender = userInfo.Gender
             };
 
             using HttpResponseMessage profileResponse = db.PostAsync(profileHandle, content).Result;

@@ -13,6 +13,8 @@ namespace RentDesktop.Models.DB
         public string image { get; set; } = string.Empty;
         public string birthDate { get; set; } = string.Empty;
         public string number { get; set; } = string.Empty;
+        public string gender { get; set; } = string.Empty;
+        public bool isActive { get; set; } = true;
         public double money { get; set; } = 0;
         public IEnumerable<DbOrder>? orders { get; set; } = null;
     }

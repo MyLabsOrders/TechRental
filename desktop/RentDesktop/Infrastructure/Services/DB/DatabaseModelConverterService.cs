@@ -21,9 +21,9 @@ namespace RentDesktop.Infrastructure.Services.DB
                 Surname = user.middleName,
                 Patronymic = user.lastName,
                 PhoneNumber = user.number,
-                Gender = UserInfo.MALE_GENDER, // Future work: add gender to user model
+                Gender = user.gender,
                 Position = position,
-                Status = UserInfo.ACTIVE_STATUS, // // Future work: add status to user model
+                Status = user.isActive ? UserInfo.ACTIVE_STATUS : UserInfo.INACTIVE_STATUS,
                 Money = user.money,
                 Icon = BitmapService.StringToBytes(user.image),
                 DateOfBirth = DateTimeService.StringToDateTime(user.birthDate),

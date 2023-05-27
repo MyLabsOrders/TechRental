@@ -10,6 +10,7 @@
         public string phoneNumber { get; set; } = string.Empty;
         public string userImage { get; set; } = string.Empty;
         public string birthDate { get; set; } = string.Empty;
+        public string gender { get; set; } = string.Empty;
     }
 
 #pragma warning restore IDE1006
