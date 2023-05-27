@@ -49,9 +49,10 @@ internal class AddOrderHandler : IRequestHandler<Command>
     private static void ProcessTransaction(User user, IEnumerable<Order> orders, Command request)
     {
         user.Money -= orders.Select(order => order.TotalPrice).Sum();
+        var orderDate = DateTime.UtcNow;
         foreach (var (order, dto) in orders.Zip(request.Orders))
         {
-            order.OrderDate = DateTime.UtcNow;
+            order.OrderDate = orderDate;
             order.Amount = dto.Amount;
             order.Period = dto.Days;
             order.Status = OrderStatus.Rented;
