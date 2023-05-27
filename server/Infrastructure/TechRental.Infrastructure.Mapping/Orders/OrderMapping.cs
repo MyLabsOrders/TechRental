@@ -17,10 +17,13 @@ public static class OrderMapping
             order.Id,
             order.User.ToDto(),
             order.Name,
+            order.Company,
             order.Image.Value,
             order.Status.ToString(),
-            order.TotalPrice,
-            order.OrderDate);
+            order.Price,
+            order.OrderDate,
+            order.Amount,
+            order.Period);
     }
 
     public static UserOrderDto ToUserOrderDto(this Order order)
@@ -29,8 +32,11 @@ public static class OrderMapping
             order.Id,
             order.Status.ToString(),
             order.Name,
+            order.Company,
             order.Image.Value,
-            order.TotalPrice,
-            order.OrderDate);
+            order.Price,
+            order.OrderDate,
+            order.Amount,
+            order.Period);
     }
 }

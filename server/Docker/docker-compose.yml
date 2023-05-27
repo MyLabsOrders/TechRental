@@ -17,7 +17,7 @@ services:
     restart: always
     build:
         context: ../
-        dockerfile: Presentation\TechRental.Presentation.WebAPI\Dockerfile
+        dockerfile: Presentation/TechRental.Presentation.WebAPI/Dockerfile
     ports:
         - "8080:80"
     environment:

@@ -6,7 +6,10 @@ public record OrderDto(
     Guid Id,
     UserDto? User,
     string Name,
+    string Company,
     string Image,
     string Status,
     decimal Total,
-    DateTime? OrderDate);
+    DateTime? OrderDate,
+    int? Count,
+    int? Days);

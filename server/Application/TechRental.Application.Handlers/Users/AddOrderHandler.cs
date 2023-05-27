@@ -1,8 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using TechRental.Application.Abstractions.Identity;
 using TechRental.Application.Common.Exceptions;
-using TechRental.Application.Contracts.Users.Commands;
 using TechRental.DataAccess.Abstractions;
 using TechRental.Domain.Common.Exceptions;
 using TechRental.Domain.Core.Abstractions;
@@ -24,24 +22,40 @@ internal class AddOrderHandler : IRequestHandler<Command>
     public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         var user = await _context.Users.FirstOrDefaultAsync(x => x.Id.Equals(request.UserId), cancellationToken);
-        var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id.Equals(request.OrderId), cancellationToken);
 
         if (user is null)
             throw EntityNotFoundException.For<User>(request.UserId);
 
-        if (order is null)
-            throw EntityNotFoundException.For<Order>(request.OrderId);
+        var absent = request.Orders.ExceptBy(_context.Orders.Select(order => order.Id), dto => dto.OrderId);
+        if (absent.Any())
+            throw new EntityNotFoundException($"Orders with ids {string.Join(", ", absent.Select(dto => dto.OrderId))} were not found.");
 
-        ProcessTransaction(user, order);
-        user.AddOrder(order);
+        var orders = (await _context.Orders.ToListAsync(cancellationToken)).Join(
+            request.Orders,
+            order => order.Id,
+            dto => dto.OrderId,
+            (order, dto) => order).ToList();
+
+
+        var rented = orders.Where(order => order.Status == OrderStatus.Rented);
+        if (rented.Any())
+            throw new OrderAlreadyRentedException($"Orders with ids {string.Join(", ", rented.Select(order => order.Id))} are already rented.");
+
+        ProcessTransaction(user, orders, request);
 
         await _context.SaveChangesAsync(cancellationToken);
     }
 
-    private static void ProcessTransaction(User user, Order order)
+    private static void ProcessTransaction(User user, IEnumerable<Order> orders, Command request)
     {
-        user.Money -= order.TotalPrice;
-        order.OrderDate = DateTime.UtcNow;
-        order.Status = OrderStatus.Rented;
+        user.Money -= orders.Select(order => order.TotalPrice).Sum();
+        foreach (var (order, dto) in orders.Zip(request.Orders))
+        {
+            order.OrderDate = DateTime.UtcNow;
+            order.Amount = dto.Amount;
+            order.Period = dto.Days;
+            order.Status = OrderStatus.Rented;
+            user.AddOrder(order);
+        }
     }
 }

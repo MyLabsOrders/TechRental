@@ -30,9 +30,10 @@ internal class CreateOrderHandler : IRequestHandler<Command, Response>
             Guid.NewGuid(),
             null,
             request.Name,
+            request.Company,
             new Image(request.OrderImage),
             Enum.Parse<OrderStatus>(request.Status),
-            request.Total,
+            request.Price,
             null);
 
         _context.Orders.Add(order);

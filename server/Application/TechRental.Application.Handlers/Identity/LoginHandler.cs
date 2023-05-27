@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using TechRental.Application.Abstractions.Identity;
-using TechRental.Application.Common.Exceptions;
 using TechRental.Domain.Common.Exceptions;
 using static TechRental.Application.Contracts.Identity.Queries.Login;
 

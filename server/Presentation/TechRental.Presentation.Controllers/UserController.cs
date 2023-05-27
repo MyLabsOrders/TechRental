@@ -37,7 +37,33 @@ public class UserController : ControllerBase
             request.LastName,
             request.UserImage ?? string.Empty,
             request.BirthDate,
-            request.PhoneNumber);
+            request.PhoneNumber,
+            request.Gender);
+
+        var response = await _mediator.Send(command);
+
+        return Ok(response);
+    }
+
+    /// <summary>
+    /// Updates user account's properties
+    /// </summary>
+    /// <param name="identityId">identity id that is trying to update profile</param>
+    /// <param name="request"></param>
+    /// <returns>Information about created account</returns>
+    [HttpPatch("{identityId:guid}/profile")]
+    [Authorize]
+    public async Task<ActionResult<UserDto>> UpdateUserAsync(Guid identityId, [FromBody] UpdateUserRequest request)
+    {
+        var command = new UpdateUser.Command(
+            identityId,
+            request.FirstName,
+            request.MiddleName,
+            request.LastName,
+            request.UserImage,
+            request.BirthDate,
+            request.PhoneNumber,
+            request.Gender);
 
         var response = await _mediator.Send(command);
 
@@ -48,13 +74,15 @@ public class UserController : ControllerBase
     /// Adds order to user purchase bucket
     /// </summary>
     /// <param name="userId">Target user id</param>
-    /// <param name="request">Target order id</param>
+    /// <param name="request">Target orders id, rent days and amount</param>
     /// <returns></returns>
     [HttpPut("{userId:guid}/orders")]
     [Authorize(Roles = TechRentalIdentityRoleNames.DefaultUserRoleName)]
-    public async Task<IActionResult> AddOrderAsync(Guid userId, [FromBody] AddOrderRequest request)
+    public async Task<IActionResult> AddOrderAsync(Guid userId, [FromBody] IList<AddOrderRequest> request)
     {
-        var command = new AddOrder.Command(userId, request.OrderId);
+        var command = new AddOrder.Command(
+            userId,
+            request.Select(order => (order.OrderId, order.Count, order.Days)).ToList());
         await _mediator.Send(command);
 
         return Ok();
