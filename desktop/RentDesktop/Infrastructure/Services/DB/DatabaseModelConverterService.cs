@@ -21,7 +21,7 @@ namespace RentDesktop.Infrastructure.Services.DB
                 Surname = user.middleName,
                 Patronymic = user.lastName,
                 PhoneNumber = user.number,
-                Gender = user.gender,
+                Gender = GenderService.FromDatabaseFormat(user.gender),
                 Position = position,
                 Status = user.isActive ? UserInfo.ACTIVE_STATUS : UserInfo.INACTIVE_STATUS,
                 Money = user.money,

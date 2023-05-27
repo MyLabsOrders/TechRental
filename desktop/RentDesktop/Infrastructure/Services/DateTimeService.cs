@@ -7,7 +7,13 @@ namespace RentDesktop.Infrastructure.Services
     {
         public static string DateTimeToString(DateTime dateTime)
         {
-            return dateTime.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture);
+            string fullDate = dateTime.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture);
+
+            int timeIndex = fullDate.IndexOf('T');
+
+            return timeIndex > 0
+                ? fullDate.Remove(timeIndex)
+                : fullDate;
         }
 
         public static DateTime StringToDateTime(string data)
