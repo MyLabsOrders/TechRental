@@ -31,7 +31,7 @@ namespace RentDesktop.Infrastructure.Services.DB
                 if (orderCollection is null || orderCollection.orders is null)
                     throw new IncorrectContentException(getOrdersResponse.Content);
 
-                var transportsCollection = DatabaseModelConverterService.ConvertOrders(orderCollection.orders)
+                var transportsCollection = DatabaseModelConverterService.ConvertProducts(orderCollection.orders)
                     .Select(t => t.Models);
 
                 foreach (var currTransports in transportsCollection)

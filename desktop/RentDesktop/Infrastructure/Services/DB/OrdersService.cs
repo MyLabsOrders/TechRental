@@ -59,7 +59,7 @@ namespace RentDesktop.Infrastructure.Services.DB
             string status = Order.RENTED_STATUS;
             DateTime creationDate = DateTime.Now;
             string id = productsInfo[0].Item1.Transport.ID;
-            double price = productsInfo.Select(t => t.Item1).Sum(t => t.TotalPrice);
+            double price = productsInfo.Sum(t => t.Item1.TotalPrice * t.Item2);
             var models = productsInfo.Select(t => t.Item1.Transport);
 
             userInfo.Money -= price;

@@ -47,7 +47,7 @@ namespace RentDesktop.Infrastructure.Services.DB
                 .ToList();
         }
 
-        public static IEnumerable<Order> ConvertOrders(IEnumerable<DbOrder> databaseOrders)
+        public static IEnumerable<Order> ConvertProducts(IEnumerable<DbOrder> databaseOrders)
         {
             return databaseOrders.Select(t => new Order(
                 id: t.id,
@@ -56,6 +56,31 @@ namespace RentDesktop.Infrastructure.Services.DB
                 dateOfCreation: t.orderDate is null ? default : DateTimeService.StringToDateTime(t.orderDate),
                 models: new[] { ConvertDbOrderToTransport(t) }
             ));
+        }
+
+        public static IEnumerable<Order> ConvertOrders(IEnumerable<DbOrder> databaseOrders)
+        {
+            var orders = new List<Order>();
+            var grouppedDatabaseOrders = databaseOrders.GroupBy(t => t.orderDate);
+
+            foreach (var transportGroup in grouppedDatabaseOrders)
+            {
+                var firstDatabaseOrder = transportGroup.First();
+                var transports = transportGroup.Select(t => ConvertDbOrderToTransport(t));
+
+                string status = Order.RENTED_STATUS;
+                string id = firstDatabaseOrder.id;
+                double price = transportGroup.Sum(t => t.total * t.count!.Value * t.days!.Value);
+
+                DateTime dateOfCreation = firstDatabaseOrder.orderDate is null
+                    ? default
+                    : DateTimeService.StringToDateTime(firstDatabaseOrder.orderDate);
+
+                var order = new Order(id, price, status, dateOfCreation, transports);
+                orders.Add(order);
+            }
+
+            return orders;
         }
 
         public static Transport ConvertDbOrderToTransport(DbOrder order)
