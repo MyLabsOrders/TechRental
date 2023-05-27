@@ -6,7 +6,6 @@ using RentDesktop.ViewModels.Base;
 using RentDesktop.Views;
 using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Reactive;
 
 namespace RentDesktop.ViewModels.Pages.UserWindowPages
@@ -106,10 +105,6 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
 
         private void AddToCart(Transport transport)
         {
-            // Futute work: add the ability to add multiple identical products
-            if (_cart.Any(t => t.Transport.ID == transport.ID))
-                return;
-
             var transportCopy = transport.Copy();
             var transportRent = new TransportRent(transportCopy, 1);
 

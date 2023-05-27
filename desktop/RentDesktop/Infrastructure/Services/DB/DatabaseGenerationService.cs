@@ -98,11 +98,11 @@ namespace RentDesktop.Infrastructure.Services.DB
 
         private readonly Transport[] _defaultTransports = new[]
         {
-            new Transport("", "Lada 7", "", 10000, default, new Bitmap(DEFAULT_ICON_LADA7_PATH)),
-            new Transport("", "Lada 10", "", 5000, default, new Bitmap(DEFAULT_ICON_LADA10_PATH)),
-            new Transport("", "Lada 15", "", 7000, default, new Bitmap(DEFAULT_ICON_LADA15_PATH)),
-            new Transport("", "Niva", "", 25000, default, new Bitmap(DEFAULT_ICON_NIVA_PATH)),
-            new Transport("", "UAZ", "", 30000, default, new Bitmap(DEFAULT_ICON_UAZ_PATH)),
+            new Transport("", "Lada 7", "Lada", 10000, default, new Bitmap(DEFAULT_ICON_LADA7_PATH)),
+            new Transport("", "Lada 10", "Lada", 5000, default, new Bitmap(DEFAULT_ICON_LADA10_PATH)),
+            new Transport("", "Lada 15", "Lada", 7000, default, new Bitmap(DEFAULT_ICON_LADA15_PATH)),
+            new Transport("", "Niva", "Chevrolet", 25000, default, new Bitmap(DEFAULT_ICON_NIVA_PATH)),
+            new Transport("", "UAZ", "Ulianovka", 30000, default, new Bitmap(DEFAULT_ICON_UAZ_PATH)),
         };
 
         #endregion
