@@ -38,6 +38,8 @@ internal class UpdateUserHandler : IRequestHandler<Command, Response>
             user.Image = new Image(request.UserImage);
         if (request.BirthDate is not null)
             user.BirthDate = (DateOnly)request.BirthDate;
+        if (request.Gender is not null)
+            user.Gender = Enum.Parse<Gender>(request.Gender);
 
         await _context.SaveChangesAsync(cancellationToken);
 
