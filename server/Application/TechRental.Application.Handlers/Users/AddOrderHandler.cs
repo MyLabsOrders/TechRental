@@ -48,7 +48,7 @@ internal class AddOrderHandler : IRequestHandler<Command>
 
     private static void ProcessTransaction(User user, IEnumerable<Order> orders, Command request)
     {
-        user.Money -= orders.Select(order => order.TotalPrice).Sum();
+        decimal totalPrice = 0;
         var orderDate = DateTime.UtcNow;
         foreach (var (order, dto) in orders.Zip(request.Orders))
         {
@@ -57,6 +57,8 @@ internal class AddOrderHandler : IRequestHandler<Command>
             order.Period = dto.Days;
             order.Status = OrderStatus.Rented;
             user.AddOrder(order);
+            totalPrice += order.TotalPrice;
         }
+        user.Money -= totalPrice;
     }
 }

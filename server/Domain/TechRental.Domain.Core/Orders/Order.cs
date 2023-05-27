@@ -66,5 +66,5 @@ public class Order
         }
     }
 
-    public decimal TotalPrice => Price * Amount ?? 0 * Period ?? 0;
+    public decimal TotalPrice => Price * (Amount ?? 0) * (Period ?? 0);
 }
