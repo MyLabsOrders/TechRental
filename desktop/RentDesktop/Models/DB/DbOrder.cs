@@ -11,8 +11,8 @@
         public string image { get; set; } = string.Empty;
         public double total { get; set; } = 0;
         public string? orderDate { get; set; } = null;
-        public int count { get; set; } = 0;
-        public int days { get; set; } = 0;
+        public int? count { get; set; } = null;
+        public int? days { get; set; } = null;
     }
 
 #pragma warning restore IDE1006

@@ -2,13 +2,13 @@
 {
 #pragma warning disable IDE1006
 
-    internal class DbCreateOrder
+    internal class DbOrderProduct
     {
-        public DbCreateOrder()
+        public DbOrderProduct()
         {
         }
 
-        public DbCreateOrder(string orderId, int count, int days)
+        public DbOrderProduct(string orderId, int count, int days)
         {
             this.orderId = orderId;
             this.count = count;

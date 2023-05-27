@@ -8,7 +8,6 @@ namespace RentDesktop.Infrastructure.Services
         public static string DateTimeToString(DateTime dateTime)
         {
             string fullDate = dateTime.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture);
-
             int timeIndex = fullDate.IndexOf('T');
 
             return timeIndex > 0

@@ -31,29 +31,25 @@ namespace RentDesktop.Infrastructure.Services.DB
             order.Status = newStatus;
         }
 
-        public static List<Order> CreateOrders(IEnumerable<TransportRent> cart, IUserInfo userInfo)
+        public static Order CreateOrder(IEnumerable<TransportRent> cart, IUserInfo userInfo)
         {
-            var orders = new List<Order>();
-            var grouppedCart = cart.GroupBy(t => t.Transport.ID);
+            List<Tuple<TransportRent, int>> products = cart
+                .GroupBy(t => t.Transport.ID)
+                .Select(t => new Tuple<TransportRent, int>(t.First(), t.Count()))
+                .ToList();
 
-            foreach (var cartItemGroup in grouppedCart)
-            {
-                int transportsCount = cartItemGroup.Count();
-                TransportRent transportRent = cartItemGroup.First();
-
-                Order order = RegisterOrder(transportRent, transportsCount, userInfo);
-                orders.Add(order);
-            }
-
-            return orders;
+            return RegisterOrder(products, userInfo);
         }
 
-        private static Order RegisterOrder(TransportRent transportRent, int transportsCount, IUserInfo userInfo)
+        private static Order RegisterOrder(List<Tuple<TransportRent, int>> productsInfo, IUserInfo userInfo)
         {
             using var db = new DatabaseConnectionService();
 
             string addOrderHandle = $"/api/User/{userInfo.ID}/orders";
-            var content = new DbCreateOrder(transportRent.Transport.ID, transportsCount, transportRent.Days);
+
+            var content = productsInfo
+                .Select(t => new DbOrderProduct(t.Item1.Transport.ID, t.Item2, t.Item1.Days))
+                .ToList();
 
             using HttpResponseMessage addOrderResponse = db.PutAsync(addOrderHandle, content).Result;
 
@@ -61,10 +57,10 @@ namespace RentDesktop.Infrastructure.Services.DB
                 throw new ErrorResponseException(addOrderResponse);
 
             string status = Order.RENTED_STATUS;
-            double price = transportRent.TotalPrice;
-            string id = transportRent.Transport.ID;
             DateTime creationDate = DateTime.Now;
-            var models = new[] { transportRent.Transport };
+            string id = productsInfo[0].Item1.Transport.ID;
+            double price = productsInfo.Select(t => t.Item1).Sum(t => t.TotalPrice);
+            var models = productsInfo.Select(t => t.Item1.Transport);
 
             userInfo.Money -= price;
 

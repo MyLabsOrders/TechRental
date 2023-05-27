@@ -1,6 +1,5 @@
 ﻿using Avalonia.Controls;
 using ReactiveUI;
-using RentDesktop.Infrastructure.Extensions;
 using RentDesktop.Infrastructure.Services.DB;
 using RentDesktop.Models;
 using RentDesktop.Models.Communication;
@@ -8,7 +7,6 @@ using RentDesktop.Models.Informing;
 using RentDesktop.ViewModels.Base;
 using RentDesktop.Views;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
@@ -292,11 +290,11 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
                 return;
             }
 
-            List<Order> orders;
+            Order order;
 
             try
             {
-                orders = OrdersService.CreateOrders(Cart, _userInfo);
+                order = OrdersService.CreateOrder(Cart, _userInfo);
             }
             catch (Exception ex)
             {
@@ -308,7 +306,7 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
                 return;
             }
 
-            _orders.AddRange(orders);
+            _orders.Add(order);
             IsOrderPaidFor = true;
 
             ClearCart();
