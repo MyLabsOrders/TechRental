@@ -5,19 +5,17 @@ namespace RentDesktop.Infrastructure.Services
 {
     internal static class DateTimeService
     {
+        private const string DATE_FORMAT = "yyyy-MM-dd";
+        private static readonly IFormatProvider FormatProvider = CultureInfo.InvariantCulture;
+
         public static string DateTimeToString(DateTime dateTime)
         {
-            string fullDate = dateTime.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture);
-            int timeIndex = fullDate.IndexOf('T');
-
-            return timeIndex > 0
-                ? fullDate.Remove(timeIndex)
-                : fullDate;
+            return dateTime.ToString(DATE_FORMAT, FormatProvider);
         }
 
         public static DateTime StringToDateTime(string data)
         {
-            return DateTime.Parse(data);
+            return DateTime.ParseExact(data, DATE_FORMAT, FormatProvider);
         }
     }
 }

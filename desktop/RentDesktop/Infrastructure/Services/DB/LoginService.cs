@@ -9,24 +9,6 @@ namespace RentDesktop.Infrastructure.Services.DB
     {
         public static IUserInfo Login(string login, string password)
         {
-            //var userInfo = new UserInfo()
-            //{
-            //    ID = "test_id",
-            //    Login = login,
-            //    Password = password,
-            //    Name = "Иван",
-            //    Surname = "Иван",
-            //    Patronymic = "Иванович",
-            //    Gender = UserInfo.MALE_GENDER,
-            //    PhoneNumber = "8 (921) 123-4567",
-            //    Position = UserInfo.USER_POSITION,
-            //    Status = UserInfo.ACTIVE_STATUS,
-            //    DateOfBirth = new DateTime(2000, 1, 21),
-            //    Icon = File.ReadAllBytes(@"D:\Testing\TechRental\human1.jpg"),
-            //    Money = 100000,
-            //    Orders = new ObservableCollection<Order>() { new Order("123", 5000, DateTime.Now, new string[] { "Lada 7, Lada 15" } ) }
-            //};
-
             DatabaseConnectionService db = new();
             DbLoginResponseContent loginContent = EnterSystem(login, password, db, true);
 
