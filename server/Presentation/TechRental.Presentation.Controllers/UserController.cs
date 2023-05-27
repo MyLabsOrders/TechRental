@@ -63,7 +63,8 @@ public class UserController : ControllerBase
             request.UserImage,
             request.BirthDate,
             request.PhoneNumber,
-            request.Gender);
+            request.Gender,
+            request.IsActive);
 
         var response = await _mediator.Send(command);
 

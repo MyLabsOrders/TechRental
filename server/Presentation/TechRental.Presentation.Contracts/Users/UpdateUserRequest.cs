@@ -8,4 +8,5 @@ public record UpdateUserRequest(
     string? PhoneNumber,
     string? UserImage,
     DateOnly? BirthDate,
-    string? Gender);
+    string? Gender,
+    bool? IsActive);

@@ -40,6 +40,8 @@ internal class UpdateUserHandler : IRequestHandler<Command, Response>
             user.BirthDate = (DateOnly)request.BirthDate;
         if (request.Gender is not null)
             user.Gender = Enum.Parse<Gender>(request.Gender);
+        if (request.IsActive is not null)
+            user.IsActive = (bool)request.IsActive;
 
         await _context.SaveChangesAsync(cancellationToken);
 
