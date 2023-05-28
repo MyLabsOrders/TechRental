@@ -32,7 +32,7 @@ namespace RentDesktop.ViewModels
                 if (selectedUser is not null && selectedUser.ID == userInfo.ID)
                     OpenAdminProfileTab();
             };
-            
+
             AddUserVM.UserRegistered += registeredUser =>
             {
                 registeredUser.Password = Models.Informing.UserInfo.HIDDEN_PASSWORD;
