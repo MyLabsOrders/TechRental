@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TechRental.Application.Common.Exceptions;
 using TechRental.DataAccess.Abstractions;
@@ -48,18 +48,27 @@ internal class AddOrderHandler : IRequestHandler<Command, Response>
         return new Response(orderDate);
     }
 
-    private static DateTime ProcessTransaction(User user, IEnumerable<Order> orders, Command request)
+    private DateTime ProcessTransaction(User user, IEnumerable<Order> orders, Command request)
     {
         decimal totalPrice = 0;
         var orderDate = DateTime.UtcNow;
         foreach (var (order, dto) in orders.Zip(request.Orders))
         {
-            order.OrderDate = orderDate;
-            order.Amount = dto.Amount;
-            order.Period = dto.Days;
-            order.Status = OrderStatus.Rented;
-            user.AddOrder(order);
-            totalPrice += order.TotalPrice;
+            var newOrder = new Order(Guid.NewGuid(),
+                                     user: user,
+                                     name: order.Name,
+                                     company: order.Company,
+                                     image: order.Image,
+                                     status: OrderStatus.Rented,
+                                     price: order.Price,
+                                     orderDate: orderDate)
+            {
+                Amount = dto.Amount,
+                Period = dto.Days
+            };
+            _context.Orders.Add(newOrder);
+            user.AddOrder(newOrder);
+            totalPrice += newOrder.TotalPrice;
         }
         user.Money -= totalPrice;
         return orderDate;

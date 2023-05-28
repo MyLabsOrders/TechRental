@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using TechRental.Application.Abstractions.Identity;
 using TechRental.Application.Common.Exceptions;
 using TechRental.DataAccess.Abstractions;
@@ -26,15 +26,14 @@ internal class CreateOrderHandler : IRequestHandler<Command, Response>
         if (_currentUser.CanManageOrders() is false)
             throw AccessDeniedException.AccessViolation();
 
-        var order = new Order(
-            Guid.NewGuid(),
-            null,
-            request.Name,
-            request.Company,
-            new Image(request.OrderImage),
-            Enum.Parse<OrderStatus>(request.Status),
-            request.Price,
-            null);
+        var order = new Order(Guid.NewGuid(),
+                              user: null,
+                              name: request.Name,
+                              company: request.Company,
+                              image: new Image(request.OrderImage),
+                              status: Enum.Parse<OrderStatus>(request.Status, true),
+                              price: request.Price,
+                              orderDate: null);
 
         _context.Orders.Add(order);
         await _context.SaveChangesAsync(cancellationToken);
