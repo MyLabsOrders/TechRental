@@ -47,5 +47,15 @@ namespace RentDesktop.Infrastructure.App
                 }
             };
         }
+
+        public static SaveFileDialog GetSavePdfFileDialog(string? initialFileName = null)
+        {
+            return new SaveFileDialog()
+            {
+                DefaultExtension = "pdf",
+                Title = "Сохранение PDF документа",
+                InitialFileName = initialFileName
+            };
+        }
     }
 }

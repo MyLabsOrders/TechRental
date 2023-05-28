@@ -1,5 +1,7 @@
 ﻿using Avalonia.Controls;
 using ReactiveUI;
+using RentDesktop.Infrastructure.App;
+using RentDesktop.Infrastructure.Exceptions;
 using RentDesktop.Infrastructure.Services.DB;
 using RentDesktop.Models;
 using RentDesktop.Models.Communication;
@@ -8,8 +10,10 @@ using RentDesktop.ViewModels.Base;
 using RentDesktop.Views;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Reactive;
+using System.Threading.Tasks;
 
 namespace RentDesktop.ViewModels.Pages.UserWindowPages
 {
@@ -312,11 +316,13 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
             ClearCart();
         }
 
-        private void DownloadReceipt()
+        private async void DownloadReceipt()
         {
             try
             {
-                FileDownloadService.DownloadReceipt(_userInfo);
+                using MemoryStream cheque = FileDownloadService.DownloadCheque(_orders[^1]);
+                await SavePdfFileAsync(cheque);
+
                 QuickMessage.Info("Чек успешно загружен.").ShowDialog(typeof(UserWindow));
             }
             catch (Exception ex)
@@ -329,11 +335,13 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
             }
         }
 
-        private void DownloadSummaryStatement()
+        private async void DownloadSummaryStatement()
         {
             try
             {
-                FileDownloadService.DownloadSummaryStatement(_userInfo);
+                using MemoryStream invoice = FileDownloadService.DownloadInvoice(_orders[^1]);
+                await SavePdfFileAsync(invoice);
+
                 QuickMessage.Info("Ведомость успешно загружена.").ShowDialog(typeof(UserWindow));
             }
             catch (Exception ex)
@@ -344,6 +352,22 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
 #endif
                 QuickMessage.Error(message).ShowDialog(typeof(UserWindow));
             }
+        }
+
+        private static async Task SavePdfFileAsync(MemoryStream pdfStream)
+        {
+            if (WindowFinder.FindUserWindow() is not Window userWindow)
+                throw new PathNotSpecifiedException();
+
+            SaveFileDialog dialog = DialogProvider.GetSavePdfFileDialog();
+
+            string? path = await dialog.ShowAsync(userWindow);
+
+            if (string.IsNullOrEmpty(path))
+                throw new PathNotSpecifiedException();
+
+            using FileStream fileStream = new(path, FileMode.Create, FileAccess.Write);
+            pdfStream.WriteTo(fileStream);
         }
 
         private static ObservableCollection<string> GetSupportedPaymentMethods()

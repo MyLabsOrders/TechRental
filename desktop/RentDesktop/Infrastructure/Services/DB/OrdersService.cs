@@ -50,9 +50,10 @@ namespace RentDesktop.Infrastructure.Services.DB
             if (!addOrderResponse.IsSuccessStatusCode)
                 throw new ErrorResponseException(addOrderResponse);
 
+            string id = addOrderResponse.Content.ReadAsStringAsync().Result.Replace("\"", null);
+
             string status = Order.RENTED_STATUS;
             DateTime creationDate = DateTime.Now;
-            string id = productsInfo[0].Item1.Transport.ID;
             double price = productsInfo.Sum(t => t.Item1.TotalPrice * t.Item2);
             var models = productsInfo.Select(t => t.Item1.Transport);
 
