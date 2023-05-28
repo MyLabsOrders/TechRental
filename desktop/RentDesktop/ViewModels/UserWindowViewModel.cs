@@ -26,6 +26,12 @@ namespace RentDesktop.ViewModels
             CartVM.OrdersTabOpening += OpenOrdersTab;
             TransportVM.CartTabOpening += OpenCartTab;
 
+            TransportVM.TransportAddingToCart += t =>
+            {
+                if (CartVM.IsOrderPaidFor)
+                    CartVM.ResetUserPaymentSteps();
+            };
+
             UserInfo = userInfo;
 
             _preloadTabsTimer = ConfigurePreloadTabsTimer();

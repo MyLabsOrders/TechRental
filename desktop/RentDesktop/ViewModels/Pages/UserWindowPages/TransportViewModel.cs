@@ -32,6 +32,9 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
         public delegate void CartTabOpeningHandler();
         public event CartTabOpeningHandler? CartTabOpening;
 
+        public delegate void TransportAddingToCartHandler(Transport transport);
+        public event TransportAddingToCartHandler? TransportAddingToCart;
+
         #endregion
 
         #region Properties
@@ -106,6 +109,8 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
 
         private void AddToCart(Transport transport)
         {
+            TransportAddingToCart?.Invoke(transport);
+
             TransportRent? existingCartItem = _cart.FirstOrDefault(t => t.Transport.ID == transport.ID);
 
             var transportRent = existingCartItem is null

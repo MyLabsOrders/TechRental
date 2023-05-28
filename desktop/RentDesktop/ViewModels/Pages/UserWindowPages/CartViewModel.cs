@@ -210,6 +210,12 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
             UserPhoneNumber = _userInfo.PhoneNumber;
         }
 
+        public void ResetUserPaymentSteps()
+        {
+            OpenCartPage();
+            IsOrderPaidFor = false;
+        }
+
         #endregion
 
         #region Private Methods
@@ -278,12 +284,10 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
 
         private void CloseOrderPaymentPage()
         {
-            OpenCartPage();
-
             if (IsOrderPaidFor)
                 OrdersTabOpening?.Invoke();
 
-            IsOrderPaidFor = false;
+            ResetUserPaymentSteps();
         }
 
         private void PayOrder()
