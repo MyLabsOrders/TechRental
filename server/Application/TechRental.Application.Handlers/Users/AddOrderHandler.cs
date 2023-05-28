@@ -10,7 +10,7 @@ using static TechRental.Application.Contracts.Users.Commands.AddOrder;
 
 namespace TechRental.Application.Handlers.Users;
 
-internal class AddOrderHandler : IRequestHandler<Command>
+internal class AddOrderHandler : IRequestHandler<Command, Response>
 {
     private readonly IDatabaseContext _context;
 
@@ -19,7 +19,7 @@ internal class AddOrderHandler : IRequestHandler<Command>
         _context = context;
     }
 
-    public async Task Handle(Command request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
     {
         var user = await _context.Users.FirstOrDefaultAsync(x => x.Id.Equals(request.UserId), cancellationToken);
 
@@ -41,12 +41,14 @@ internal class AddOrderHandler : IRequestHandler<Command>
         if (rented.Any())
             throw new OrderAlreadyRentedException($"Orders with ids {string.Join(", ", rented.Select(order => order.Id))} are already rented.");
 
-        ProcessTransaction(user, orders, request);
+        var orderDate = ProcessTransaction(user, orders, request);
 
         await _context.SaveChangesAsync(cancellationToken);
+
+        return new Response(orderDate);
     }
 
-    private static void ProcessTransaction(User user, IEnumerable<Order> orders, Command request)
+    private static DateTime ProcessTransaction(User user, IEnumerable<Order> orders, Command request)
     {
         decimal totalPrice = 0;
         var orderDate = DateTime.UtcNow;
@@ -60,5 +62,6 @@ internal class AddOrderHandler : IRequestHandler<Command>
             totalPrice += order.TotalPrice;
         }
         user.Money -= totalPrice;
+        return orderDate;
     }
 }

@@ -20,11 +20,14 @@ internal class GetOrderHandler : IRequestHandler<Query, Response>
 
     public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
-        var order = await _context.Orders.FindAsync(request.OrderId, cancellationToken);
+        var orders = await _context.Orders
+            .Where(order => order.OrderDate == request.OrderTime)
+            .Include(order => order.User)
+            .ToListAsync(cancellationToken);
 
-        if (order is null)
-            throw EntityNotFoundException.For<Order>(request.OrderId);
+        if (!orders.Any())
+            throw new EntityNotFoundException("Order with this date does not exist");
 
-        return new Response(order.ToDto());
+        return new Response(orders.Select(order => order.ToDto()).ToList());
     }
 }

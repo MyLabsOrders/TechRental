@@ -5,7 +5,7 @@ namespace TechRental.Application.Contracts.Orders.Queries;
 
 internal static class GetOrder
 {
-    public record Query(Guid OrderId) : IRequest<Response>;
+    public record Query(DateTime OrderTime) : IRequest<Response>;
 
-    public record Response(OrderDto Order);
+    public record Response(IList<OrderDto> Orders);
 }

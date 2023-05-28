@@ -59,23 +59,46 @@ public class OrderController : ControllerBase
     /// <summary>
     /// Gets specified order
     /// </summary>
-    /// <param name="orderId">Target order id</param>
+    /// <param name="orderTime">Order's time</param>
     /// <returns>Information about specified order</returns>
-    [HttpGet("{orderId:guid}")]
+    [HttpGet("at")]
     [Authorize]
-    public async Task<ActionResult<OrderDto>> GetOrderAsync(Guid orderId)
+    public async Task<ActionResult<IList<OrderDto>>> GetOrderAsync([FromQuery] DateTime orderTime)
     {
-        var query = new GetOrder.Query(orderId);
+        var query = new GetOrder.Query(orderTime);
         var response = await _mediator.Send(query);
 
-        return Ok(response.Order);
+        return Ok(response.Orders);
     }
 
+    /// <summary>
+    /// Get sales chart for a date range
+    /// </summary>
+    /// <param name="From">Start of range</param>
+    /// <param name="To">End of range</param>
+    /// <returns>Sales chart as PDF document</returns>
+    [HttpGet("stats")]
+    [Authorize(Roles = TechRentalIdentityRoleNames.AdminRoleName)]
+    [Produces("application/pdf", new string[] { })]
+    public async Task<ActionResult> GetStats([FromQuery] DateTime From, [FromQuery] DateTime To)
+    {
+        var query = new GetStats.Query(From, To);
+        var response = await _mediator.Send(query);
+
+        return new FileStreamResult(response.Stream, "application/pdf");
+    }
+
+    /// <summary>
+    /// Get invoice of the order for current user
+    /// </summary>
+    /// <param name="orderTime">The time of order</param>
+    /// <returns>Invoice as PDF document</returns>
     [HttpGet("invoice")]
     [Authorize]
-    public async Task<ActionResult> GetInvoice()
+    [Produces("application/pdf", new string[] { })]
+    public async Task<ActionResult> GetInvoice([FromQuery] DateTime orderTime)
     {
-        var query = new GetInvoice.Query();
+        var query = new GetInvoice.Query(orderTime);
         var response = await _mediator.Send(query);
 
         return new FileStreamResult(response.Stream, "application/pdf");

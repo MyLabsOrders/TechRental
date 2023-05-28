@@ -13,6 +13,9 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.Property(x => x.OrderDate).IsRequired(false);
         builder.Property(x => x.Price);
         builder.Property(x => x.Name);
+        builder.Property(x => x.Company);
+        builder.Property(x => x.Amount);
+        builder.Property(x => x.Period);
 
         builder.Property(x => x.Image).HasConversion<ImageValueConverter>();
         builder.Property(x => x.Status).HasConversion<OrderStatusValueConverter>();

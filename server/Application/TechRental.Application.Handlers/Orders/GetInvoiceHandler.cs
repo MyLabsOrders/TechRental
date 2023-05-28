@@ -35,11 +35,11 @@ internal class GetInvoiceHandler : IRequestHandler<Query, Response>
             throw EntityNotFoundException.For<User>(_currentUser.Id);
 
         var orders = await _context.Orders
-            .Where(order => order.UserId == _currentUser.Id)
+            .Where(order => order.UserId == _currentUser.Id && order.OrderDate == request.OrderDate)
             .ToListAsync(cancellationToken);
 
         if (!orders.Any())
-            throw new EntityNotFoundException("No orders found by this user.");
+            throw new EntityNotFoundException("Order with this date is not found by this user.");
 
         return new Response(GenerateInvoice(user, orders));
     }
@@ -61,8 +61,9 @@ internal class GetInvoiceHandler : IRequestHandler<Query, Response>
                             <td>{order.Price * order.Period}</td>
                             <td>{order.TotalPrice}</td>
                             </tr>
-                            ")));
+                            ")))
+            .ToString();
         _id++;
-        return new MemoryStream(renderer.RenderHtmlAsPdf(html.ToString()).BinaryData);
+        return new MemoryStream(renderer.RenderHtmlAsPdf(html).BinaryData);
     }
 }

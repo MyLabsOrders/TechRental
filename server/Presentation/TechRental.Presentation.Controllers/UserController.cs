@@ -76,17 +76,17 @@ public class UserController : ControllerBase
     /// </summary>
     /// <param name="userId">Target user id</param>
     /// <param name="request">Target orders id, rent days and amount</param>
-    /// <returns></returns>
+    /// <returns>Order's timestamp</returns>
     [HttpPut("{userId:guid}/orders")]
     [Authorize(Roles = TechRentalIdentityRoleNames.DefaultUserRoleName)]
-    public async Task<IActionResult> AddOrderAsync(Guid userId, [FromBody] IList<AddOrderRequest> request)
+    public async Task<ActionResult<DateTime>> AddOrderAsync(Guid userId, [FromBody] IList<AddOrderRequest> request)
     {
         var command = new AddOrder.Command(
             userId,
             request.Select(order => (order.OrderId, order.Count, order.Days)).ToList());
-        await _mediator.Send(command);
+        var response = await _mediator.Send(command);
 
-        return Ok();
+        return Ok(response.OrderTime);
     }
 
     /// <summary>
