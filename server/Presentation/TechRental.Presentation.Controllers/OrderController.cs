@@ -103,6 +103,23 @@ public class OrderController : ControllerBase
 
         return new FileStreamResult(response.Stream, "application/pdf");
     }
+
+    /// <summary>
+    /// Get cheque of the order for current user
+    /// </summary>
+    /// <param name="orderTime">The time of order</param>
+    /// <returns>Cheque as PDF document</returns>
+    [HttpGet("cheque")]
+    [Authorize]
+    [Produces("application/pdf", new string[] { })]
+    public async Task<ActionResult> GetCheque([FromQuery] DateTime orderTime)
+    {
+        var query = new GetCheque.Query(orderTime);
+        var response = await _mediator.Send(query);
+
+        return new FileStreamResult(response.Stream, "application/pdf");
+    }
+
     /// <summary>
     /// Lists all orders registered in the system
     /// </summary>
