@@ -10,7 +10,7 @@ namespace RentDesktop.Infrastructure.Services.DB
         {
             using var db = new DatabaseConnectionService();
 
-            string getChequeHandle = $"/api/Order/cheque?orderTime={order.ID}";
+            string getChequeHandle = $"/api/Order/cheque?orderTime={order.DateOfCreationStamp}";
             using HttpResponseMessage getChequeResponse = db.GetAsync(getChequeHandle).Result;
 
             if (!getChequeResponse.IsSuccessStatusCode)
@@ -24,7 +24,7 @@ namespace RentDesktop.Infrastructure.Services.DB
         {
             using var db = new DatabaseConnectionService();
 
-            string getInvoiceHandle = $"/api/Order/invoice?orderTime={order.ID}";
+            string getInvoiceHandle = $"/api/Order/invoice?orderTime={order.DateOfCreationStamp}";
             using HttpResponseMessage getInvoiceResponse = db.GetAsync(getInvoiceHandle).Result;
 
             if (!getInvoiceResponse.IsSuccessStatusCode)
