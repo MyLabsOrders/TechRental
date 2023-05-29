@@ -33,4 +33,6 @@ using (var scope = app.Services.CreateScope())
     await SeedingHelper.SeedAdmins(scope.ServiceProvider, app.Configuration);
 }
 
+app.Logger.LogInformation("Initializing IronPDF renderer...");
+Installation.Initialize();
 app.Run();
