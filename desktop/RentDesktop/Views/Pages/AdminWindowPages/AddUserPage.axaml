@@ -1,0 +1,101 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:RentDesktop.ViewModels.Pages.AdminWindowPages"
+			 mc:Ignorable="d"
+			 d:DesignWidth="680" d:DesignHeight="475"
+             x:Class="RentDesktop.Views.Pages.AddUserPage">
+
+	<Design.DataContext>
+		<vm:AddUserViewModel />
+	</Design.DataContext>
+
+	<Grid Margin="0, 0, 0, 5" ColumnDefinitions="310, 10, 1*" RowDefinitions="Auto, 1*, 30">
+		<Grid.Styles>
+			<Style Selector="TextBlock">
+				<Setter Property="VerticalAlignment" Value="Center" />
+			</Style>
+			<Style Selector="TextBox">
+				<Setter Property="HorizontalAlignment" Value="Stretch" />
+			</Style>
+			<Style Selector="ComboBox">
+				<Setter Property="HorizontalAlignment" Value="Stretch" />
+			</Style>
+		</Grid.Styles>
+
+		<Grid Grid.Column="0"
+			  Margin="0, 1, 0, 0"
+			  RowDefinitions="30, 5, 30, 5, 30, 5, 30, 5, 30, 5, 30, 5, 30, 5, 30, 5, 32, 5, 30, 5, 30, 1*"
+			  ColumnDefinitions="Auto, 5, 1*">
+
+			<TextBlock Grid.Row="0" Grid.Column="0" Text="Логин" />
+			<TextBox Grid.Row="0" Grid.Column="2" Text="{Binding Login}" />
+			<TextBlock Grid.Row="2" Grid.Column="0" Text="Пароль" />
+			<TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Password}" PasswordChar="{Binding PasswordChar}" />
+			<TextBlock Grid.Row="4" Grid.Column="0" Text="Подтверждение" />
+			<TextBox Grid.Row="4" Grid.Column="2" Text="{Binding PasswordConfirmation}" PasswordChar="{Binding PasswordChar}" />
+			<CheckBox Grid.Row="6" Grid.ColumnSpan="3" Content="Показать пароль" IsChecked="{Binding ShowPassword}" />
+			<TextBlock Grid.Row="8" Grid.Column="0" Text="Имя" />
+			<TextBox Grid.Row="8" Grid.Column="2" Text="{Binding Name}" />
+			<TextBlock Grid.Row="10" Grid.Column="0" Text="Фамилия" />
+			<TextBox Grid.Row="10" Grid.Column="2" Text="{Binding Surname}" />
+			<TextBlock Grid.Row="12" Grid.Column="0" Text="Отчество" />
+			<TextBox Grid.Row="12" Grid.Column="2" Text="{Binding Patronymic}" />
+			<TextBlock Grid.Row="14" Grid.Column="0" Text="Должность" />
+			
+			<ComboBox Grid.Row="14"
+					  Grid.Column="2"
+					  Items="{Binding Positions}"
+					  SelectedIndex="{Binding SelectedPositionIndex}" />
+			
+			<TextBlock Grid.Row="16" Grid.Column="0" Text="Дата рождения" />
+
+			<CalendarDatePicker Grid.Row="16"
+								Grid.Column="2"
+								HorizontalContentAlignment="Center"
+								HorizontalAlignment="Stretch"
+								SelectedDate="{Binding DateOfBirth}" />
+
+			<TextBlock Grid.Row="18" Grid.Column="0" Text="Телефон" />
+			<MaskedTextBox Grid.Row="18" Grid.Column="2" Mask="8 (000) 000-0000" Text="{Binding PhoneNumber}" />
+			<TextBlock Grid.Row="20" Grid.Column="0" Text="Пол" />
+
+			<Grid Grid.Row="20" Grid.Column="2" ColumnDefinitions="Auto, 10, Auto" >
+				<RadioButton Grid.Column="0"
+							 Content="Мужской"
+							 GroupName="Gender"
+							 Name="MaleGenderRadioButton"
+							 IsChecked="{Binding IsMaleGenderChecked}"
+							 Command="{Binding SetGenderCommand}"
+							 CommandParameter="{Binding ElementName=MaleGenderRadioButton, Path=Content}" />
+
+				<RadioButton Grid.Column="2"
+							 Content="Женский"
+							 GroupName="Gender"
+							 Name="FemaleGenderRadioButton"
+							 IsChecked="{Binding IsFemaleGenderChecked}"
+							 Command="{Binding SetGenderCommand}"
+							 CommandParameter="{Binding ElementName=FemaleGenderRadioButton, Path=Content}" />
+			</Grid>
+		</Grid>
+
+		<Grid Grid.Row="4" Grid.ColumnSpan="3" ColumnDefinitions="1*, 130, 5, 130, 5, 130, 1*">
+			<Grid.Styles>
+				<Style Selector="Button">
+					<Setter Property="HorizontalAlignment" Value="Stretch" />
+					<Setter Property="HorizontalContentAlignment" Value="Center" />
+				</Style>
+			</Grid.Styles>
+
+			<Button Grid.Column="1" Content="Добавить" Command="{Binding RegisterUserCommand}" />
+			<Button Grid.Column="3" Content="Сброс" Command="{Binding ResetAllFieldsCommand}" />
+			<Button Grid.Column="5" Content="Загрузить фото" Command="{Binding LoadUserImageCommand}" />
+		</Grid>
+
+		<Border Grid.Column="2" BorderThickness="2" BorderBrush="LightGray" Name="UserImageBorder">
+			<Image Margin="10" Source="{Binding UserImage}" MaxHeight="323" />
+		</Border>
+	</Grid>
+
+</UserControl>

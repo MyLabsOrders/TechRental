@@ -1,0 +1,101 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:RentDesktop.ViewModels.Pages.AdminWindowPages"
+			 mc:Ignorable="d"
+			 d:DesignWidth="680" d:DesignHeight="475"
+             x:Class="RentDesktop.Views.Pages.AdminProfilePage">
+
+	<Design.DataContext>
+		<vm:AdminProfileViewModel />
+	</Design.DataContext>
+
+	<Grid ColumnDefinitions="310, 10, 1*" RowDefinitions="Auto, 1*, 30" Margin="0, 5">
+		<Grid.Styles>
+			<Style Selector="TextBlock">
+				<Setter Property="VerticalAlignment" Value="Center" />
+			</Style>
+			<Style Selector="TextBox">
+				<Setter Property="HorizontalAlignment" Value="Stretch" />
+			</Style>
+			<Style Selector="ComboBox">
+				<Setter Property="HorizontalAlignment" Value="Stretch" />
+			</Style>
+		</Grid.Styles>
+
+		<Grid Grid.Column="0"
+			  ColumnDefinitions="Auto, 5, 1*"
+			  RowDefinitions="30, 5, 30, 5, 30, 5, 30, 5, 30, 5, 30, 5, 30, 5, 32, 5, 30, 5, 30, 1*"
+			  Margin="0, 1, 0, 0"
+			  IsEnabled="{Binding IsEditModeEnabled}">
+
+			<TextBlock Grid.Row="0" Grid.Column="0" Text="Логин" />
+			<TextBox Grid.Row="0" Grid.Column="2" Text="{Binding Login}" />
+			<TextBlock Grid.Row="2" Grid.Column="0" Text="Пароль" />
+			<TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Password}" />
+			<TextBlock Grid.Row="4" Grid.Column="0" Text="Имя" />
+			<TextBox Grid.Row="4" Grid.Column="2" Text="{Binding Name}" />
+			<TextBlock Grid.Row="6" Grid.Column="0" Text="Фамилия" />
+			<TextBox Grid.Row="6" Grid.Column="2" Text="{Binding Surname}" />
+			<TextBlock Grid.Row="8" Grid.Column="0" Text="Отчество" />
+			<TextBox Grid.Row="8" Grid.Column="2" Text="{Binding Patronymic}" />
+			<TextBlock Grid.Row="10" Grid.Column="0" Text="Должность" />
+			<TextBox Grid.Row="10" Grid.Column="2" IsReadOnly="True" Text="{Binding Position}" />
+			<TextBlock Grid.Row="12" Grid.Column="0" Text="Статус" />
+			
+			<ComboBox Grid.Row="12"
+					  Grid.Column="2"
+					  Items="{Binding Statuses}"
+					  SelectedIndex="{Binding SelectedStatusIndex}" />
+
+			<TextBlock Grid.Row="14" Grid.Column="0" Text="Дата рождения" />
+
+			<CalendarDatePicker Grid.Row="14"
+								Grid.Column="2"
+								HorizontalContentAlignment="Center"
+								HorizontalAlignment="Stretch"
+								SelectedDate="{Binding DateOfBirth}" />
+
+			<TextBlock Grid.Row="16" Grid.Column="0" Text="Телефон" />
+			<MaskedTextBox Grid.Row="16" Grid.Column="2" Mask="8 (000) 000-0000" Text="{Binding PhoneNumber}" />
+			<TextBlock Grid.Row="18" Grid.Column="0" Text="Пол" />
+
+			<Grid Grid.Row="18" Grid.Column="2" ColumnDefinitions="Auto, 10, Auto">
+				<RadioButton Grid.Column="0"
+							 Content="Мужской"
+							 GroupName="Gender"
+							 Name="MaleGenderRadioButton"
+							 IsChecked="{Binding IsMaleGenderChecked}"
+							 Command="{Binding SetGenderCommand}"
+							 CommandParameter="{Binding ElementName=MaleGenderRadioButton, Path=Content}" />
+
+				<RadioButton Grid.Column="2"
+							 Content="Женский"
+							 GroupName="Gender"
+							 Name="FemaleGenderRadioButton"
+							 IsChecked="{Binding IsFemaleGenderChecked}"
+							 Command="{Binding SetGenderCommand}"
+							 CommandParameter="{Binding ElementName=FemaleGenderRadioButton, Path=Content}" />
+			</Grid>
+		</Grid>
+
+		<Grid Grid.Row="4" Grid.ColumnSpan="3" ColumnDefinitions="1*, 130, 5, 130, 5, 130, 1*">
+			<Grid.Styles>
+				<Style Selector="Button">
+					<Setter Property="HorizontalAlignment" Value="Stretch" />
+					<Setter Property="HorizontalContentAlignment" Value="Center" />
+				</Style>
+			</Grid.Styles>
+
+			<Button Grid.Column="1" Content="Редактировать" Command="{Binding SwapEditModeCommand}" />
+			<Button Grid.Column="3" Content="Подтвердить" Command="{Binding SaveUserInfoCommand}" />
+			<Button Grid.Column="5" Content="Изменить фото" Command="{Binding ChangeUserImageCommand}" IsEnabled="{Binding IsEditModeEnabled}" />
+		</Grid>
+
+		<Border Grid.Column="2" BorderThickness="2" BorderBrush="LightGray">
+			<Image Margin="10" Source="{Binding UserImage}" MaxHeight="288" />
+		</Border>
+	</Grid>
+
+</UserControl>

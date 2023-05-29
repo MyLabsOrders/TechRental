@@ -1,0 +1,54 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+		xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+		xmlns:vm="using:RentDesktop.ViewModels"
+		xmlns:pages="using:RentDesktop.Views.Pages"
+        mc:Ignorable="d"
+		d:DesignWidth="670" d:DesignHeight="475"
+		Width="670" Height="475"
+		MinWidth="670" MinHeight="475"
+        x:Class="RentDesktop.Views.UserWindow"
+		Icon="/Assets/avalonia-logo.ico"
+        Title="Пользователь">
+
+	<Design.DataContext>
+		<vm:UserWindowViewModel />
+	</Design.DataContext>
+
+	<i:Interaction.Behaviors>
+		<ia:EventTriggerBehavior EventName="Closing">
+			<ia:InvokeCommandAction Command="{Binding ShowMainWindowCommand}" />
+			<ia:InvokeCommandAction Command="{Binding DisposeUserImageCommand}" />
+		</ia:EventTriggerBehavior>
+
+		<ia:EventTriggerBehavior EventName="PointerMoved">
+			<ia:InvokeCommandAction Command="{Binding ResetInactivitySecondsCommand}" />
+		</ia:EventTriggerBehavior>
+
+		<ia:EventTriggerBehavior EventName="KeyDown">
+			<ia:InvokeCommandAction Command="{Binding ResetInactivitySecondsCommand}" />
+		</ia:EventTriggerBehavior>
+	</i:Interaction.Behaviors>
+	
+	<TabControl SelectedIndex="{Binding SelectedTabIndex}">
+		<TabItem Header="Профиль">
+			<pages:UserProfilePage DataContext="{Binding UserProfileVM}" />
+		</TabItem>
+		
+		<TabItem Header="Транспорт">
+			<pages:TransportPage DataContext="{Binding TransportVM}" />
+		</TabItem>
+		
+		<TabItem Header="Корзина">
+			<pages:CartPage DataContext="{Binding CartVM}" />
+		</TabItem>
+
+		<TabItem Header="Заказы">
+			<pages:OrdersPage DataContext="{Binding OrdersVM}" />
+		</TabItem>
+	</TabControl>
+	
+</Window>
