@@ -1,17 +1,26 @@
-﻿using RentDesktop.Models;
+﻿using RentDesktop.Infrastructure.Services.DB.Exceptions;
+using RentDesktop.Models;
 using System.IO;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace RentDesktop.Infrastructure.Services.DB
 {
     internal static class FileDownloadService
     {
+        private const int RESPONSE_WAIT_TIME_MILLISECONDS = 500;
+
         public static MemoryStream DownloadCheque(IOrder order)
         {
             using var db = new DatabaseConnectionService();
 
             string getChequeHandle = $"/api/Order/cheque?orderTime={order.DateOfCreationStamp}";
-            using HttpResponseMessage getChequeResponse = db.GetAsync(getChequeHandle).Result;
+            Task<HttpResponseMessage> getChequeTask = db.GetAsync(getChequeHandle);
+
+            if (!getChequeTask.Wait(RESPONSE_WAIT_TIME_MILLISECONDS))
+                throw new ResponseWaitingTimeExceededException(RESPONSE_WAIT_TIME_MILLISECONDS);
+
+            using HttpResponseMessage getChequeResponse = getChequeTask.Result;
 
             if (!getChequeResponse.IsSuccessStatusCode)
                 throw new ErrorResponseException(getChequeResponse);
@@ -25,7 +34,12 @@ namespace RentDesktop.Infrastructure.Services.DB
             using var db = new DatabaseConnectionService();
 
             string getInvoiceHandle = $"/api/Order/invoice?orderTime={order.DateOfCreationStamp}";
-            using HttpResponseMessage getInvoiceResponse = db.GetAsync(getInvoiceHandle).Result;
+            Task<HttpResponseMessage> getInvoiceTask = db.GetAsync(getInvoiceHandle);
+
+            if (!getInvoiceTask.Wait(RESPONSE_WAIT_TIME_MILLISECONDS))
+                throw new ResponseWaitingTimeExceededException(RESPONSE_WAIT_TIME_MILLISECONDS);
+
+            using HttpResponseMessage getInvoiceResponse = getInvoiceTask.Result;
 
             if (!getInvoiceResponse.IsSuccessStatusCode)
                 throw new ErrorResponseException(getInvoiceResponse);
