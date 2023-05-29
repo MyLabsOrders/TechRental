@@ -52,7 +52,12 @@ internal class AddOrderHandler : IRequestHandler<Command, Response>
     {
         decimal totalPrice = 0;
         var orderDate = DateTime.UtcNow;
-        foreach (var (order, dto) in orders.Zip(request.Orders))
+        foreach (var (order, dto) in orders.Join(
+            request.Orders,
+            order => order.Id,
+            dto => dto.OrderId,
+            (order, dto) => Tuple.Create(order, dto)
+        ))
         {
             var newOrder = new Order(Guid.NewGuid(),
                                      user: user,
