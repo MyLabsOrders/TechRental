@@ -8,7 +8,7 @@ namespace RentDesktop.Infrastructure.Services.DB
 {
     internal static class FileDownloadService
     {
-        private const int RESPONSE_WAIT_TIME_MILLISECONDS = 500;
+        private const int RESPONSE_WAIT_TIME_MILLISECONDS = 3000;
 
         public static MemoryStream DownloadCheque(IOrder order)
         {
