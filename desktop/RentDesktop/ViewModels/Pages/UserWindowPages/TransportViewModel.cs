@@ -112,11 +112,9 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
             TransportAddingToCart?.Invoke(transport);
 
             TransportRent? existingCartItem = _cart.FirstOrDefault(t => t.Transport.ID == transport.ID);
+            int days = existingCartItem is null ? 1 : existingCartItem.Days;
 
-            var transportRent = existingCartItem is null
-                ? new TransportRent(transport.Copy(), 1)
-                : existingCartItem;
-
+            var transportRent = new TransportRent(transport.Copy(), days);
             _cart.Add(transportRent);
 
             SelectedTransport = null;

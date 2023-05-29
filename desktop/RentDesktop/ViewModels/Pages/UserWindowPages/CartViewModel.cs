@@ -44,6 +44,7 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
             RemoveFromCartCommand = ReactiveCommand.Create<TransportRent>(RemoveFromCart);
             SelectTransportRentCommand = ReactiveCommand.Create<TransportRent>(SelectTransportRent);
             UpdateTotalPriceCommand = ReactiveCommand.Create<NumericUpDownValueChangedEventArgs>(UpdateTotalPrice);
+            UpdateInfoOnRelatedProductsCommand = ReactiveCommand.Create<NumericUpDownValueChangedEventArgs>(UpdateInfoOnRelatedProducts);
 
             OpenCartPageCommand = ReactiveCommand.Create(OpenCartPage);
             OpenOrderPaymentPageCommand = ReactiveCommand.Create(OpenOrderPaymentPage);
@@ -192,6 +193,7 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
         public ReactiveCommand<TransportRent, Unit> RemoveFromCartCommand { get; }
         public ReactiveCommand<TransportRent, Unit> SelectTransportRentCommand { get; }
         public ReactiveCommand<NumericUpDownValueChangedEventArgs, Unit> UpdateTotalPriceCommand { get; }
+        public ReactiveCommand<NumericUpDownValueChangedEventArgs, Unit> UpdateInfoOnRelatedProductsCommand { get; }
 
         public ReactiveCommand<Unit, Unit> OpenCartPageCommand { get; }
         public ReactiveCommand<Unit, Unit> OpenOrderPaymentPageCommand { get; }
@@ -243,6 +245,21 @@ namespace RentDesktop.ViewModels.Pages.UserWindowPages
         {
             if (SelectedTransportRent is not null)
                 SelectedTransportRent.Days = (int)e.NewValue;
+
+            CalcTotalPrice();
+        }
+
+        private void UpdateInfoOnRelatedProducts(NumericUpDownValueChangedEventArgs e)
+        {
+            if (SelectedTransportRent is null)
+                return;
+
+            var relatedProducts = Cart.Where(t => t.Transport.ID == SelectedTransportRent.Transport.ID);
+
+            foreach (var relatedProduct in relatedProducts)
+            {
+                relatedProduct.Days = (int)e.NewValue;
+            }
 
             CalcTotalPrice();
         }

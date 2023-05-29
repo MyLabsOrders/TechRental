@@ -129,6 +129,9 @@
 										<ia:InvokeCommandAction
 											Command="{Binding UpdateTotalPriceCommand}"
 											PassEventArgsToCommand="True" />
+										<ia:InvokeCommandAction
+											Command="{Binding UpdateInfoOnRelatedProductsCommand}"
+											PassEventArgsToCommand="True" />
 									</ia:EventTriggerBehavior>
 								</i:Interaction.Behaviors>
 							</NumericUpDown>
