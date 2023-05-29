@@ -17,7 +17,7 @@ interface ItemTableProps {
 const ItemTable: React.FC<ItemTableProps> = ({ products }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(20);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [selectedItemIds, setSelectedItemIds] = useState<string[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editedItem, setEditedItem] = useState<IProduct | null>(null);

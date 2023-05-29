@@ -1,8 +1,30 @@
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
+import { useState, useEffect } from "react";
+import { getCookie } from "typescript-cookie";
+import { authorizeAdmin } from "../../lib/identity/identity";
 
 const Navbar = () => {
+	const [isAdmin, setIsAdmin] = useState(true);
+    
+    useEffect(() => {
+        getUser();
+    }, []);
+
+    const getUser = async () => {
+        try {
+            //If not error - user = admin
+            await authorizeAdmin(
+                getCookie("jwt-authorization") ?? "",
+                getCookie("current-username") ?? ""
+            );
+            setIsAdmin(true);
+        } catch (error) {
+            setIsAdmin(false);
+        }
+    };
+
 	return (
 		<Box maxWidth='inherited'
 			bgcolor="rgba(7, 27, 47, 0.8)"
@@ -26,12 +48,21 @@ const Navbar = () => {
 					<Button component={Link} to="/profile">
 						Profile
 					</Button>
+					<Button component={Link} to="/history">
+						History
+					</Button>
+					<Button component={Link} to="/documents">
+						Documents	
+					</Button>
 					<Button component={Link} to="/login">
 						Login
 					</Button>
 					<Button component={Link} to="/register">
 						Register
 					</Button>
+					{isAdmin && <Button component={Link} to="/admin">
+						Admin
+					</Button>}
 				</Stack>
 			</Container>
 		</Box>

@@ -6,8 +6,12 @@ import { register } from "../../../lib/identity/identity";
 import { Notification } from "../../../features";
 import { setCookie } from "typescript-cookie";
 
+export interface RegisterFormProps{
+	isModal?: boolean
+	oncloseCallback?: ()=>void
+}
 
-const LoginForm = () => {
+const LoginForm = ({oncloseCallback, isModal = false}: RegisterFormProps) => {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState<string | null>(null)
@@ -21,7 +25,8 @@ const LoginForm = () => {
 			const { data } = await register({ username, password, roleName: 'user' })
 			
 			setCookie('jwt-authorization', data.token);
-			navigate("/login", { state: { message: "Successfully registered!", type: "success" } })
+			if(!isModal) navigate("/login", { state: { message: "Successfully registered!", type: "success" } })
+			if(oncloseCallback) oncloseCallback();
 		} catch (error: any) {
 			setError(error.response.data.Detailes);
 		}
@@ -104,9 +109,9 @@ const LoginForm = () => {
 						}}>
 						Register
 					</Button>
-					<Typography variant="body2" sx={{ mt: 2, color: 'white' }}>
+					{!isModal && <Typography variant="body2" sx={{ mt: 2, color: 'white' }}>
 						Already have an account? <Link to="/login">Login here</Link>
-					</Typography>
+					</Typography>}
 				</Box>
 			</Box>
 		</>

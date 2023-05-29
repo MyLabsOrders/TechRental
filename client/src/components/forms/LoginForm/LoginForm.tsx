@@ -21,6 +21,7 @@ const LoginForm = () => {
 			const { data } = await login({ username, password })
 			setCookie('jwt-authorization', data.token)
 			setCookie('current-user', data.userId)
+			setCookie('current-username', username);
 
 			navigate("/", { state: { message: "Successfully logged in!", type: "success" } })
 		} catch (error: any) {

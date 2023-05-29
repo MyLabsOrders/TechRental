@@ -39,10 +39,9 @@ const ReplenishForm = ({ close }: ReplenishFormProps) => {
 			alignItems: "center",
 			justifyContent: "center",
 			backgroundColor: "#132f4b",
+			borderRadius: 3,
 			maxWidth: '400px',
 			margin: '0 auto',
-			marginTop: '100px',
-			borderRadius: 3
 		}}>
 			<Typography variant="h6" align="center" color='white'>
 				Replenish account

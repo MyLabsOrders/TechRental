@@ -11,7 +11,7 @@ export const getUser = async (id: string, token: string) => {
 }
 
 export const getAllUsers = async (token: string, page?: number) => {
-	return await api.get<IUserPage>(`${page}`, {
+	return await api.get<IUserPage>(`${page ?? ''}`, {
 		headers: {
 			Authorization: `Bearer ${token}`
 		}
@@ -20,6 +20,14 @@ export const getAllUsers = async (token: string, page?: number) => {
 
 export const createUserProfile = async (token: string, id: string, dto: CreateProfileDto) => {
 	return await api.post<IUser>(`${id}/profile`, dto, {
+		headers: {
+			Authorization: `Bearer ${token}`
+		}
+	})
+}
+
+export const changeUserProfile = async (token: string, id: string, dto: Partial<CreateProfileDto>) => {
+	return await api.patch<IUser>(`${id}/profile`, dto, {
 		headers: {
 			Authorization: `Bearer ${token}`
 		}
