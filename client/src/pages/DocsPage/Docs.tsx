@@ -1,46 +1,46 @@
 import { Box, Button, Typography } from "@mui/material";
 import { DocumentsList } from "../../components/documents";
 import { useEffect, useState } from "react";
-import { getDocuments } from "../../lib/products/products";
+import { getStats } from "../../lib/products/products";
 import { getCookie } from "typescript-cookie";
 import { DateField, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { green } from "@mui/material/colors";
 import { IDocument } from "../../shared/models/docs";
+import dayjs, { Dayjs } from "dayjs";
 
 const debugDocuments = (count: number): IDocument[] => {
     return new Array(count).fill(null).map((_, i) => {
         return {
             link: `http://localhost:3000/document?id=${i}`,
             filename: `File${i}`,
-            file: new File([], `f${i}`)
+            file: new File([], `f${i}`),
         };
     });
 };
 
 const DocsPage = () => {
-    // const location = useLocation();
-
-    const [documents, setDocuments] = useState<IDocument[]>(
-        debugDocuments(5)
+    const [documents, setDocuments] = useState<IDocument[]>(debugDocuments(5));
+    const [beginDate, setBeginDate] = useState<Dayjs | null>(
+        dayjs().subtract(1, "day")
     );
-    const [beginDate, setBeginDate] = useState<Date | null>();
-    const [endDate, setEndDate] = useState<Date | null>();
+    const [endDate, setEndDate] = useState<Dayjs | null>(dayjs());
 
     const fetchDocuments = async (dateFrom?: Date, dateTo?: Date) => {
         try {
-            const fetchedDocuments = await getDocuments(
-                getCookie("jwt-authorization") ?? ""
+            const { data } = await getStats(
+                getCookie("jwt-authorization") ?? "",
+                beginDate?.toISOString() ?? "",
+                endDate?.toISOString() ?? ""
             );
-            setDocuments(fetchedDocuments);
-        } catch (error) {
-            console.log(error);
-        }
+
+            setDocuments([{ filename: "diagrams-stats", link: data.link }]);
+        } catch (error) {}
     };
 
     useEffect(() => {
         fetchDocuments();
-    });
+    },[]);
 
     const handleClick = () => {
         fetchDocuments();

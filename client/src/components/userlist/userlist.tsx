@@ -4,10 +4,9 @@ import UserElement from "./userelement";
 
 export interface UserListProps {
     users: IUser[];
-    deleteCallback: (user: IUser) => {};
 }
 
-const UserListComponent = ({ users, deleteCallback }: UserListProps) => {
+const UserListComponent = ({ users }: UserListProps) => {
     return (
         <Container
             sx={{
@@ -16,8 +15,8 @@ const UserListComponent = ({ users, deleteCallback }: UserListProps) => {
                 alignItems: "center",
             }}>
             <Box width={"100%"}>
-                {users.map((user) => (
-                    <UserElement user={user} deleteCallback={deleteCallback} />
+                {users.map((user,i) => (
+                    <UserElement key={i} user={user}/>
                 ))}
             </Box>
         </Container>

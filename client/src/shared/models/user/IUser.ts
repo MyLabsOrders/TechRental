@@ -7,6 +7,7 @@ interface IUser{
 	lastName: string;
 	image: string;
 	birthDate: string;
+	gender: "male" | "female";
 	number: string;
 	money: number;
 	orders: IProduct[];

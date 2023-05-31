@@ -6,8 +6,8 @@ import { getCookie } from "typescript-cookie";
 import { authorizeAdmin } from "../../lib/identity/identity";
 
 const Navbar = () => {
-	const [isAdmin, setIsAdmin] = useState(true);
-    
+    const [isAdmin, setIsAdmin] = useState(false);
+
     useEffect(() => {
         getUser();
     }, []);
@@ -25,48 +25,55 @@ const Navbar = () => {
         }
     };
 
-	return (
-		<Box maxWidth='inherited'
-			bgcolor="rgba(7, 27, 47, 0.8)"
-			color="#fff"
-			top={0}
-			py={2}
-			boxShadow={0}
-			position='fixed'
-			width="100%"
-			zIndex={1}
-			sx={{backdropFilter: 'blur(2px)'}}
-		>
-			<Container sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-				<Typography variant="h3" className="logo">
-					Tech rental
-				</Typography>
-				<Stack direction="row" spacing={2}>
-					<Button component={Link} to="/">
-						Home
-					</Button>
-					<Button component={Link} to="/profile">
-						Profile
-					</Button>
-					<Button component={Link} to="/history">
-						History
-					</Button>
-					<Button component={Link} to="/documents">
-						Documents	
-					</Button>
-					<Button component={Link} to="/login">
-						Login
-					</Button>
-					<Button component={Link} to="/register">
-						Register
-					</Button>
-					{isAdmin && <Button component={Link} to="/admin">
-						Admin
-					</Button>}
-				</Stack>
-			</Container>
-		</Box>
-	);
+    return (
+        <Box
+            maxWidth="inherited"
+            bgcolor="rgba(7, 27, 47, 0.8)"
+            color="#fff"
+            top={0}
+            py={2}
+            boxShadow={0}
+            position="fixed"
+            width="100%"
+            zIndex={1}
+            sx={{ backdropFilter: "blur(2px)" }}>
+            <Container
+                sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                }}>
+                <Typography variant="h3" className="logo">
+                    Tech rental
+                </Typography>
+                <Stack direction="row" spacing={2}>
+                    <Button component={Link} to="/">
+                        Home
+                    </Button>
+                    <Button component={Link} to="/profile">
+                        Profile
+                    </Button>
+                    <Button component={Link} to="/history">
+                        History
+                    </Button>
+                    <Button component={Link} to="/documents">
+                        Documents
+                    </Button>
+                    <Button component={Link} to="/login">
+                        Login
+                    </Button>
+                    <Button component={Link} to="/register">
+                        Register
+                    </Button>
+                    {isAdmin && (
+                        <Button component={Link} to="/admin">
+                            Admin
+                        </Button>
+                    )}
+                </Stack>
+            </Container>
+        </Box>
+    );
 };
 
 export default Navbar;

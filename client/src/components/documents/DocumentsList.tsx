@@ -29,7 +29,6 @@ const DocumentsList = ({ documents }: ProductContainerProps) => {
                         boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
                     }}>
                     <Document
-                        file={document.file}
                         filename={document.filename}
                         link={document.link}
                     />

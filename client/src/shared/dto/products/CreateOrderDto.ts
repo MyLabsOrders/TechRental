@@ -1,8 +1,9 @@
 interface CreateOrderDto{
 	name: string;
+	company: string;
 	orderImage: string;
 	status: string;
-	total: number;
+	price: number;
 }
 
 export default CreateOrderDto

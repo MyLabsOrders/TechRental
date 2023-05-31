@@ -40,6 +40,7 @@ const ProfileForm = ({ setError }: IProfileProps) => {
         birthDate: "00-00-0000",
         number: "phone number",
         image: "",
+        gender: "male",
         money: 0,
         orders: [],
     });
@@ -71,7 +72,6 @@ const ProfileForm = ({ setError }: IProfileProps) => {
     };
 
     useEffect(() => {
-        // (async () => await fetchData())();
         fetchData();
     }, []);
 
@@ -95,12 +95,15 @@ const ProfileForm = ({ setError }: IProfileProps) => {
                 getCookie("jwt-authorization") ?? "",
                 getCookie("current-user") ?? "",
                 {
+                    identityId: user.id,
                     firstName: editedFirstName,
                     middleName: editedMiddleName,
                     lastName: editedLastName,
                     phoneNumber: editedPhoneNumber,
                     userImage: user.image,
-                    birthDate: new Date(editedBirthDate).toISOString(),
+                    birthDate: editedBirthDate,
+                    gender: user.gender,
+                    isActive: true
                 }
             );
 

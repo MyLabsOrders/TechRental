@@ -1,4 +1,4 @@
-import { Button, Box, Modal } from "@mui/material";
+import { Button, Box, Modal, Dialog } from "@mui/material";
 import { green } from "@mui/material/colors";
 import { useState } from "react";
 import { RegisterForm } from "../RegisterForm";
@@ -31,7 +31,7 @@ const CreateUserForm = ({onCloseCallback}:CreateUserProps) => {
                 }}>
                 Create user
             </Button>
-            <Modal
+            <Dialog
                 open={isModaOpen}
                 onClose={handleClose}
                 sx={{ backdropFilter: "blur(5px)" }}>
@@ -39,7 +39,7 @@ const CreateUserForm = ({onCloseCallback}:CreateUserProps) => {
                     oncloseCallback={handleClose}
                     isModal={true}
                 />
-            </Modal>
+            </Dialog>
         </Box>
     );
 };

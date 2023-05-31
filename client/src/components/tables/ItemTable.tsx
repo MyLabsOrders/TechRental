@@ -17,7 +17,7 @@ interface ItemTableProps {
 const ItemTable: React.FC<ItemTableProps> = ({ products }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(3);
   const [selectedItemIds, setSelectedItemIds] = useState<string[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editedItem, setEditedItem] = useState<IProduct | null>(null);
@@ -32,7 +32,7 @@ const ItemTable: React.FC<ItemTableProps> = ({ products }) => {
   };
 
   const handleRowsPerPageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+    setRowsPerPage(parseInt(event.target.value,10));
     setPage(0);
   };
 
@@ -137,6 +137,7 @@ const ItemTable: React.FC<ItemTableProps> = ({ products }) => {
             component="div"
             count={filteredItems.length}
             page={page}
+            rowsPerPageOptions={[1,2,3,5,10]}
             onPageChange={handlePageChange}
             rowsPerPage={rowsPerPage}
             onRowsPerPageChange={handleRowsPerPageChange}

@@ -21,10 +21,9 @@ import { changeUserProfile } from "../../lib/users/users";
 
 export interface UserElementProps {
     user: IUser;
-    deleteCallback: (user: IUser) => {};
 }
 
-const UserElement = ({ user, deleteCallback }: UserElementProps) => {
+const UserElement = ({ user }: UserElementProps) => {
     const [role, setRole] = useState<string>("user");
 
     const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -34,15 +33,12 @@ const UserElement = ({ user, deleteCallback }: UserElementProps) => {
     const [editedMiddleName, setEditedMiddleName] = useState(user.middleName);
     const [editedLastName, setEditedLastName] = useState(user.lastName);
     const [editedBirthDate, setEditedBirthDate] = useState(user.birthDate);
-    const [editedUsername, setEditedUsername] = useState(username);
+    
+
 
     useEffect(() => {
         fetchIdentity();
     });
-
-    const deleteUser = () => {
-        deleteCallback(user);
-    };
 
     const changeUser = async () => {
         try {
@@ -53,20 +49,20 @@ const UserElement = ({ user, deleteCallback }: UserElementProps) => {
 
             await changeUserProfile(
                 getCookie("jwt-authorization") ?? "",
-                getCookie("current-user") ?? "",
+                user.id,
                 {
+                    identityId: user.id,
                     firstName: user.firstName,
                     middleName: user.middleName,
                     lastName: user.lastName,
                     birthDate: user.birthDate,
+                    gender: user.gender.toLowerCase() as ("male" | "female"),
+                    phoneNumber: user.number,
+                    userImage: user.image,
+                    isActive: true
                 }
             );
-            await changeUsername(
-                getCookie("jwt-authorization") ?? "",
-                editedUsername
-            );
         } catch (error) {
-            // console.log(error);
         }
     };
 
@@ -81,6 +77,7 @@ const UserElement = ({ user, deleteCallback }: UserElementProps) => {
 
     const changeUserRole = async (event: SelectChangeEvent) => {
         setRole(event.target.value as string);
+        let role = event.target.value;
         try {
             await changeRole(
                 getCookie("jwt-authorization") ?? "",
@@ -89,6 +86,10 @@ const UserElement = ({ user, deleteCallback }: UserElementProps) => {
             );
         } catch (error) {}
     };
+
+    const deleteUser = ()=>{
+        console.log("Удаляю...")
+    }
 
     const fetchIdentity = async () => {
         try {
@@ -99,7 +100,6 @@ const UserElement = ({ user, deleteCallback }: UserElementProps) => {
             setRole(data.role);
             setUsername(data.username);
         } catch (error) {
-            // console.log(error);
         }
     };
 
@@ -137,7 +137,9 @@ const UserElement = ({ user, deleteCallback }: UserElementProps) => {
                     sx={{ backgroundColor: green[500], marginRight: "10px" }}>
                     Изменить
                 </Button>
-                <Button onClick={deleteUser} sx={{ backgroundColor: red[500] }}>
+                <Button
+                    onClick={deleteUser}
+                    sx={{ backgroundColor: red[500], marginRight: "10px" }}>
                     Удалить
                 </Button>
             </Box>
@@ -150,35 +152,6 @@ const UserElement = ({ user, deleteCallback }: UserElementProps) => {
                     },
                 }}>
                 <Box bgcolor={"inherit"} padding={"2rem"}>
-                    <TextField
-                        variant="standard"
-                        value={editedUsername}
-                        onChange={(e) => setEditedUsername(e.target.value)}
-                        fullWidth
-                        InputProps={{
-                            style: {
-                                color: "white",
-                            },
-                        }}
-                        sx={{
-                            textAlign: "center",
-                            "& .MuiInputBase-root": {
-                                color: "white",
-                                "&:before": {
-                                    borderBottomColor: "white",
-                                },
-                                "&:hover:before": {
-                                    borderBottomColor: "white",
-                                },
-                                "&.Mui-focused:before": {
-                                    borderBottomColor: "green",
-                                },
-                                "&.Mui-focused:after": {
-                                    borderBottomColor: "green",
-                                },
-                            },
-                        }}
-                    />
                     <TextField
                         variant="standard"
                         value={editedFirstName}

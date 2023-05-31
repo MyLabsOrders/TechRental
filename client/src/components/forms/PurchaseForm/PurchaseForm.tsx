@@ -9,12 +9,12 @@ import {
 import { useState } from "react";
 import { Add, Remove } from "@mui/icons-material";
 import { green } from "@mui/material/colors";
-import { Report } from "../../reports";
-import { PDFDocument } from "pdf-lib";
+import { getCheque, getInvoice } from "../../../lib/products/products";
+import { getCookie } from "typescript-cookie";
 
 interface PurchaseProps {
     total: number;
-    onSubmit: () => void;
+    onSubmit: (count: number) => void;
 }
 
 const PurchaseForm = ({ total, onSubmit }: PurchaseProps) => {
@@ -43,33 +43,34 @@ const PurchaseForm = ({ total, onSubmit }: PurchaseProps) => {
         return price * quantity;
     };
 
-    const handleSubmit = (event: React.FormEvent) => {
+    const fetchCheque = async () => {
+        try {
+            const { data } = await getCheque(
+                getCookie("jwt-authorization") ?? "",
+                getCookie("order-date") ?? ""
+            );
+            window.open(data.link, "_blank", "noreferrer");
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const fetchInvoice = async () => {
+        try {
+            const { data } = await getInvoice(
+                getCookie("jwt-authorization") ?? "",
+                getCookie("order-date") ?? ""
+            );
+            window.open(data.link, "_blank", "noreferrer");
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        onSubmit();
+        await onSubmit(quantity);
         setShowReport(true);
-    };
-
-    const handleDownloadPDF = async () => {
-        const pdfDoc = await generatePDF();
-
-        const pdfBytes = await pdfDoc.save();
-        const blob = new Blob([pdfBytes], { type: "application/pdf" });
-        const url = URL.createObjectURL(blob);
-
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = "invoice.pdf";
-        link.click();
-
-        URL.revokeObjectURL(url);
-    };
-
-    const generatePDF = async () => {
-        const pdfDoc = await PDFDocument.create();
-        const page = pdfDoc.addPage();
-        page.drawText(`Purchased Item: ${purchasedItem}`, { x: 50, y: 50 });
-
-        return pdfDoc;
     };
 
     return (
@@ -150,11 +151,31 @@ const PurchaseForm = ({ total, onSubmit }: PurchaseProps) => {
                     }}>
                     Submit
                 </Button>
-                {showReport && <Report onDownloadPDF={handleDownloadPDF} />}
+                {showReport && (
+                    <>
+                        <Button
+                            onClick={fetchCheque}
+                            sx={{
+                                background: "#0a1929",
+                                borderRadius: "15px",
+                                ":hover": { background: "#001e3c" },
+                            }}>
+                            Получить чек
+                        </Button>
+                        <Button
+                            onClick={fetchInvoice}
+                            sx={{
+                                background: "#0a1929",
+                                borderRadius: "15px",
+                                ":hover": { background: "#001e3c" },
+                            }}>
+                            Получить накладную
+                        </Button>
+                    </>
+                )}
             </FormControl>
         </Box>
     );
 };
 
 export default PurchaseForm;
-

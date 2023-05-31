@@ -5,7 +5,7 @@ import { getCookie } from "typescript-cookie";
 import { IProductPage } from "../../shared";
 import { Notification } from "../../features";
 import { useLocation } from "react-router-dom";
-import { getCheque } from "../../lib/products/products";
+import { getCheque, getInvoice } from "../../lib/products/products";
 import { createProduct } from "../../shared/models/product/IProduct";
 import { getUser } from "../../lib/users/users";
 
@@ -29,10 +29,8 @@ const createProducts = (count: number): IProductPage => {
 
 const Profile = () => {
     const [error, setError] = useState<string | null>(null);
-    const [products, setProducts] = useState<IProductPage | null>(
-        createProducts(5)
-    );
-    
+    const [products, setProducts] = useState<IProductPage | null>();
+
     const [documentLink, setDocumentLink] = useState<string>();
 
     const location = useLocation();
@@ -52,17 +50,29 @@ const Profile = () => {
     };
     useEffect(() => {
         fetchItems();
-    },[]);
-
+    }, []);
 
     const fetchCheque = async () => {
         try {
             const { data } = await getCheque(
-                getCookie("jwt-token") ?? "",
+                getCookie("jwt-authorization") ?? "",
                 getCookie("order-date") ?? ""
             );
             setDocumentLink(data.link);
-            window.open(documentLink, '_blank', 'noreferrer');
+            window.open(documentLink, "_blank", "noreferrer");
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const fetchInvoice = async () => {
+        try {
+            const { data } = await getInvoice(
+                getCookie("jwt-authorization") ?? "",
+                getCookie("order-date") ?? ""
+            );
+            setDocumentLink(data.link);
+            window.open(documentLink, "_blank", "noreferrer");
         } catch (error) {
             console.log(error);
         }
@@ -84,6 +94,7 @@ const Profile = () => {
                 <Stack spacing={"2rem"}>
                     <ProfileForm setError={setError} />
                     <Button
+                        disabled={!products || products?.orders.length === 0}
                         onClick={fetchCheque}
                         sx={{
                             background: "#0a1929",
@@ -92,41 +103,23 @@ const Profile = () => {
                         }}>
                         Получить чек
                     </Button>
+                    <Button
+                        disabled={!products || products?.orders.length === 0}
+                        onClick={fetchInvoice}
+                        sx={{
+                            background: "#0a1929",
+                            borderRadius: "15px",
+                            ":hover": { background: "#001e3c" },
+                        }}>
+                        Получить накладную
+                    </Button>
                 </Stack>
                 <ItemTable
                     products={products ?? { orders: [], page: 0, totalPage: 0 }}
                 />
-                {
-                /* <Dialog open={isModalOpen}>
-                    <Box width={"20rem"} padding={"1rem"} bgcolor={"#001e3c"}>
-                        <Typography fontSize={32} marginBottom={"1rem"} color={"white"}>
-                            Спасибо за заказ!
-                        </Typography>
-                        <Stack justifyContent={"space-between"} direction={"row"}>
-                            <Button
-                                onClick={closeModal}
-                                sx={{
-                                    backgroundColor: red[500],
-                                }}>
-                                Закрыть
-                            </Button>
-                            <Link
-                                underline="none"
-                                href={documentLink}>
-                                <Button
-                                sx={{
-                                    backgroundColor: green[500],
-                                }}>
-                                Просмотреть чек
-                            </Button>
-                            </Link>
-                        </Stack>
-                    </Box>
-                </Dialog> */}
             </Box>
         </Box>
     );
 };
 
 export default Profile;
-

@@ -11,7 +11,7 @@ import { green, grey } from "@mui/material/colors";
 import { PurchaseForm } from "../PurchaseForm";
 import { useState } from "react";
 import { addProduct } from "../../../lib/users/users";
-import { getCookie } from "typescript-cookie";
+import { getCookie, setCookie } from "typescript-cookie";
 import { Notification } from "../../../features";
 import { useNavigate } from "react-router-dom";
 
@@ -45,7 +45,6 @@ export const createProducts = (count: number): IProduct[] => {
                 "https://loremflickr.com/640/360"
             )
         );
-    console.log(result);
 
     return result;
 };
@@ -63,14 +62,15 @@ const Product = ({ id, name, total, status, image }: IProduct) => {
         setIsModalOpen(false);
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (count: number) => {
         try {
             setMessage(null);
-            await addProduct(
+            const {data} = await addProduct(
                 getCookie("jwt-authorization") ?? "",
                 getCookie("current-user") ?? "",
-                id
+                {orderId: id, count }
             );
+            setCookie('order-date', data);
             setMessage("Successfully bought it!");
         } catch (error: any) {
             setMessage(error?.response?.data?.Detailes);

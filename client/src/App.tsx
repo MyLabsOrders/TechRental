@@ -10,7 +10,7 @@ import { authorizeAdmin } from "./lib/identity/identity";
 import { getCookie } from "typescript-cookie";
 
 function App() {
-    const [isAdmin, setIsAdmin] = useState(true);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
         getUser();
