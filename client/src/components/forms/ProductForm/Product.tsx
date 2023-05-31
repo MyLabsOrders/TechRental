@@ -23,31 +23,6 @@ export interface IProduct {
     image: string;
 }
 
-export const createProduct = (
-    id: string,
-    name: string,
-    total: number,
-    status: string,
-    image: string
-): IProduct => {
-    return { id, name, total, status, image };
-};
-
-export const createProducts = (count: number): IProduct[] => {
-    const result: IProduct[] = new Array(count)
-        .fill(null)
-        .map((_, i) =>
-            createProduct(
-                `${i}`,
-                `Имя${i}`,
-                1000 + 100 * i,
-                `Статус${i}`,
-                "https://loremflickr.com/640/360"
-            )
-        );
-
-    return result;
-};
 
 const Product = ({ id, name, total, status, image }: IProduct) => {
     const [isModalOpen, setIsModalOpen] = useState(false);

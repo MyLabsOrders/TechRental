@@ -103,7 +103,6 @@ const RegisterForm = ({
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
-                        marginTop: "100px",
                     }}>
                     <Typography variant="h4" sx={{ mb: 3, color: "white" }}>
                         Register Form

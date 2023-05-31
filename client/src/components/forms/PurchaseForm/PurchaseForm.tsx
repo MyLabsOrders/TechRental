@@ -20,7 +20,6 @@ interface PurchaseProps {
 const PurchaseForm = ({ total, onSubmit }: PurchaseProps) => {
     const [quantity, setQuantity] = useState(1);
     const [showReport, setShowReport] = useState(false);
-    const [purchasedItem] = useState("");
 
     const handleIncreaseQuantity = () => {
         setQuantity((prevQuantity) => prevQuantity + 1);

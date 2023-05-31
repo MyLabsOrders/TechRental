@@ -6,26 +6,8 @@ import { IProductPage } from "../../shared";
 import { Notification } from "../../features";
 import { useLocation } from "react-router-dom";
 import { getCheque, getInvoice } from "../../lib/products/products";
-import { createProduct } from "../../shared/models/product/IProduct";
 import { getUser } from "../../lib/users/users";
 
-const createProducts = (count: number): IProductPage => {
-    const orders = new Array(count)
-        .fill(null)
-        .map((_, i) =>
-            createProduct(
-                `${i}`,
-                `status${i}`,
-                `name${i}`,
-                "https://loremflickr.com/640/360",
-                0,
-                `01.01.000${i}`
-            )
-        );
-
-    return { orders, page: 0, totalPage: 2 };
-    // return orders;
-};
 
 const Profile = () => {
     const [error, setError] = useState<string | null>(null);

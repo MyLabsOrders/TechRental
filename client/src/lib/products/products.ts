@@ -82,7 +82,7 @@ export const getStats = async (token: string, from: string, to: string) => {
     return { data: { link: url } };
 };
 
-//Todo: review
+
 export const getHistory = async (page?: number): Promise<IProductPage> => {
     const { data } = await api.get<IProductPage>(`${page ?? "/"}`);
     data.orders = data.orders.filter((order) => order.orderDate !== null);

@@ -13,7 +13,6 @@ import { green, red } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 import {
     changeRole,
-    changeUsername,
     getIdentityUser,
 } from "../../lib/identity/identity";
 import { getCookie } from "typescript-cookie";
@@ -34,8 +33,6 @@ const UserElement = ({ user }: UserElementProps) => {
     const [editedLastName, setEditedLastName] = useState(user.lastName);
     const [editedBirthDate, setEditedBirthDate] = useState(user.birthDate);
     
-
-
     useEffect(() => {
         fetchIdentity();
     });

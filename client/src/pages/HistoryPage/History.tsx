@@ -2,30 +2,10 @@ import { Box } from "@mui/material";
 import { ItemTable } from "../../components";
 import { useEffect, useState } from "react";
 import {  IProductPage } from "../../shared";
-import { createProduct } from "../../shared/models/product/IProduct";
 import { getHistory } from "../../lib/products/products";
 
-const createProducts = (count: number): IProductPage => {
-    return {
-        orders: new Array(count)
-            .fill(null)
-            .map((_, i) =>
-                createProduct(
-                    `${i}`,
-                    `status${i}`,
-                    `name${i}`,
-                    "https://loremflickr.com/640/360",
-                    0,
-                    `01.01.000${i}`
-                )
-            ),
-        page: 1,
-        totalPage: 1,
-    };
-};
-
 const HistoryPage = () => {
-    const [products, setProducts] = useState<IProductPage>(createProducts(2));
+    const [products, setProducts] = useState<IProductPage>();
 
     const fetchHistory = async () => {
         try {

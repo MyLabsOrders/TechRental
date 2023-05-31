@@ -1,13 +1,13 @@
-import { Button, Box, Modal, Dialog } from "@mui/material";
+import { Button, Box, Dialog } from "@mui/material";
 import { green } from "@mui/material/colors";
 import { useState } from "react";
 import { RegisterForm } from "../RegisterForm";
 
 export interface CreateUserProps {
-	onCloseCallback: ()=>void
+    onCloseCallback: () => void;
 }
 
-const CreateUserForm = ({onCloseCallback}:CreateUserProps) => {
+const CreateUserForm = ({ onCloseCallback }: CreateUserProps) => {
     const [isModaOpen, setIsModalOpen] = useState(false);
 
     const handleOpen = () => {
@@ -16,7 +16,7 @@ const CreateUserForm = ({onCloseCallback}:CreateUserProps) => {
 
     const handleClose = () => {
         setIsModalOpen(false);
-		onCloseCallback();
+        onCloseCallback();
     };
 
     return (
@@ -34,15 +34,18 @@ const CreateUserForm = ({onCloseCallback}:CreateUserProps) => {
             <Dialog
                 open={isModaOpen}
                 onClose={handleClose}
-                sx={{ backdropFilter: "blur(5px)" }}>
-                <RegisterForm
-                    oncloseCallback={handleClose}
-                    isModal={true}
-                />
+                sx={{
+                    backdropFilter: "blur(5px)",
+                    "& .MuiPaper-root": {
+                        borderRadius: "1rem",
+                        padding:"1rem",
+                        bgcolor: "#0a1929",
+                    },
+                }}>
+                <RegisterForm oncloseCallback={handleClose} isModal={true} />
             </Dialog>
         </Box>
     );
 };
 
 export default CreateUserForm;
-
