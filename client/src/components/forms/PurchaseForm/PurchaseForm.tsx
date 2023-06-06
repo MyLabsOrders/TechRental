@@ -86,7 +86,7 @@ const PurchaseForm = ({ total, onSubmit }: PurchaseProps) => {
                 borderRadius: 3,
             }}>
             <Typography variant="h6" align="center" color="white">
-                Purchase Form
+                Заказ
             </Typography>
             <FormControl component="form" onSubmit={handleSubmit}>
                 <Box
@@ -134,7 +134,7 @@ const PurchaseForm = ({ total, onSubmit }: PurchaseProps) => {
                     </IconButton>
                 </Box>
                 <Typography color="white">
-                    Total price: {calculateCost(total, quantity)}
+                    Общая стоимость: {calculateCost(total, quantity)}
                 </Typography>
                 <Button
                     variant="contained"

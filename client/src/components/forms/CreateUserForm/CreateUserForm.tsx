@@ -29,7 +29,7 @@ const CreateUserForm = ({ onCloseCallback }: CreateUserProps) => {
                         color: "white",
                     },
                 }}>
-                Create user
+                Создать пользователя
             </Button>
             <Dialog
                 open={isModaOpen}

@@ -125,8 +125,8 @@ const UserElement = ({ user }: UserElementProps) => {
                 value={role}
                 label="Age"
                 onChange={changeUserRole}>
-                <MenuItem value={"user"}>User</MenuItem>
-                <MenuItem value={"admin"}>Admin</MenuItem>
+                <MenuItem value={"user"}>Польз.</MenuItem>
+                <MenuItem value={"admin"}>Админ</MenuItem>
             </Select>
             <Box>
                 <Button

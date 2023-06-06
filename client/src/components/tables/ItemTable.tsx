@@ -82,7 +82,7 @@ const ItemTable: React.FC<ItemTableProps> = ({ products }) => {
             type="text"
             value={searchTerm}
             onChange={handleSearchChange}
-            label="Search"
+            label="Поиск"
             disabled={isEditing}
           />
           {selectedItemIds.length === 1 && !isEditing && (
@@ -102,9 +102,9 @@ const ItemTable: React.FC<ItemTableProps> = ({ products }) => {
             <TableRow>
               <TableCell></TableCell>
               <TableCell>ID</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Price</TableCell>
-              <TableCell>Status</TableCell>
+              <TableCell>Название</TableCell>
+              <TableCell>Цена</TableCell>
+              <TableCell>Статус</TableCell>
               {/* Add more table headers here */}
             </TableRow>
           </TableHead>

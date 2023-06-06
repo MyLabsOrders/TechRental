@@ -26,7 +26,7 @@ const Document = ({ filename, link }: IDocument) => {
                         color: "white",
                     },
                 }}>
-                <Typography variant="body1" color={"white"}>Open</Typography>
+                <Typography variant="body1" color={"white"}>Открыть</Typography>
             </Link>
         </Box>
     );

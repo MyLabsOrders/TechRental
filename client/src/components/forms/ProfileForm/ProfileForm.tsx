@@ -348,7 +348,7 @@ const ProfileForm = ({ setError }: IProfileProps) => {
                             component="span"
                             fontWeight="fontWeightBold"
                             marginRight="8px">
-                            balance:
+                            Баланс:
                         </Box>
                         {user.money}
                     </Typography>
@@ -360,7 +360,7 @@ const ProfileForm = ({ setError }: IProfileProps) => {
                                 color: "white",
                             },
                         }}>
-                        Make deposit
+                        Внести средства
                     </Button>
                 </Box>
             </Card>

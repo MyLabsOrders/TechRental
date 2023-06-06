@@ -58,7 +58,7 @@ const CreateProductForm = () => {
                         color: "white",
                     },
                 }}>
-                Create product
+                Создать продукт
             </Button>
             <Modal
                 open={isModaOpen}
@@ -83,13 +83,13 @@ const CreateProductForm = () => {
                         <TextField
                             value={status}
                             onChange={(e) => setStatus(e.target.value)}
-                            label="Status ( Available/Rented ) "
+                            label="Статус ( Available/Rented ) "
                             fullWidth
                         />
                         <TextField
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            label="Name"
+                            label="Имя"
                             fullWidth
                         />
                         <TextField
@@ -97,7 +97,7 @@ const CreateProductForm = () => {
                             onChange={(e) =>
                                 setPrice(e.target.value as unknown as number)
                             }
-                            label="Price"
+                            label="Цена"
                             fullWidth
                             type="number"
                         />
@@ -106,7 +106,7 @@ const CreateProductForm = () => {
                             onChange={(e) =>
                                 setCompany(e.target.value)
                             }
-                            label="Company"
+                            label="Производитель"
                             fullWidth
                         />
                         <input

@@ -105,10 +105,10 @@ const RegisterForm = ({
                         alignItems: "center",
                     }}>
                     <Typography variant="h4" sx={{ mb: 3, color: "white" }}>
-                        Register Form
+                        Регистрация
                     </Typography>
                     <TextField
-                        label="Username"
+                        label="Логин"
                         onChange={handleUsernameChange}
                         required
                         variant="outlined"
@@ -130,7 +130,7 @@ const RegisterForm = ({
                         value={username}
                     />
                     <TextField
-                        label="Password"
+                        label="Пароль"
                         onChange={handlePasswordChange}
                         required
                         variant="outlined"
@@ -152,7 +152,7 @@ const RegisterForm = ({
                         value={password}
                     />
                     <TextField
-                        label="First name"
+                        label="Имя"
                         onChange={handleFirstnameChange}
                         required
                         variant="outlined"
@@ -174,7 +174,7 @@ const RegisterForm = ({
                         value={firstName}
                     />
                     <TextField
-                        label="Middle name"
+                        label="Фамилия"
                         onChange={handleMiddlenameChange}
                         required
                         variant="outlined"
@@ -196,7 +196,7 @@ const RegisterForm = ({
                         value={middleName}
                     />
 					<TextField
-                        label="Phone"
+                        label="Телефон"
                         onChange={handlePhonenumberChange}
                         required
                         variant="outlined"
@@ -250,14 +250,14 @@ const RegisterForm = ({
                                 color: "white",
                             },
                         }}>
-                        Register
+                        Зарегистрироваться
                     </Button>
                     {!isModal && (
                         <Typography
                             variant="body2"
                             sx={{ mt: 2, color: "white" }}>
-                            Already have an account?{" "}
-                            <Link to="/login">Login here</Link>
+                            Уже зарегистрированы?{" "}
+                            <Link to="/login">Войти здесь</Link>
                         </Typography>
                     )}
                 </Box>

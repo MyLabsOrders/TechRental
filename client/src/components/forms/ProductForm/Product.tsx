@@ -87,10 +87,10 @@ const Product = ({ id, name, total, status, image }: IProduct) => {
                         {name}
                     </Typography>
                     <Typography variant="body1" color={grey[600]}>
-                        Total: {total}
+                        Стоимость: {total}
                     </Typography>
                     <Typography variant="body1" color={grey[600]}>
-                        Status: {status}
+                        Статус: {status}
                     </Typography>
                 </Stack>
                 <div
@@ -107,7 +107,7 @@ const Product = ({ id, name, total, status, image }: IProduct) => {
                             },
                         }}
                         onClick={handleClick}>
-                        Purchase
+                        Заказать
                     </Button>
                 </div>
             </Box>

@@ -48,26 +48,26 @@ const Navbar = () => {
                 </Typography>
                 <Stack direction="row" spacing={2}>
                     <Button component={Link} to="/">
-                        Home
+                        Главная
                     </Button>
                     <Button component={Link} to="/profile">
-                        Profile
+                        Профиль
                     </Button>
                     <Button component={Link} to="/history">
-                        History
+                        История
                     </Button>
                     <Button component={Link} to="/documents">
-                        Documents
+                        Документы
                     </Button>
                     <Button component={Link} to="/login">
-                        Login
+                        Вход
                     </Button>
                     <Button component={Link} to="/register">
-                        Register
+                        Регистрация
                     </Button>
                     {isAdmin && (
                         <Button component={Link} to="/admin">
-                            Admin
+                            Админ
                         </Button>
                     )}
                 </Stack>
