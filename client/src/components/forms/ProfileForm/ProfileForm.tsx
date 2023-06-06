@@ -14,7 +14,7 @@ import { green, grey } from "@mui/material/colors";
 import { ReplenishForm } from "../ReplenishForm";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { changeUserProfile, getUser } from "../../../lib/users/users";
 import { getCookie } from "typescript-cookie";
 import { useNavigate } from "react-router-dom";
@@ -54,7 +54,7 @@ const ProfileForm = ({ setError }: IProfileProps) => {
         setEditedPhoneNumber(user.number);
     }, [user]);
 
-    const fetchData = async () => {
+    const fetchData = useCallback(async () => {
         try {
             setError(null);
             const { data } = await fetchUser();
@@ -62,7 +62,7 @@ const ProfileForm = ({ setError }: IProfileProps) => {
         } catch (error: any) {
             setError("You are not authorized");
         }
-    };
+    },[setError]);
 
     const fetchUser = async () => {
         return await getUser(
@@ -73,7 +73,7 @@ const ProfileForm = ({ setError }: IProfileProps) => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [fetchData]);
 
     const handleOpen = () => {
         setIsModalOpen(true);

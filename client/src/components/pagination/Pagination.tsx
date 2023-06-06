@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ProductsContainer from "../containers/ItemContainer";
 import { IProduct } from "../forms/ProductForm/Product";
 import { getAllProducts } from "../../lib/products/products";
@@ -12,13 +12,7 @@ const Pagination = ({ apiUrl }: IPaginationProps) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [fetching, setFetching] = useState(true);
 
-    useEffect(() => {
-        if (fetching) {
-            fetchProducts();
-        }
-    }, []);
-
-    const fetchProducts = async () => {
+    const fetchProducts = useCallback(async () => {
         try {
             const { data } = await getAllProducts(currentPage);
             setProducts([
@@ -27,7 +21,14 @@ const Pagination = ({ apiUrl }: IPaginationProps) => {
             ]);
             setCurrentPage((prev) => prev + 1);
         } catch (error) {}
-    };
+    },[currentPage, products]);
+
+    useEffect(() => {
+        if (fetching) {
+            fetchProducts();
+        }
+    }, [fetching, fetchProducts]);
+
 
     useEffect(() => {
         document.addEventListener("scroll", handleScroll);

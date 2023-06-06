@@ -1,7 +1,6 @@
 import axios from "axios";
 import { ChangeProductStatusDto, CreateOrderDto } from "../../shared/dto";
 import { IProduct, IProductPage } from "../../shared";
-import { IDocument } from "../../shared/models/docs";
 
 export const api = axios.create({ baseURL: process.env.REACT_APP_PRODUCT_API });
 
