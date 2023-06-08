@@ -20,9 +20,9 @@ const debugDocuments = (count: number): IDocument[] => {
 };
 
 const DocsPage = () => {
-    const [documents, setDocuments] = useState<IDocument[]>(debugDocuments(5));
+    const [documents, setDocuments] = useState<IDocument[]>(debugDocuments(0));
     const [beginDate, setBeginDate] = useState<Dayjs | null>(
-        dayjs().subtract(1, "day")
+        dayjs().subtract(1, "month")
     );
     const [endDate, setEndDate] = useState<Dayjs | null>(dayjs());
 
