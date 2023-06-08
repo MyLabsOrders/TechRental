@@ -1,9 +1,17 @@
 import { IProduct } from "../product";
 
-interface IProductPage{
-	orders: IProduct[];
-	page: number;
-	totalPage: number;
+interface IProductPage {
+    orders: IProduct[];
+    page: number;
+    totalPage: number;
 }
 
-export default IProductPage
+export const createProductPage = (
+    orders: IProduct[],
+    page: number,
+    totalPage: number
+): IProductPage => {
+    return { orders, page, totalPage };
+};
+
+export default IProductPage;

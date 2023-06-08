@@ -3,7 +3,7 @@ import { RegisterForm } from "../../components";
 
 const Register = () => {
 	return (
-		<Box bgcolor="#132f4b" minHeight="100vh">
+		<Box bgcolor="#132f4b" minHeight="100vh" paddingTop={"150px"}>
 			<RegisterForm />
 		</Box>
 	)

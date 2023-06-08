@@ -1,62 +1,107 @@
-import { Box } from "@mui/material"
-import { CreateProductForm, ItemTable, ProfileForm } from "../../components"
+import { Box, Button, Stack } from "@mui/material";
+import { ItemTable, ProfileForm } from "../../components";
 import { useEffect, useState } from "react";
 import { getCookie } from "typescript-cookie";
 import { IProductPage } from "../../shared";
 import { Notification } from "../../features";
 import { useLocation } from "react-router-dom";
-import { getIdentityUser } from "../../lib/identity/identity";
-import { getAllProducts } from "../../lib/products/products";
+import { getCheque, getInvoice } from "../../lib/products/products";
+import { getUser } from "../../lib/users/users";
+
 
 const Profile = () => {
-	const [error, setError] = useState<string | null>(null);
-	const [isAdmin, setIsAdmin] = useState(false);
-	const [products, setProducts] = useState<IProductPage | null>();
+    const [error, setError] = useState<string | null>(null);
+    const [products, setProducts] = useState<IProductPage | null>();
 
-	const location = useLocation();
-	const message = location.state && location.state.message;
-	const type = location.state && location.state.type;
+    const [documentLink, setDocumentLink] = useState<string>();
 
-	useEffect(() => {
-		getUser();
-		fetchItems();
-	}, []);
+    const location = useLocation();
+    const message = location.state && location.state.message;
+    const type = location.state && location.state.type;
 
-	const getUser = async () => {
-		try {
-			const { data } = await getIdentityUser(
-				getCookie("jwt-authorization") ?? "",
-				getCookie("current-user") ?? ""
-			);
-			if (data.role === "admin") {
-				setIsAdmin(true);
-			}
-		} catch (error) {
-		}
-	};
+    const fetchItems = async () => {
+        try {
+            const { data } = await getUser(
+                getCookie("current-user") ?? "",
+                getCookie("jwt-authorization") ?? ""
+            );
+            setProducts({ orders: data.orders, page: 1, totalPage: 1 });
+        } catch (error) {
+            setProducts(null);
+        }
+    };
+    useEffect(() => {
+        fetchItems();
+    }, []);
 
-	const fetchItems = () => {
-		(async () => {
-			try {
-				const response = await getAllProducts();
-				setProducts(response.data);
-			} catch (error) {
-				setProducts(null)
-			}
-		})();
-	};
+    const fetchCheque = async () => {
+        try {
+            const { data } = await getCheque(
+                getCookie("jwt-authorization") ?? "",
+                getCookie("order-date") ?? ""
+            );
+            setDocumentLink(data.link);
+            window.open(documentLink, "_blank", "noreferrer");
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
-	return (
-		<Box bgcolor="#132f4b" display={"flex"} alignItems={"center"} height={"100vh"} width={"100vw"}>
-			{error && <Notification message={error} type="error" />}
-			{message && <Notification message={message} type={type} />}
-			<Box display={"flex"} justifyContent={"space-evenly"} width={"100%"}>
-				<ProfileForm setError={setError} />
-				<ItemTable products={products ?? { orders: [], page: 0, totalPage: 0 }} />
-				{isAdmin && <CreateProductForm />}
-			</Box>
-		</Box>
-	);
+    const fetchInvoice = async () => {
+        try {
+            const { data } = await getInvoice(
+                getCookie("jwt-authorization") ?? "",
+                getCookie("order-date") ?? ""
+            );
+            setDocumentLink(data.link);
+            window.open(documentLink, "_blank", "noreferrer");
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    return (
+        <Box
+            bgcolor="#132f4b"
+            display={"flex"}
+            alignItems={"center"}
+            height={"100vh"}
+            width={"100vw"}>
+            {error && <Notification message={error} type="error" />}
+            {message && <Notification message={message} type={type} />}
+            <Box
+                display={"flex"}
+                justifyContent={"space-evenly"}
+                width={"100%"}>
+                <Stack spacing={"2rem"}>
+                    <ProfileForm setError={setError} />
+                    <Button
+                        disabled={!products || products?.orders.length === 0}
+                        onClick={fetchCheque}
+                        sx={{
+                            background: "#0a1929",
+                            borderRadius: "15px",
+                            ":hover": { background: "#001e3c" },
+                        }}>
+                        Получить чек
+                    </Button>
+                    <Button
+                        disabled={!products || products?.orders.length === 0}
+                        onClick={fetchInvoice}
+                        sx={{
+                            background: "#0a1929",
+                            borderRadius: "15px",
+                            ":hover": { background: "#001e3c" },
+                        }}>
+                        Получить накладную
+                    </Button>
+                </Stack>
+                <ItemTable
+                    products={products ?? { orders: [], page: 0, totalPage: 0 }}
+                />
+            </Box>
+        </Box>
+    );
 };
 
 export default Profile;

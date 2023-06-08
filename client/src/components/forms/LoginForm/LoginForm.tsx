@@ -21,6 +21,7 @@ const LoginForm = () => {
 			const { data } = await login({ username, password })
 			setCookie('jwt-authorization', data.token)
 			setCookie('current-user', data.userId)
+			setCookie('current-username', username);
 
 			navigate("/", { state: { message: "Successfully logged in!", type: "success" } })
 		} catch (error: any) {
@@ -52,10 +53,10 @@ const LoginForm = () => {
 					}}
 				>
 					<Typography variant="h4" sx={{ mb: 3, color: 'white' }}>
-						Login Form
+						Вход
 					</Typography>
 					<TextField
-						label="Username"
+						label="Логин"
 						onChange={handleUsernameChange}
 						required
 						variant="outlined"
@@ -74,7 +75,7 @@ const LoginForm = () => {
 						value={username}
 					/>
 					<TextField
-						label="Password"
+						label="Пароль"
 						onChange={handlePasswordChange}
 						required
 						variant="outlined"
@@ -102,10 +103,10 @@ const LoginForm = () => {
 								color: "white",
 							}
 						}}>
-						Login
+						Войти
 					</Button>
 					<Typography variant="body2" sx={{ mt: 2, color: 'white' }}>
-						Need an account? <Link to="/register">Register here</Link>
+						Нет аккаунта? <Link to="/register">Регистрация</Link>
 					</Typography>
 				</Box>
 			</Box>
