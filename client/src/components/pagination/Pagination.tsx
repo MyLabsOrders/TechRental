@@ -20,12 +20,13 @@ const Pagination = ({ apiUrl }: IPaginationProps) => {
                 ...data.orders.filter((order) => !order.orderDate), //+ append orders without orderDate
             ]);
             setCurrentPage((prev) => prev + 1);
+            setFetching(false);
         } catch (error) {}
     },[currentPage, products]);
 
     useEffect(() => {
         if (fetching) {
-            fetchProducts();
+            (async ()=>{ fetchProducts() })();
         }
     }, [fetching, fetchProducts]);
 
