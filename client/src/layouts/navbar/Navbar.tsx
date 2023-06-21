@@ -1,9 +1,17 @@
-import { Box, Button, Container, Stack, Typography } from "@mui/material";
+import {
+    Box,
+    Button,
+    CardMedia,
+    Container,
+    Stack,
+    Typography,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
 import { useState, useEffect } from "react";
 import { getCookie } from "typescript-cookie";
 import { authorizeAdmin } from "../../lib/identity/identity";
+import TechRentalLogo from "../../assets/TechRentalLogo.png";
 
 const Navbar = () => {
     const [isAdmin, setIsAdmin] = useState(false);
@@ -43,9 +51,17 @@ const Navbar = () => {
                     justifyContent: "space-between",
                     alignItems: "center",
                 }}>
-                <Typography variant="h3" className="logo">
-                    Tech rental
-                </Typography>
+                <Box display="flex" flexDirection="row">
+                    <CardMedia
+                        component="img"
+                        src={TechRentalLogo}
+                        alt=""
+                        sx={{height: "4rem", width: "4rem", marginRight: "1rem", opacity: 0.6, userSelect: "none"}}
+                    />
+                    <Typography variant="h3" className="logo">
+                        Tech rental
+                    </Typography>
+                </Box>
                 <Stack direction="row" spacing={2}>
                     <Button component={Link} to="/">
                         Главная

@@ -44,7 +44,7 @@ const ReplenishForm = ({ close }: ReplenishFormProps) => {
 			margin: '0 auto',
 		}}>
 			<Typography variant="h6" align="center" color='white'>
-				Replenish account
+				Пополнить счет
 			</Typography>
 			<FormControl component="form" onSubmit={handleSubmit}>
 				<Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -91,7 +91,7 @@ const ReplenishForm = ({ close }: ReplenishFormProps) => {
 							color: "white",
 						}
 					}}>
-					Submit
+					Внести средства
 				</Button>
 			</FormControl>
 		</Box>

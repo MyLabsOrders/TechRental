@@ -97,7 +97,7 @@ const ItemTable: React.FC<ItemTableProps> = ({ products }) => {
           )}
         </Box>
 
-        <Table sx={{ maxWidth: 400, width: "100%", backgroundColor: "white" }}>
+        <Table sx={{ maxWidth: 400, width: "100%", backgroundColor: "white" }} >
           <TableHead>
             <TableRow>
               <TableCell></TableCell>
@@ -105,7 +105,7 @@ const ItemTable: React.FC<ItemTableProps> = ({ products }) => {
               <TableCell>Название</TableCell>
               <TableCell>Цена</TableCell>
               <TableCell>Статус</TableCell>
-              {/* Add more table headers here */}
+              {/* Сюда можно еще столбцов добавить */}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -125,8 +125,8 @@ const ItemTable: React.FC<ItemTableProps> = ({ products }) => {
                 <TableCell>{item.id}</TableCell>
                 <TableCell>{item.name}</TableCell>
                 <TableCell>{item.total}</TableCell>
-                <TableCell>{item.status}</TableCell>
-                {/* Add more table cells here */}
+                <TableCell>{item.status.toLowerCase() === 'available' ? 'Доступен' : "Арендован"}</TableCell>
+                {/* Можно добавить больше столбцов */}
               </TableRow>
             ))}
           </TableBody>

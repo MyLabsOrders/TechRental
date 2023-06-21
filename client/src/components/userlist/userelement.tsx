@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { IUser } from "../../shared";
 import { green, red } from "@mui/material/colors";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
     changeRole,
     getIdentityUser,
@@ -33,9 +33,20 @@ const UserElement = ({ user }: UserElementProps) => {
     const [editedLastName, setEditedLastName] = useState(user.lastName);
     const [editedBirthDate, setEditedBirthDate] = useState(user.birthDate);
     
+    const fetchIdentity = useCallback(async () => {
+        try {
+            const { data } = await getIdentityUser(
+                getCookie("jwt-authorization") ?? "",
+                user.id
+            );
+            setRole(data.role);
+            setUsername(data.username);
+        } catch (error) {}
+    }, [user.id]);
+
     useEffect(() => {
         fetchIdentity();
-    });
+    }, [fetchIdentity]);
 
     const changeUser = async () => {
         try {
@@ -74,30 +85,14 @@ const UserElement = ({ user }: UserElementProps) => {
 
     const changeUserRole = async (event: SelectChangeEvent) => {
         setRole(event.target.value as string);
-        let role = event.target.value;
+        let _role = event.target.value;
         try {
             await changeRole(
                 getCookie("jwt-authorization") ?? "",
                 username,
-                role
+                _role
             );
         } catch (error) {}
-    };
-
-    const deleteUser = ()=>{
-        console.log("Удаляю...")
-    }
-
-    const fetchIdentity = async () => {
-        try {
-            const { data } = await getIdentityUser(
-                getCookie("jwt-authorization") ?? "",
-                user.id
-            );
-            setRole(data.role);
-            setUsername(data.username);
-        } catch (error) {
-        }
     };
 
     return (
@@ -133,11 +128,6 @@ const UserElement = ({ user }: UserElementProps) => {
                     onClick={openModal}
                     sx={{ backgroundColor: green[500], marginRight: "10px" }}>
                     Изменить
-                </Button>
-                <Button
-                    onClick={deleteUser}
-                    sx={{ backgroundColor: red[500], marginRight: "10px" }}>
-                    Удалить
                 </Button>
             </Box>
             <Dialog

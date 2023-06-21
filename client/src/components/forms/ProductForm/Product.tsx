@@ -95,7 +95,7 @@ const Product = ({ id, name, total, status, image }: IProduct) => {
                         Стоимость: {total}
                     </Typography>
                     <Typography variant="body1" color={grey[600]}>
-                        Статус: {status}
+                        Статус: {status.toLowerCase() === 'available' ? 'доступен' : 'заказан'}
                     </Typography>
                 </Stack>
                 <div
