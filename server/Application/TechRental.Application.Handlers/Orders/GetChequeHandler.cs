@@ -1,13 +1,12 @@
+using System.Globalization;
 using System.Text;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TechRental.Application.Abstractions.Identity;
-using TechRental.Application.Common.Exceptions;
 using TechRental.DataAccess.Abstractions;
 using TechRental.Domain.Common.Exceptions;
 using TechRental.Domain.Core.Orders;
 using TechRental.Domain.Core.Users;
-using TechRental.Infrastructure.Mapping.Orders;
 using static TechRental.Application.Contracts.Orders.Queries.GetCheque;
 
 namespace TechRental.Application.Handlers.Orders;
@@ -51,9 +50,9 @@ internal class GetChequeHandler : IRequestHandler<Query, Response>
                 "{Orders}",
                 string.Join('\n', orders.Select((order, i) => @$"
                         <p>{order.Name}</p>
-                        <p>{i + 1} {order.Amount}x {order.Price} ={order.TotalPrice}B</p>"))
+                        <p>{i + 1} {order.Amount}x {order.Price * order.Period} ={order.TotalPrice.ToString("C", new CultureInfo("ru-RU"))}</p>"))
             )
-            .Replace("{Total}", orders.Sum(order => order.TotalPrice).ToString())
+            .Replace("{Total}", orders.Sum(order => order.TotalPrice).ToString("C", new CultureInfo("ru-RU")))
             .ToString();
         return new MemoryStream(renderer.RenderHtmlAsPdf(html).BinaryData);
     }
