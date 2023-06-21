@@ -20,7 +20,7 @@ namespace RentDesktop.ViewModels
             RegisterVM.PageClosing += OpenLoginPage;
 
             _inactivity_timer = ConfigureInactivityTimer();
-            _inactivity_timer.Start();
+            //_inactivity_timer.Start();
 
             ResetInactivitySecondsCommand = ReactiveCommand.Create(ResetInactivitySeconds);
 

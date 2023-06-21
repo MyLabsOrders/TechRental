@@ -38,7 +38,7 @@ namespace RentDesktop.ViewModels
             _preloadTabsTimer.Start();
 
             _inactivity_timer = ConfigureInactivityTimer();
-            _inactivity_timer.Start();
+            //_inactivity_timer.Start();
 
             ResetInactivitySecondsCommand = ReactiveCommand.Create(ResetInactivitySeconds);
             ShowMainWindowCommand = ReactiveCommand.Create(ShowMainWindow);
