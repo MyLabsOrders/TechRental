@@ -148,7 +148,7 @@ const PurchaseForm = ({ total, onSubmit }: PurchaseProps) => {
                             color: "white",
                         },
                     }}>
-                    Submit
+                    Заказать
                 </Button>
                 {showReport && (
                     <>

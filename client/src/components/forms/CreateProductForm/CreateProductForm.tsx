@@ -123,7 +123,7 @@ const CreateProductForm = () => {
                                 },
                                 backgroundColor: "#132f4b",
                             }}>
-                            Create
+                            Создать
                         </Button>
                     </FormControl>
                 </Box>
