@@ -25,7 +25,7 @@ const LoginForm = () => {
 
 			navigate("/", { state: { message: "Successfully logged in!", type: "success" } })
 		} catch (error: any) {
-			setError(error.response.data.Detailes)
+			setError(error?.response?.data?.Detailes)
 		}
 	};
 

@@ -63,7 +63,7 @@ const RegisterForm = ({
                 });
             if (oncloseCallback) oncloseCallback();
         } catch (error: any) {
-            setError(error.response.data.Detailes);
+            setError(error?.response?.data?.Detailes);
         }
     };
 
