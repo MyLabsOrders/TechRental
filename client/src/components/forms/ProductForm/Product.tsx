@@ -23,11 +23,16 @@ export interface IProduct {
     image: string;
 }
 
-
 const Product = ({ id, name, total, status, image }: IProduct) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [message, setMessage] = useState<string | null>(null);
     const navigate = useNavigate();
+
+    const base64regex =
+        /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
+    const imageUrl = base64regex.test(image)
+        ? `data:image/jpeg;base64,${image}`
+        : image;
 
     const handleClick = () => {
         setIsModalOpen(true);
@@ -40,12 +45,12 @@ const Product = ({ id, name, total, status, image }: IProduct) => {
     const handleSubmit = async (count: number) => {
         try {
             setMessage(null);
-            const {data} = await addProduct(
+            const { data } = await addProduct(
                 getCookie("jwt-authorization") ?? "",
                 getCookie("current-user") ?? "",
-                {orderId: id, count }
+                { orderId: id, count }
             );
-            setCookie('order-date', data);
+            setCookie("order-date", data);
             setMessage("Successfully bought it!");
         } catch (error: any) {
             setMessage(error?.response?.data?.Detailes);
@@ -68,7 +73,7 @@ const Product = ({ id, name, total, status, image }: IProduct) => {
                     alignItems: "center",
                     backgroundColor: "#0a1929",
                 }}>
-                <CardMedia component="img" src={image} alt={name} />
+                <CardMedia component="img" src={imageUrl} alt={name} />
             </Box>
             <Divider sx={{ backgroundColor: "white" }} />
             <Box
@@ -119,7 +124,7 @@ const Product = ({ id, name, total, status, image }: IProduct) => {
                     "& .MuiPaper-root": {
                         borderRadius: 3,
                         bgcolor: "#132f4b",
-                    }
+                    },
                 }}>
                 <PurchaseForm total={total} onSubmit={handleSubmit} />
             </Dialog>
@@ -127,4 +132,3 @@ const Product = ({ id, name, total, status, image }: IProduct) => {
     );
 };
 export default Product;
-
