@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -48,8 +49,8 @@ internal class GetInvoiceHandler : IRequestHandler<Query, Response>
     {
         var renderer = new ChromePdfRenderer();
         var html = new StringBuilder(File.ReadAllText("Assets/Invoice.html"))
-            .Replace("{Order.Id}", _id.ToString())
-            .Replace("{Order.Total}", orders.Select(order => order.TotalPrice).Sum().ToString())
+            .Replace("{Order.Id}", _id.ToString(CultureInfo.CurrentCulture))
+            .Replace("{Order.Total}", orders.Select(order => order.TotalPrice).Sum().ToString("C", new CultureInfo("ru-RU")))
             .Replace("{User.FirstName}", user.FirstName)
             .Replace("{User.MiddleName}", user.MiddleName)
             .Replace("{User.LastName}", user.LastName)
@@ -59,7 +60,7 @@ internal class GetInvoiceHandler : IRequestHandler<Query, Response>
                             <td>{order.Name}</td>
                             <td>{order.Amount}</td>
                             <td>{order.Price * order.Period}</td>
-                            <td>{order.TotalPrice}</td>
+                            <td>{order.TotalPrice.ToString("C", new CultureInfo("ru-RU"))}</td>
                             </tr>
                             ")))
             .ToString();
