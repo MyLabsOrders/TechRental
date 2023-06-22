@@ -48,7 +48,7 @@ const Product = ({ id, name, total, status, image }: IProduct) => {
             const { data } = await addProduct(
                 getCookie("jwt-authorization") ?? "",
                 getCookie("current-user") ?? "",
-                { orderId: id, count }
+                { orderId: id, count, days: 1 }
             );
             setCookie("order-date", data);
             setMessage("Successfully bought it!");
@@ -95,7 +95,12 @@ const Product = ({ id, name, total, status, image }: IProduct) => {
                         Стоимость: {total}
                     </Typography>
                     <Typography variant="body1" color={grey[600]}>
-                        Статус: {status.toLowerCase() === 'available' ? 'доступен' : 'заказан'}
+                        Статус:{" "}
+                        {status
+                            ? status.toLowerCase() === "available"
+                                ? "доступен"
+                                : "заказан"
+                            : "доступен"}
                     </Typography>
                 </Stack>
                 <div

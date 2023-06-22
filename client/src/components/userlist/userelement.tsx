@@ -64,7 +64,7 @@ const UserElement = ({ user }: UserElementProps) => {
                     middleName: user.middleName,
                     lastName: user.lastName,
                     birthDate: user.birthDate,
-                    gender: user.gender.toLowerCase() as ("male" | "female"),
+                    gender: user.gender?.toLowerCase() as ("male" | "female"),
                     phoneNumber: user.number,
                     userImage: user.image,
                     isActive: true

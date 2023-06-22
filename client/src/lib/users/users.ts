@@ -51,9 +51,10 @@ export const addProduct = async (
     dto: {
         orderId: string;
         count: number;
+        days: number;
     }
 ) => {
-    return await api.put<string>(`${id}/orders`, [dto], {
+    return await api.put(`${id}/orders`, [dto], {
         headers: {
             Authorization: `Bearer ${token}`,
         },
