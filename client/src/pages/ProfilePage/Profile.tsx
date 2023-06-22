@@ -1,6 +1,6 @@
 import { Box, Button, Stack } from "@mui/material";
 import { ItemTable, ProfileForm } from "../../components";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getCookie } from "typescript-cookie";
 import { IProductPage } from "../../shared";
 import { Notification } from "../../features";
@@ -30,11 +30,16 @@ const Profile = () => {
             setProducts(null);
         }
     };
-    useEffect(() => {
-        fetchItems();
-        fetchCheque();
-        fetchInvoice();
+
+    const fetchAll = useCallback(async ()=>{
+        await fetchItems();
+        await fetchCheque();
+        await fetchInvoice();
     }, []);
+
+    useEffect(() => {
+        fetchAll();
+    }, [fetchAll]);
 
     const fetchCheque = async () => {
         try {

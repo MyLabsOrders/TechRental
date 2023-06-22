@@ -48,7 +48,7 @@ const Product = ({ id, name, total, status, image }: IProduct) => {
             const { data } = await addProduct(
                 getCookie("jwt-authorization") ?? "",
                 getCookie("current-user") ?? "",
-                { orderId: id, count }
+                { orderId: id, count, days: 1 }
             );
             setCookie("order-date", data);
             setMessage("Successfully bought it!");

@@ -51,6 +51,7 @@ export const addProduct = async (
     dto: {
         orderId: string;
         count: number;
+        days: number;
     }
 ) => {
     return await api.put(`${id}/orders`, [dto], {
