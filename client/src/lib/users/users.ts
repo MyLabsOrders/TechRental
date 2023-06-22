@@ -53,7 +53,7 @@ export const addProduct = async (
         count: number;
     }
 ) => {
-    return await api.put<string>(`${id}/orders`, [dto], {
+    return await api.put(`${id}/orders`, [dto], {
         headers: {
             Authorization: `Bearer ${token}`,
         },

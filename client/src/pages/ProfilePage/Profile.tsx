@@ -8,12 +8,12 @@ import { useLocation } from "react-router-dom";
 import { getCheque, getInvoice } from "../../lib/products/products";
 import { getUser } from "../../lib/users/users";
 
-
 const Profile = () => {
     const [error, setError] = useState<string | null>(null);
     const [products, setProducts] = useState<IProductPage | null>();
 
-    const [documentLink, setDocumentLink] = useState<string>();
+    const [invoiceLink, setInvoiceLink] = useState<string>();
+    const [chequeLink, setChequeLink] = useState<string>();
 
     const location = useLocation();
     const message = location.state && location.state.message;
@@ -32,6 +32,8 @@ const Profile = () => {
     };
     useEffect(() => {
         fetchItems();
+        fetchCheque();
+        fetchInvoice();
     }, []);
 
     const fetchCheque = async () => {
@@ -40,8 +42,7 @@ const Profile = () => {
                 getCookie("jwt-authorization") ?? "",
                 getCookie("order-date") ?? ""
             );
-            setDocumentLink(data.link);
-            window.open(documentLink, "_blank", "noreferrer");
+            setChequeLink(data.link);
         } catch (error) {
             console.log(error);
         }
@@ -53,8 +54,7 @@ const Profile = () => {
                 getCookie("jwt-authorization") ?? "",
                 getCookie("order-date") ?? ""
             );
-            setDocumentLink(data.link);
-            window.open(documentLink, "_blank", "noreferrer");
+            setInvoiceLink(data.link);
         } catch (error) {
             console.log(error);
         }
@@ -76,8 +76,10 @@ const Profile = () => {
                 <Stack spacing={"2rem"}>
                     <ProfileForm setError={setError} />
                     <Button
+                        href={chequeLink as string}
+                        target="_blank"
                         disabled={!products || products?.orders.length === 0}
-                        onClick={fetchCheque}
+                        // onClick={fetchCheque}
                         sx={{
                             background: "#0a1929",
                             borderRadius: "15px",
@@ -86,8 +88,10 @@ const Profile = () => {
                         Получить чек
                     </Button>
                     <Button
+                        href={invoiceLink as string}
+                        target="_blank"
                         disabled={!products || products?.orders.length === 0}
-                        onClick={fetchInvoice}
+                        // onClick={fetchInvoice}
                         sx={{
                             background: "#0a1929",
                             borderRadius: "15px",
